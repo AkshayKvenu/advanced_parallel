@@ -46,6 +46,7 @@
 									<th class="text-right">Invoice Amount</th>
 									<th class="text-right">Amount Due</th>
 									<th class="text-right">Currency</th>
+									<th class="text-right">Amount to Pay</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -72,6 +73,9 @@
 										<td class="text-right">
 											<span t-field="line.currency_id" />
 										</td>
+										<td class="text-right">
+											<span t-field="line.amount_to_pay" />
+										</td>
 									</tr>
 								</t>
 								<tr>
@@ -84,6 +88,11 @@
 									</td>
 									<td class="text-right">
 										<span class="m-0" t-field="doc.total_amount_due" />
+									</td>
+									<td class="text-right">
+									</td>
+									<td class="text-right">
+										<span class="m-0" t-field="doc.total_amount_to_pay" />
 									</td>
 								</tr>
 							</tbody>

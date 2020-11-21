@@ -22,7 +22,7 @@
 
 {
     'name': 'Sales Customizations',
-    'version': '1.20.3',
+    'version': '1.20.4',
     'category': 'Sales',
     'sequence': 5,
     'summary': 'Sales Customizations for Advanced Lines',

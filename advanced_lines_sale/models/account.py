@@ -90,7 +90,10 @@ class AccountInvoice(models.Model):
     
     @api.multi
     def write(self, vals):
-        print("bbbbbbbbbbbbbb",vals)
+        if 'amount_to_pay' in vals:
+            if vals['amount_to_pay'] > self.residual:
+                raise UserError(_("Amount to pay should not be greater than Amount due."))
+                
         return super(AccountInvoice, self).write(vals)
 
     @api.multi
@@ -126,11 +129,23 @@ class PaymentVoucher(models.Model):
     company_id = fields.Many2one('res.company','Company',default = lambda self: self.env.user.company_id)
         
         
-    total_amount_due = fields.Float('Amount Due',readonly=True)
-    amount_to_pay = fields.Float('Amount To Pay')
+    total_amount_due = fields.Float('Amount Due', compute='_compute_total_amount_due',readonly=True)
+    total_amount_to_pay = fields.Float('Amount To Pay', compute='_compute_total_amount_pay',readonly=True)
+#     amount_to_pay = fields.Float('Amount To Pay')
     total_invoice_amount = fields.Float('Invoice Amount',readonly=True)
         
-    
+    @api.depends('invoices_ids')
+    def _compute_total_amount_pay(self):
+        for rec in self:
+            for line in rec.invoices_ids:
+                rec.total_amount_to_pay += line.amount_to_pay
+        
+    @api.depends('invoices_ids')
+    def _compute_total_amount_due(self):
+        for rec in self:
+            for line in rec.invoices_ids:
+                rec.total_amount_due += line.residual_signed
+        
         
                 
     @api.onchange('vendor_id')
@@ -144,29 +159,33 @@ class PaymentVoucher(models.Model):
         result = super(PaymentVoucher, self).create(vals)
         result.total_amount_due=0
         result.total_invoice_amount=0
+        result.total_amount_to_pay=0
         for line in result.invoices_ids:
 #             line.payment_voucher_id=result.id
             result.total_amount_due=result.total_amount_due+line.residual_signed
             result.total_invoice_amount=result.total_invoice_amount+line.amount_total_signed
+            result.total_amount_to_pay=result.total_amount_to_pay+line.amount_to_pay
         vals['company_id'] = self.env.user.company_id
             
         return result
     
     @api.multi
     def write(self, vals):
-        print("aaaaaaaaaaaaaa",vals)
 #         for line in self.invoices_ids:
 #             line.payment_voucher_id=False
         
         result = super(PaymentVoucher, self).write(vals)
         total_amount=0
         total_invoice=0
+        total_amount_to_pay=0
         for line in self.invoices_ids:
 #             line.payment_voucher_id=self.id
             total_amount=total_amount+line.residual_signed
             total_invoice=total_invoice+line.amount_total_signed
+            total_amount_to_pay=total_amount_to_pay+line.amount_to_pay
         vals['total_amount_due'] = total_amount
         vals['total_invoice_amount'] = total_invoice
+        vals['total_amount_to_pay'] = total_amount_to_pay
         
         result = super(PaymentVoucher, self).write(vals)
         return result

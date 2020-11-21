@@ -27,7 +27,8 @@
 						</group>
 						<group>
 							<field name="total_amount_due" />
-							<field name="amount_to_pay" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+							<field name="total_amount_to_pay" readonly="1"/>
+<!-- 							 attrs="{'readonly': [('state','!=', 'draft')]}"/> -->
 							<field name="company_id" readonly="1"/>
 							<field name="total_invoice_amount" invisible="True" />
 						</group>
@@ -41,9 +42,9 @@
 								<field name="date_invoice" />
 								<field name="date_due" />
 								<field name="amount_total_signed" string="Invoice Amount"/>
-								<field name="residual_signed" />
+								<field name="residual_signed" sum="Total Amount Due" />
 								<field name="currency_id" />
-								<field name="amount_to_pay"  readonly="0"/>
+								<field name="amount_to_pay"  sum="Total Amount To Pay" readonly="0"/>
 								<field name="state" invisible="True"/>
 							</tree>
 						</field>
