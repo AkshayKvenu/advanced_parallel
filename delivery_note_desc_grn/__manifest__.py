@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "delivery_note_desc_grn",
+    'name': "Delivery Note Description and GRN",
 
     'summary': """
         Delivery note duplication and GRN in stock picking""",
