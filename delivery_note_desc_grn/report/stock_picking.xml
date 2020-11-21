@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report string="GRN" id="stock.action_report_picking"
+			model="stock.picking" report_type="qweb-pdf"
+			name="stock.report_picking" file="stock.report_picking_operations"
+			print_report_name="'GRN - %s - %s' % (object.partner_id.name or '', object.name)" />
+	</data>
+
+
+	<template id="report_picking_inherit"
+		inherit_id="stock.report_picking">
+		<xpath expr="//div[hasclass('page')]/table[1]"
+			position="replace">
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th t-if="o.origin">
+							<strong>Order</strong>
+						</th>
+						<th>
+							<strong>State</strong>
+						</th>
+						<th t-if="o.delivery_note">
+							<strong>Delivery Note</strong>
+						</th>
+						<th name="td_sched_date_h" width="18%">
+							<strong>Scheduled Date</strong>
+						</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td t-if="o.origin">
+							<span t-field="o.origin" />
+						</td>
+						<td>
+							<span t-field="o.state" />
+						</td>
+						<td t-if="o.delivery_note">
+							<span t-field="o.delivery_note" />
+						</td>
+						<td name="td_sched_date" width="18%">
+							<span t-field="o.scheduled_date" />
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</xpath>
+		<xpath expr="//div[hasclass('page')]/table[2]/thead/tr/th[1]"
+			position="replace">
+			<th>
+				<strong>Description</strong>
+			</th>
+
+		</xpath>
+		<xpath
+			expr="//div[hasclass('page')]/table[2]/tbody/t/t/tr/td[1]"
+			position="replace">
+			<td>
+				<span t-field="move.name" />
+			</td>
+		</xpath>
+	</template>
+
+
+	<template id="report_delivery_document_inherit_new"
+		inherit_id="stock.report_delivery_document">
+
+		<xpath expr="//table[1]/thead/tr/th[2]" position="after">
+			<th t-if="o.delivery_note" width="18%">
+				<strong>Delivery Note</strong>
+			</th>
+		</xpath>
+
+		<xpath expr="//table[1]/tbody/tr/td[2]" position="after">
+			<td t-if="o.delivery_note" width="18%">
+				<span t-field="o.delivery_note" />
+			</td>
+		</xpath>
+
+		<xpath expr="//table[hasclass('mt48')][1]/thead/tr/th[2]"
+			position="replace">
+			<th>
+				<strong>Description</strong>
+			</th>
+		</xpath>
+
+		<xpath expr="//table[hasclass('mt48')][1]/tbody/tr/td[2]"
+			position="replace">
+			<td>
+				<span t-field="move.name" />
+			</td>
+		</xpath>
+
+		<xpath expr="//table[hasclass('mt48')][2]/thead/tr/th[2]"
+			position="replace">
+			<th>
+				<strong>Description</strong>
+			</th>
+		</xpath>
+
+		<xpath expr="//table[hasclass('mt48')][2]/tbody/tr/td[2]"
+			position="replace">
+
+			<td>
+				<span t-field="move_line.move_id.name" />
+			</td>
+		</xpath>
+
+	</template>
+
+</odoo>

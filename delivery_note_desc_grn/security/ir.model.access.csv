@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_delivery_note_duplication_delivery_note_duplication,delivery_note_duplication.delivery_note_duplication,model_delivery_note_duplication_delivery_note_duplication,,1,0,0,0
