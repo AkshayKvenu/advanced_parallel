@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="uom_uom_inherit_period_type" model="ir.ui.view">
+			<field name="name">uom.uom.inherit</field>
+			<field name="model">uom.uom</field>
+			<field name="inherit_id" ref="uom.product_uom_form_view" />
+			<field name="arch" type="xml">
+			
+				<xpath expr="//field[@name='rounding']" position="after">
+					<field name="period_type" />
+				</xpath>
+				
+			</field>
+		</record>
+	</data>
+</odoo>

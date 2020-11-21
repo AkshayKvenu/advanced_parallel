@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="maintenance_equipment_view_form_inherit_inspection" model="ir.ui.view">
+		<field name="name">maintenance.equipment.view.form.inherit.inspection</field>
+		<field name="model">maintenance.equipment</field>
+		<field name="inherit_id" ref="maintenance.hr_equipment_view_form" />
+		<field name="arch" type="xml">
+
+			<button name="%(maintenance.hr_equipment_request_action_from_equipment)d" position="after">
+				<button name="%(action_equipment_inspection_form_request)d" type="action" class="oe_stat_button" icon="fa-ticket">
+					<field string="Inspection" name="inspection_count" widget="statinfo" />
+				</button>
+			</button>
+
+			<xpath expr="//page[3]" position="inside">
+				<label for="maintenance_type_ids" />
+				<field name="maintenance_type_ids">
+					<tree editable="bottom">
+						<field name="maintenance_type_id" />
+						<field name="frequency" />
+					</tree>
+				</field>
+			</xpath>
+
+		</field>
+	</record>
+
+
+	<record id="maintenance_request_view_form_inherit_inspection" model="ir.ui.view">
+		<field name="name">maintenance.request.view.form.inherit.inspection</field>
+		<field name="model">maintenance.request</field>
+		<field name="inherit_id" ref="maintenance.hr_equipment_request_view_form" />
+		<field name="arch" type="xml">
+
+			<field name='description' position="before">
+				<group string="Material Consumed">
+					<field name="material_ids" nolabel="1">
+						<tree editable="bottom">
+							<field name="product_id" />
+							<field name="partner_id" context="{'default_supplier': 1}" />
+							<field name="qty" />
+							<field name="cost" />
+							<field name="cost_total" sum="Total" />
+						</tree>
+					</field>
+				</group>
+			</field>
+
+		</field>
+	</record>
+
+
+	<record model="ir.ui.view" id="view_maintenance_type_tree">
+		<field name="name">maintenance.type.tree</field>
+		<field name="model">maintenance.type</field>
+		<field name="arch" type="xml">
+			<tree string="Maintenance Type">
+				<field name="name" />
+				<field name="code" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_maintenance_type_form" model="ir.ui.view">
+		<field name="name">maintenance.type.form</field>
+		<field name="model">maintenance.type</field>
+		<field name="arch" type="xml">
+
+			<form string="Maintenance Type">
+				<sheet>
+					<group col="4" colspan="4">
+						<field name="name" />
+						<field name="code" />
+					</group>
+				</sheet>
+			</form>
+
+		</field>
+	</record>
+
+	<record id="action_maintenance_type_form" model="ir.actions.act_window">
+		<field name="name">Maintenance Type</field>
+		<field name="res_model">maintenance.type</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">Create the first maintenance type.</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_maintenance_type" name="Maintenance Types"
+		parent="maintenance.menu_maintenance_configuration" action="action_maintenance_type_form" sequence="5" />
+
+</odoo>

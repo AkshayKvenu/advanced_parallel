@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="purchase_order_layout">
+		<t t-if="not o" t-set="o" t-value="doc" />
+
+		<t t-if="not company">
+			<!-- Multicompany -->
+			<t t-if="company_id">
+				<t t-set="company" t-value="company_id" />
+			</t>
+			<t t-elif="o and 'company_id' in o">
+				<t t-set="company" t-value="o.company_id.sudo()" />
+			</t>
+			<t t-else="else">
+				<t t-set="company" t-value="res_company" />
+			</t>
+		</t>
+
+		<div class="header">
+			<style>
+				.table-head tr td { padding: 1px 0.75rem; }
+			</style>
+			<t t-if="company.header_img">
+				<div class="row">
+					<div class="col-xs-12">
+						<img t-att-src="'data:image/png;base64,%s' % to_text(company.header_img)"
+							style="max-height: 150px; width: 65em;" />
+					</div>
+				</div>
+				<div class="row zero_min_height">
+					<div class="col-xs-12">
+						<div style="border-bottom: 1px solid black;"></div>
+					</div>
+				</div>
+			</t>
+
+			<t t-if="not company.header_img">
+				<div class="row">
+					<div class="col-xs-3">
+						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;" />
+					</div>
+					<div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.report_header" />
+				</div>
+				<div class="row zero_min_height">
+					<div class="col-xs-12">
+						<div style="border-bottom: 1px solid black;"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6" name="company_address">
+						<span t-field="company.partner_id"
+							t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+							style="border-bottom: 1px solid black; display:inline-block;" />
+					</div>
+				</div>
+			</t>
+
+			<div class="oe_structure" />
+
+			<h2 t-if="o.state in ['sent', 'to approve']" style="text-align:center;">
+				Draft Purchase Order
+			</h2>
+			<h2 t-if="o.state in ['purchase', 'done']" style="text-align:center;">
+				Purchase Order
+			</h2>
+			<h2 t-if="o.state == 'draft'" style="text-align:center;">
+				Request for Quotation
+			</h2>
+			<h2 t-if="o.state == 'cancel'" style="text-align:center;">
+				Cancelled Purchase Order
+			</h2>
+
+			<div class="row mt32 mb32">
+				<div class="col-3">
+					<strong>Vendor details:</strong>
+					<div>
+						<b>IKVTA Score: </b>
+						<span t-field="o.ikvta" />
+					</div>
+					<div>
+						<b>CR #: </b>
+						<span t-field="o.partner_id.cr_number" />
+					</div>
+					<div>
+						<b>Vendor VAT: </b>
+						<span t-field="o.partner_id.vat" />
+					</div>
+					<b>
+						<div t-esc="o.partner_id.parent_id.name" />
+					</b>
+					<div t-esc="o.partner_id.name" />
+					<div t-field="o.partner_id"
+						t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": True}' />
+<!-- 					<p t-if="o.partner_id.vat"> -->
+<!-- 						<t t-esc="o.company_id.country_id.vat_label or 'Tax ID'" /> -->
+<!-- 						: -->
+<!-- 						<span t-field="o.partner_id.vat" /> -->
+<!-- 					</p> -->
+				</div>
+
+				<div class="col-6" id="informations">
+					<table class="table table-condensed table-head">
+						<tr>
+							<td>
+								<b>PO Number</b>
+							</td>
+							<td>
+								<span t-field="o.name" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>PO Date</b>
+							</td>
+							<td>
+								<span t-field="o.date_order" t-options="{'format': 'MM/dd/yyyy'}" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>PR Reference</b>
+							</td>
+							<td>
+								<span t-field="o.source_document" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>Your Reference</b>
+							</td>
+							<td>
+								<span t-field="o.partner_ref" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>Mode Of Shipment</b>
+							</td>
+							<td>
+								<span t-field="o.mode_of_shipment" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>Incoterm</b>
+							</td>
+							<td>
+								<span t-field="o.incoterm_id" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>Payment terms</b>
+							</td>
+							<td>
+								<span t-field="o.payment_term_id" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>PO Issued By</b>
+							</td>
+							<td>
+								<span t-field="o.user_id" />
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div class="col-3">
+					<t t-if="o.dest_address_id">
+						<strong>Shipping address:</strong>
+						<div t-if="o.dest_address_id">
+							<div t-field="o.dest_address_id"
+								t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'
+								name="purchase_shipping_address" />
+						</div>
+					</t>
+					<t t-else="">
+						<strong>Shipping address:</strong>
+						<div t-if="o.picking_type_id and o.picking_type_id.warehouse_id">
+							<span t-field="o.picking_type_id.warehouse_id.name" />
+							<div t-field="o.picking_type_id.warehouse_id.partner_id"
+								t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": True}' />
+						</div>
+					</t>
+				</div>
+			</div>
+		</div>
+
+		<div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+			t-att-data-oe-lang="o and o.env.context.get('lang')">
+			<t t-call="web.address_layout" />
+			<t t-raw="0" />
+		</div>
+		<div class="footer o_standard_footer">
+			<t t-if="not doc and o">
+				<t t-set="doc" t-value="o" />
+			</t>
+
+			<t t-if="company.footer_img">
+				<div class="row">
+					<div class="col-xs-12">
+						<img t-att-src="'data:image/png;base64,%s' % to_text(company.footer_img)" style="max-height: 150px;" />
+					</div>
+				</div>
+			</t>
+			<t t-if="not company.footer_img">
+
+				<div class="text-center" style="border-top: 1px solid black;">
+					<ul class="list-inline mb4">
+						<li t-if="company.phone" class="list-inline-item">
+							Phone:
+							<span t-field="company.phone" />
+						</li>
+						<li t-if="company.email" class="list-inline-item">
+							Email:
+							<span t-field="company.email" />
+						</li>
+						<li t-if="company.website" class="list-inline-item">
+							Web:
+							<span t-field="company.website" />
+						</li>
+						<li t-if="company.vat" class="list-inline-item">
+							<t t-esc="(company.country_id.vat_label or 'Tax ID').replace(' ','\N{NO-BREAK SPACE}')" />
+							:
+							<span t-esc="company.vat.replace(' ','\N{NO-BREAK SPACE}')" />
+						</li>
+					</ul>
+
+					<div name="financial_infos">
+						<span t-field="company.report_footer" />
+					</div>
+
+					<div t-if="report_type == 'pdf'" class="text-muted">
+						Page:
+						<span class="page" />
+						/
+						<span class="topage" />
+					</div>
+				</div>
+			</t>
+		</div>
+	</template>
+
+	<template id="report_purchase_order_document_custom">
+		<t t-call="advanced_lines_sale.purchase_order_layout">
+			<t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+
+			<div class="page">
+				<div class="oe_structure" />
+
+				<table class="table table-sm o_main_table">
+					<thead>
+						<tr>
+							<th style="text-align:left;">
+								<strong>Sl No</strong>
+							</th>
+							<th>
+								<strong>Brand</strong>
+							</th>
+							<th>
+								<strong>Description</strong>
+							</th>
+							<th>
+								<strong>Taxes</strong>
+							</th>
+<!-- 							<th class="text-center"> -->
+<!-- 								<strong>Date Req.</strong> -->
+<!-- 							</th> -->
+							<th class="text-right">
+								<strong>Qty</strong>
+							</th>
+							<th class="text-right">
+								<strong>UOM</strong>
+							</th>
+							<th class="text-right">
+								<strong>Unit Price</strong>
+							</th>
+							<th class="text-right">
+								<strong>Amount</strong>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr t-foreach="o.order_line" t-as="line">
+							<td>
+								<span t-esc="line_index + 1" />
+							</td>
+								<td>
+								<span t-field="line.product_id.product_brand_id" />
+							</td>
+							<td>
+								<span t-field="line.name" />
+								</td>
+							<td>
+								<span t-esc="', '.join(map(lambda x: x.name, line.taxes_id))" />
+							</td>
+<!-- 							<td class="text-center"> -->
+<!-- 								<span t-field="line.date_planned" t-options='{"format": "MM/dd/yyyy"}'/> -->
+<!-- 							</td> -->
+<!-- 							<td> -->
+<!-- 								<span t-field="line.product_uom" /> -->
+<!-- 							</td> -->
+							<td class="text-right">
+								<span t-field="line.product_qty" />
+								</td>
+								<td class="text-right"> 
+								<span t-field="line.product_uom.name" groups="uom.group_uom" />
+							</td>
+							<td class="text-right">
+								<span t-field="line.price_unit" />
+							</td>
+							<td class="text-right">
+								<span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div id="total" class="row justify-content-end">
+					<div class="col-4">
+						<table class="table table-sm">
+							<tr class="border-black">
+								<td>
+									<strong>Subtotal</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+								</td>
+							</tr>
+							<tr>
+								<td>Taxes</td>
+								<td class="text-right">
+									<span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+								</td>
+							</tr>
+							<tr class="border-black o_total">
+								<td>
+									<strong>Total</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				Amount in words :<p t-field="o.amount_words" />
+				<p t-field="o.note" />
+				<div class="oe_structure" />
+			</div>
+
+		</t>
+	</template>
+
+	<template id="report_request_order" inherit_id="purchase.report_purchasequotation_document">
+		<xpath expr="//div[@t-field='o.partner_id']" position="after">
+
+			<!-- <xpath expr="//div[@class='page']/h2" position="after"> -->
+
+			<div id="informations" class="row mt32 mb32">
+				<div t-if="o.ikvta" class="col-6 bm-2">
+					<strong>IKVTA %</strong>
+					<p t-field="o.ikvta" class="m-0" />
+				</div>
+				<div t-if="o.Updated_date" class="col-6 bm-2">
+					<strong>Updated Date</strong>
+					<p t-field="o.Updated_date" class="m-0" />
+				</div>
+			</div>
+		</xpath>
+	</template>
+
+	<template id="purchase.report_purchaseorder">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="advanced_lines_sale.report_purchase_order_document_custom" t-lang="o.partner_id.lang" />
+			</t>
+		</t>
+	</template>
+
+</odoo>

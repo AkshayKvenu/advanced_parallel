@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<odoo>
+	<template id="report_invoice_part_number"
+		inherit_id="account.report_invoice_document">
+
+		<xpath expr="//table[@name='invoice_line_table']/thead/tr/th[1]"
+			position="after">
+			<th class="text-left">Part Number</th>
+		</xpath>
+		<xpath
+			expr="//table[@name='invoice_line_table']/tbody/t/tr/t/td[1]"
+			position="after">
+			<td>
+				<span t-field="line.part_number" />
+			</td>
+		</xpath>
+	</template>
+</odoo>

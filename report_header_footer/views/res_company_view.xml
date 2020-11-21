@@ -1,0 +1,20 @@
+<odoo>
+	<data>
+
+		<record id="view_company_form_inh_header_footer"
+			model="ir.ui.view">
+			<field name="name">res.company.form.inh.header.footer</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<field name="website" position="after">
+					<field name="header_img" widget="image" />
+					<field name="footer_img" widget="image" />
+				</field>
+			</field>
+		</record>
+
+
+
+	</data>
+</odoo>

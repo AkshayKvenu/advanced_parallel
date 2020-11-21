@@ -1,0 +1,175 @@
+<odoo>
+  <data>
+ 	<record id="view_accrual_revenue_tree" model="ir.ui.view">
+			<field name="name">Accrual Revenue Accounting Tree</field>
+			<field name="model">accrual.revenue.accounting</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" />
+					<field name="first_recognition_date" />
+					<field name="original_value" />
+					<field name="residual_amount" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_accrual_revenue_form" model="ir.ui.view">
+			<field name="name">Accrual Revenue Accounting Form</field>
+			<field name="model">accrual.revenue.accounting</field>
+			<field name="arch" type="xml">
+				<form string="Accrual">
+					<header>
+						<button string="Confirm" name="action_confirm_accrual"
+							type="object" states="draft" class="oe_highlight" />
+						<button string="Compute Deferral" name="action_move_create"
+							states="draft" type='object'
+							class="oe_highlight" />
+						<button string="Set To Draft" name="action_cancel_accrual"
+								 type='object' class="oe_highlight"
+								  attrs="{'invisible':['|',('posted_entries','!=', 0),('state','!=', 'open')]}"/>
+					<button name="%(accrual_wizard_modify_revenues_action)d" type="action" states="open" string="Modify Expense"/>
+						<field name="state" widget="statusbar" />
+					
+					</header>
+					<sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="open_entries" type="object" icon="fa-pencil">
+                            <field string="Posted Entries" name="posted_entries" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" name="gross_entries" type="object" icon="fa-pencil"
+								attrs="{'invisible':[('gross_increase_count','=', 0)]}">
+                            <field string="Gross Increase" name="gross_increase_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name"
+								attrs="{'readonly': [('state', 'not in', ['draft','model'])], 
+										'required': [('state', '!=', 'draft')] }"/>
+                        </h1>
+                    </div>
+						<group>
+							<group  col="2" string="Asset Values">
+							<button string="selected related purchases" name="%(accrual_wizard_related_purchase_action)d"
+							 type="action"	class="oe_edit_only" 
+							 attrs="{'invisible': ['|',('original_value', '!=', 0),('original_move_line_ids','!=',[])]}"/>
+<!-- 							 '|',('original_value', '!=', 0),('original_move_line_ids', '!=', 'False') -->
+								
+								<field name="company_id" invisible = 'True'/>
+								<field name="original_value"
+								attrs="{'invisible': [('state', '=', 'model')], 
+										'readonly': [('state', '!=', 'draft')]}"/>
+								<field name="gross_increase_value"
+								attrs="{'invisible': ['|',('gross_increase_value','=', 0),('state', '=', 'model')], 
+										'readonly': True}"/>
+								<field name="aquisition_date"
+								attrs="{'invisible': [('state', '=', 'model')], 
+										'readonly': [('state', '!=', 'draft')]}"/>
+									
+							</group>
+							<group  col="2" string="Current Values">
+								<field name="residual_amnt_calculate" invisible = 'True'/>
+								<field name="residual_amount"
+								attrs="{'invisible': [('state', '=', 'model')], 
+										'readonly': True}"/>
+								<field name="deferred_amount"
+								attrs="{'invisible': [('state', '=', 'model')], 
+										'readonly': True}"/>
+									
+							</group>
+						</group>
+						<group>
+							<group  col="2" string="Depreciation Method">
+								<field name="number_recognition"
+								attrs="{'readonly': [('state', 'not in', ['draft','model'])], 
+										'required': True}"/>
+								<field name="period"
+								attrs="{'readonly': [('state', 'not in', ['draft','model'])], 
+										'required': True}"/>
+								<field name="prorata_temporis"
+								attrs="{'invisible': [('prorata_temporis','=',False),('state', '!=', 'draft')],
+										'readonly': [('state',  'not in', ['draft','model'])]}"/>
+								<field name="prorata_date"
+								attrs="{'invisible': ['|',('prorata_temporis','=',False),('state', '=', 'model')], 
+										'readonly': [('state',  'not in', ['draft'])],
+										'required':  [('prorata_temporis','=',True),('state', '!=', 'model')]}"/>
+								<field name="first_recognition_date"
+								attrs="{'invisible': [('state', '=', 'model')], 
+										'readonly': [('state',  'not in', ['draft','model'])],
+										'required': True}"/>
+									
+							</group>
+							<group  col="2" string="Accounting">
+								<field name="deferred_amount_id"
+								attrs="{'readonly': [('state',  'not in', ['draft','model'])],
+										'required': [('state', '!=', 'draft')]}"
+										domain="[('deprecated','=',False),('internal_type','=','other')]"
+								/>
+								<field name="expense_account_id"
+								attrs="{'readonly': [('state',  'not in', ['draft','model'])],
+										'required': [('state', '!=', 'draft')]}"
+										domain="[('deprecated','=',False),('internal_type','=','other')]"/>
+								<field name="journal_id"
+								attrs="{'readonly': [('state',  'not in', ['draft','model'])],
+										'required': [('state', '!=', 'draft')]}"
+										domain="[('type','=','general')]"/>
+									
+							</group>
+						</group>
+						<notebook>
+							<page string="Expensive Board"
+								attrs="{'invisible': [('depreciation_move_ids',  '=', [])]}">
+							<field name="depreciation_move_ids">
+									<tree string="Depreciation" default_order="date asc" editable="bottom"
+										delete='1' create="false">
+										<field name="ref" />
+										<field name="date"/>
+										<field name="amount_total" string="Revenues"/>
+										<field name="asset_depreciated_value" string="Cumulative Revenues" readonly = "True" />
+										<field name="state" invisible="1" />
+										<field name="asset_remaining_value" string="Next Period Revenues" readonly = "True"/>
+										<field name="name" readonly = "True"/>
+									</tree>
+								</field>
+							</page>
+							<page string="Related Sales"
+								attrs="{'invisible': [('original_move_line_ids',  '=', [])]}">
+							<field name="original_move_line_ids" widget="many2many"
+							attrs="{'readonly': [('state',  '=', 'posted')]}"
+							domain="[('debit','=','0'),('move_id.state','=','posted')]">
+							
+									<tree string="Related move lines" >
+										<field name="date"/>
+										<field name="account_id" />
+										<field name="company_id" />
+										<field name="name" />
+										<field name="debit" />
+										<field name="credit" />
+									</tree>
+								</field>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_view_accrual_revenue"
+			model="ir.actions.act_window">
+			<field name="name">Accrual Revenue </field>
+			<field name="res_model">accrual.revenue.accounting</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('parent_id', '=', False)]</field>
+			<field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new accrual!!
+                </p>
+            </field>
+		</record>
+		<menuitem action="action_view_accrual_revenue"
+			id="menu_accrual_revenue" parent="account.menu_finance_entries_management" 
+        	sequence="2"/>
+  </data>
+</odoo>

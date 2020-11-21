@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Inherits product forms to add Rental field -->
+		<record id="product_template_form_view_inherit" model="ir.ui.view">
+			<field name="name">product.template.form.inherit</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_form_view" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='purchase_ok']/../.." attrs="inside">
+					<div>
+						<field name="is_rental" />
+						<label for="is_rental" />
+					</div>
+				</xpath>
+
+				<field name="uom_po_id" position="after">
+					<field name="rental_uom_id" groups="uom.group_uom" options="{'no_create': True}"
+						attrs="{'required': [('is_rental', '=', True)],'invisible': [('is_rental', '=', False)]}" />
+					<!-- <field name="secondary_rental_uom_id" groups="uom.group_uom" -->
+					<!-- options="{'no_create': True}" -->
+					<!-- attrs="{'required': [('is_rental', '=', True)],'invisible': [('is_rental', '=', False)]}" /> -->
+				</field>
+
+			</field>
+		</record>
+		
+		<record id="product_type_set_inherit" model="ir.ui.view">
+			<field name="name">product.type.set.inherit</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_only_form_view" />
+			<field name="arch" type="xml">
+				<field name="default_code" position="attributes">
+					<attribute name="attrs">{'required':[('type', 'in', ['service', 'product'])]}
+					</attribute>
+				</field>
+			</field>
+		</record>
+		
+		<record id="product_template_search" model="ir.ui.view">
+        <field name="name">product.template.search</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+           <xpath expr="//search" position="inside">
+			
+					<field name="description_purchase" />
+            </xpath>
+        </field>
+    </record>
+    
+	</data>
+</odoo>

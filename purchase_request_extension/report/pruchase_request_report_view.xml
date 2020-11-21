@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="report_purchase_request_uom" inherit_id="purchase_request.report_purchase_request">
+		<xpath expr="//div[@class='page']/t[@t-if='o.line_ids']/table/tbody/tr/t" position="replace">
+			<td class="text-center" groups="uom.group_uom">
+				<span t-field="line_ids.product_uom_id.name" />
+			</td>
+		</xpath>
+		<xpath expr="//div[@class='page']/t[@t-if='o.line_ids']/table/thead/tr/th[2]" position="before">
+			<th style="width: 10%">
+				<strong>Code</strong>
+			</th>
+		</xpath>
+		<xpath expr="//div[@class='page']/t[@t-if='o.line_ids']/table/tbody/tr/td[2]" position="before">
+			<td>
+				<span t-field="line_ids.item_code" />
+			</td>
+		</xpath>
+	</template>
+
+	<template id="report_request_order" inherit_id="purchase.report_purchasequotation_document">
+		<xpath expr="//div[@t-field='o.partner_id']" position="after">
+
+			<!-- <xpath expr="//div[@class='page']/h2" position="after"> -->
+
+			<div id="informations" class="row mt32 mb32">
+				<div t-if="o.ikvta" class="col-6 bm-2">
+					<strong>IKVTA %</strong>
+					<p t-field="o.ikvta" class="m-0" />
+				</div>
+				<div t-if="o.Updated_date" class="col-6 bm-2">
+					<strong>Updated Date</strong>
+					<p t-field="o.Updated_date" class="m-0" />
+				</div>
+			</div>
+		</xpath>
+	</template>
+	
+
+</odoo>

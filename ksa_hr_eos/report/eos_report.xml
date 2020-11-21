@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<template id="report_employee_eos_benefit">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<t>
+							<div class="page">
+								<div style="font-size:15px; margin-top: 40px;">
+									<h3 align="center">
+										<strong>
+											END OF SERVICE - BENEFIT
+										</strong>
+									</h3>
+								</div>
+
+								<div class="row mt32 mb32">
+									<div class="col-2"></div>
+
+									<div class="col-8">
+
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<td>
+														<b>Name: </b>
+													</td>
+													<td>
+														<span t-field="o.employee_id.name" />
+													</td>
+													<td>
+														<b>Department: </b>
+													</td>
+													<td>
+														<span t-field="o.department_id.name" />
+													</td>
+												</tr>
+
+												<tr>
+													<td>
+														<b>Job Title: </b>
+													</td>
+													<td>
+														<span t-field="o.job_id.name" />
+
+													</td>
+													<td>
+														<b>Work Location: </b>
+													</td>
+													<td>
+														<span t-field="o.work_location" />
+
+													</td>
+												</tr>
+
+											</thead>
+										</table>
+									</div>
+								</div>
+
+
+								<div class="row mt32 mb32">
+									<div class="col-2"></div>
+
+									<div class="col-8">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<td>
+														<b>Current Contract: </b>
+													</td>
+													<td>
+														<span t-field="o.contract_id.name" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<b>Manager: </b>
+													</td>
+													<td>
+														<span t-field="o.parent_id.name" />
+
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<b>Wage: </b>
+													</td>
+													<td>
+														<span t-esc="o.wage"
+															t-options='{"widget": "float", "precision": 2}' />
+
+													</td>
+												</tr>
+
+												<tr>
+													<td>
+														<b>Joining Date: </b>
+													</td>
+													<td>
+														<span t-field="o.joining_date"
+															t-options="{'format': 'MM/dd/yyyy'}" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<b>EOS Duration: </b>
+													</td>
+													<td>
+														<div class="oe_inline">
+															<span t-field="o.date_start"
+																t-options="{'format': 'MM/dd/yyyy'}" />
+															<b> - </b>
+															<span t-field="o.date_end"
+																t-options="{'format': 'MM/dd/yyyy'}" />
+
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<b>EOS Period: </b>
+													</td>
+													<td>
+														<span t-field="o.duration" />
+													</td>
+												</tr>
+
+												<tr>
+													<td>
+														<b>End Services Benefit: </b>
+													</td>
+													<td>
+														<span t-field="o.eos_amount"
+															t-options='{"widget": "float", "precision": 2}' />
+													</td>
+												</tr>
+
+											</thead>
+										</table>
+										<div class="col-2"></div>
+
+									</div>
+								</div>
+								<div style="margin-top:30px">
+									<p t-field="o.note" />
+								</div>
+								<div class="body-part">
+									<div class="row"
+										style="margin-top:100px; page-break-inside: avoid;width:100%">
+
+										<div class="col-4" style="text-align: left;">
+
+											<strong>Prepared By</strong>
+											<p>
+												<div t-field="o.create_uid.name"></div>
+											</p>
+										</div>
+										<div class="col-4" style="text-align: center;">
+											<strong>Reviewed By</strong>
+										</div>
+										<div class="col-4" style="text-align: right;">
+											
+											<strong>Approved By</strong>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</t>
+					</t>
+
+				</t>
+			</t>
+		</template>
+
+	</data>
+</odoo>

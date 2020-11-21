@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="wizard_object_view" model="ir.ui.view">
+			<field name="name">wizard.object</field>
+			<field name="model">wizard.object</field>
+			<field name="arch" type="xml">
+				<form string="Purchase Comparison" version="7.0">
+					<group>
+						<h5>
+							<b>This wizard will allow you to show Compare Purchase Orders</b>
+						</h5>
+					</group>
+					<footer>
+						<button name="method_purchase_compare" string="Compare Now"
+							type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="open_wizard_action_id"
+			model="ir.actions.act_window">
+			<field name="name">Compare Purchase Orders</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">wizard.object</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id"
+				ref="purchase_comparison.wizard_object_view" />
+			<field name="binding_model_id"
+				ref="purchase.model_purchase_order" />
+			<field name="target">new</field>
+		</record>
+	</data>
+</odoo>

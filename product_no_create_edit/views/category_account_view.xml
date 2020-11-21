@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record model="ir.ui.view" id="price_account_no_create_edit">
+		<field name="name">priceaccount.no</field>
+		<field name="model">product.category</field>
+		<field name="inherit_id" ref="account.view_category_property_form" />
+		<field name="arch" type="xml">
+			<xpath
+				expr="//field[@name='property_account_creditor_price_difference_categ']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='property_account_income_categ_id']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='property_account_expense_categ_id']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='property_stock_account_input_categ_id']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='property_stock_account_output_categ_id']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='property_stock_valuation_account_id']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='property_stock_journal']"
+				position="attributes">
+				<attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+			</xpath>
+		</field>
+	</record>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+© 2018-Today Aktiv Software (http://aktivsoftware.com/).
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+-->
+
+<odoo>
+    <record id="ship_document_form" model="ir.ui.view">
+        <field name="name">hr.holidays</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="after">
+                <field name="sandwich_rule" invisible='1'/>
+                <div attrs="{'invisible':[('sandwich_rule', '=', False)]}" style="font-size: 20px;color: red;">Sandwich Rule is Applied.</div>
+            </xpath> 
+            <field name="department_id" position='after'>
+                <field name='hr_consider_sandwich_rule' groups="hr.group_hr_manager" readonly="1" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="sandwich_rule_leave_type_form" model="ir.ui.view">
+        <field name="name">hr.leave.type</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/group[@name='description']/field[@name='unpaid']" position="before">
+                <field name="hr_consider_sandwich_rule_apply"/>
+            </xpath> 
+        </field>
+    </record>
+    
+    
+</odoo>

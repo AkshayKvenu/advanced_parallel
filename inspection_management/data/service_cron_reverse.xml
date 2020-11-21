@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ir_cron_inspection_expiry" model="ir.cron">
+        <field name="name">Expire Inspections</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"/>
+        <field name="model_id" ref="model_equipment_inspection"/>
+        <field name="code">model.check_inspection_expiry()</field>
+        <field name="state">code</field>
+    </record>
+    
+</odoo>

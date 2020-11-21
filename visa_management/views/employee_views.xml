@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+
+		<record id="view_block_visa_tree" model="ir.ui.view">
+			<field name="name">block.tree</field>
+			<field name="model">hr.block.visa</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Block Visa">
+					<field name="visa_number" />
+					<field name="date" />
+					<field name="company_id" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_block_visa_form" model="ir.ui.view">
+			<field name="name">block.form</field>
+			<field name="model">hr.block.visa</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Block Visa">
+				<sheet>
+					<group>
+						<group>
+							<field name="visa_number" />
+						</group>
+						<group>
+							<field name="date" required='1'/>
+							<field name="total_visa_no" />
+						</group>
+						<group>
+							<field name="company_id" />
+						</group>
+						<group>
+							<field name="remain_visa" />
+						</group>
+					</group>
+					<group>
+						<field name="add_inf" nolabel="1" placeholder="Additional Info" />
+					</group>
+					
+						<field name="block_visa_ids" widget="many2many" domain ="[('visa_id','=',False)]">
+							<tree string="Block Visa" >
+								<field name="visa_num" />
+								<field name="profession"  />
+								<field name="employee" />
+								
+							</tree>
+						</field>
+					
+				</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_block_visa_form"
+			model="ir.actions.act_window">
+			<field name="name">Block Visa</field>
+			<field name="res_model">hr.block.visa</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Create the first Visa.</p>
+			</field>
+		</record>
+
+		<record id="view_employee_visa_tree" model="ir.ui.view">
+			<field name="name">employee.tree</field>
+			<field name="model">hr.employee.visa</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Employee Visa">
+					<field name="visa_num" />
+					<field name="visa_id" />
+					<field name="profession" />
+					<field name="employee" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_employee_visa_form" model="ir.ui.view">
+			<field name="name">employee.form</field>
+			<field name="model">hr.employee.visa</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Employee Visa">
+					<sheet>
+						<group>
+							<group>
+								<field name="visa_num" />
+							</group>
+							<group>
+								<field name="profession" />
+							</group>
+							<group>
+								<field name="employee" />
+							</group>
+							<group>
+								<field name="visa_id" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_employee_visa_form"
+			model="ir.actions.act_window">
+			<field name="name">Employee Visa</field>
+			<field name="res_model">hr.employee.visa</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Create the first Visa.</p>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hr_employee_inherit_form_">
+			<field name="name">hr.employee.inherit.form</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='visa_no']" position="replace">
+					<field name="visa_numb"  domain ="['|',('employee','=',False),('employee','ilike',name)]"  options="{'no_create_edit': True}"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view"
+			id="view_hr_employee_inherit_form_pro">
+			<field name="name">hr.employee.inherit.form.pro</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id"
+				ref="saudi_payroll_allowances.hr_employee_view_form_" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='employee_profession_id']"
+					position="replace">
+					<field name="prof" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<menuitem id="menu_visa" name="Employee Visa" parent="hr.menu_hr_root"
+			sequence="90" />
+
+		<menuitem id="menu_block_visa" name="Block Visa"
+			parent="visa_management.menu_visa" sequence="10"
+			action="action_block_visa_form" />
+
+		<menuitem id="menu_employee_visa" name="Employee Visa"
+			parent="visa_management.menu_visa" sequence="20"
+			action="action_employee_visa_form" />
+
+	</data>
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+<!-- 		<record id="view_stock_picking" model="ir.ui.view"> -->
+<!-- 			<field name="name">stock.picking.view</field> -->
+<!-- 			<field name="model">stock.picking</field> -->
+<!-- 			<field name="inherit_id" ref="stock.view_picking_form" /> -->
+<!-- 			<field name="arch" type="xml"> -->
+
+<!-- 				<xpath expr="//sheet/group/group[2]/field[@name='date_done']" -->
+<!-- 					position="replace"> -->
+
+<!-- 					<field name="date_done" string="Effective Date" -->
+<!-- 						attrs="{'readonly':[('state','in',['done'])]}" required='True' /> -->
+
+<!-- 				</xpath> -->
+<!-- 			</field> -->
+<!-- 		</record> -->
+
+		<record id="view_picking_type_form_inherit_rental"
+			model="ir.ui.view">
+			<field name="name">stock.picking.type.rental</field>
+			<field name="model">stock.picking.type</field>
+			<field name="inherit_id" ref="stock.view_picking_type_form" />
+			<field name="arch" type="xml">
+
+				<field name="use_existing_lots" position="after">
+					<field name="is_rental_picking" />
+				</field>
+
+			</field>
+		</record>
+
+		<record id="view_move_form_rental_lot" model="ir.ui.view">
+			<field name="name">stock.production.lot.rental</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//sheet" position="inside">
+					<group>
+						<group>
+							<field name="state" />
+							<field name="is_rental" invisible="1" />
+						</group>
+					</group>
+				</xpath>
+
+			</field>
+		</record>
+
+		<record id="action_rental_production_lot_form"
+			model="ir.actions.act_window">
+			<field name="name">Rental Lots/Serial Numbers</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">stock.production.lot</field>
+			<field name="view_ids"
+				eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('stock.view_production_lot_tree')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('stock.view_production_lot_form')})]" />
+			<field name="search_view_id"
+				ref="stock.search_product_lot_filter" />
+			<field name="context">{'search_default_group_by_product': 1}</field>
+			<field name="domain">[('is_rental', '=', True)]</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Add a lot/serial number
+				</p>
+				<p>
+					This is the list of all the production lots you recorded. When
+					you select a lot, you can get the traceability of the products
+					contained in lot.
+				</p>
+			</field>
+		</record>
+
+		<record id="stock.action_production_lot_form"
+			model="ir.actions.act_window">
+			<field name="domain">[('is_rental', '=', False)]</field>
+		</record>
+
+		<menuitem id="menu_rental_production_lot"
+			name="Rental lot Numbers" parent="stock.menu_stock_inventory_control"
+			action="action_rental_production_lot_form" sequence="101"
+			groups="advanced_lines_sale.group_rental_user,stock.group_stock_user" />
+
+	</data>
+</odoo>

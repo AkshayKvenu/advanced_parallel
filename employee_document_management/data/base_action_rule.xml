@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">
+    
+        <!-- automated actions add messge -->
+        <record id="action_email_reminder_document_expiry" model="ir.actions.server">
+            <field name="name">Reminder to User</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">email</field>
+            <field name="template_id" ref="email_template_document_reminder_mail"/>
+        </record>
+        
+        <record id="action_set_reminder_document" model="ir.actions.server">
+            <field name="name">Reminder Code</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="sequence">2</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">record.write({'state': 'sent','mail_time':timet.strftime('%Y-%m-%d %H:%M:%S')})</field>
+        </record>
+        
+        <record id="rule_set_reminder_document" model="base.action.rule">
+            <field name="name">Set Auto Reminder on employee documents.</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="sequence">11</field>
+            <field name="kind">on_time</field>
+            <field name="trg_date_id" search="[('model','=','hr.employee.contract'),('name','=','next_reminder')]"/>
+            <field name="trg_date_range">1</field>
+            <field name="trg_date_range_type">minutes</field>
+            <field name="server_action_ids" eval="[(6,0,[ref('action_email_reminder_document_expiry'),ref('action_set_reminder_document')])]"/>
+        </record>
+        
+        <!-- Document-related subtypes for messaging / Chatter -->
+        <record id="mt_document_pending" model="mail.message.subtype">
+            <field name="name">To Renew</field>
+            <field name="res_model">hr.employee.contract</field>
+            <field name="default" eval="True"/>
+            <field name="description">Contract about to expire</field>
+        </record>
+        <record id="mt_document_close" model="mail.message.subtype">
+            <field name="name">Expired</field>
+            <field name="res_model">hr.employee.contract</field>
+            <field name="default" eval="False"/>
+            <field name="description">Document expired</field>
+        </record>
+        
+        <!-- base action rule about "Expiring Soon" contracts -->
+        <record id="document_open" model="ir.filters">
+            <field name="name">Renew Documents</field>
+            <field name="model_id">hr.employee.contract</field>
+            <field name="domain">[('state', '=', 'renew')]</field>
+            <field name="user_id" eval="False"/>
+        </record>
+        <record id="document_set_as_pending" model="ir.actions.server">
+            <field name="name">Employee Document: set as renew</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">record.set_as_pending()</field>
+        </record>
+        <record id="rule_document_1_set_as_pending" model="base.action.rule">
+            <field name="name">Employee Document: check for renew</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="sequence">50</field>
+            <field name="kind">on_time</field>
+            <field name="filter_id" ref="document_open"/>
+            <field name="trg_date_id" ref="employee_document_management.field_hr_employee_contract_next_reminder"/>
+            <field name="trg_date_range">-1</field>
+            <field name="trg_date_range_type">minutes</field>
+            <field name="server_action_ids" eval="[(6, 0, [ref('document_set_as_pending')])]"/>
+        </record>
+        
+        <!-- base action rule about "Expired" Documents -->
+        <record id="document_set_as_close" model="ir.actions.server">
+            <field name="name">Employee Document: set as expired</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">record.set_as_close()</field>
+        </record>
+        <record id="rule_document_3_set_as_close" model="base.action.rule">
+            <field name="name">Employee Document: check for expire</field>
+            <field name="model_id" ref="model_hr_employee_contract"/>
+            <field name="sequence">52</field>
+            <field name="kind">on_time</field>
+            <field name="trg_date_id" ref="employee_document_management.field_hr_employee_contract_expiration_date"/>
+            <field name="trg_date_range">1</field>
+            <field name="trg_date_range_type">minutes</field>
+            <field name="server_action_ids" eval="[(6, 0, [ref('document_set_as_close')])]"/>
+        </record>
+        
+    </data>
+</odoo>

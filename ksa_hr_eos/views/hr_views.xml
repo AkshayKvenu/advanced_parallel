@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<menuitem id="menu_eos_main" name="End of Services" parent="hr.menu_hr_root" sequence="3" />
+
+		<record id="view_eos_tree" model="ir.ui.view">
+			<field name="name">employee.eos.tree</field>
+			<field name="model">employee.eos</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="End of Services">
+					<field name="employee_id" />
+					<field name="department_id" />
+					<field name="job_id" />
+					<field name="work_location" />
+					<field name="parent_id" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_eos_form" model="ir.ui.view">
+			<field name="name">employee.eos.form</field>
+			<field name="model">employee.eos</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="End of Services">
+					<header>
+						<button string="Confirm" name="action_done" states="draft" type='object' class="EmployeeEOS" />
+						<button string="Cancel" name="action_cancel" states="draft,done" type='object' class="EmployeeEOS" />
+						<button name='acton_reset_draft' type='object' states='cancel' string='Reset to draft' />
+						<field name="state" widget="statusbar" />
+					</header>
+					<sheet>
+						<div class="oe_title">
+							<label for="employee_id" class="oe_edit_only" />
+							<h1>
+								<field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</h1>
+						</div>
+						<group>
+							<group string="Position">
+								<field name="department_id" />
+								<field name="job_id" />
+								<field name="work_location" />
+								<field name="parent_id" />
+							</group>
+							<!--<group string="Personal Info"> <field name="country_id" options='{"no_open": True, "no_create": True}'/> <field 
+								name="identification_id" groups="hr.group_hr_user"/> </group> <group string="Status"> <field name="gender"/> <field name="marital"/> 
+								<field name="birthday"/> <field name="age"/> </group> -->
+							<group string="Current Contract">
+								<field name="contract_id" />
+								<field name="wage" />
+								<field name="joining_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="duration_year" invisible="1" />
+								<field name="duration_month" invisible="1" />
+								<field name="duration_day" invisible="1" />
+								<label for="date_start" string="Duration" />
+								<div>
+									<field name="date_start" class="oe_inline" />
+									-
+									<field name="date_end" class="oe_inline" />
+									<field name="duration" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+									<button string="Calculate EOS" type="action" name="%(action_view_calculate_eos)d" class="oe_link"
+										attrs="{'invisible': [('state', '!=', 'draft')]}" />
+								</div>
+								<field name="eos_amount" />
+								<field name="effective_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="relieving_date" invisible="1" />
+							</group>
+						</group>
+						 <div>
+                                <field name="note" placeholder="Additional notes..."/>
+                            </div>
+						<!-- <notebook> <page name="contracts" string="Contracts"> <field name="contract_ids"> <tree string="Contracts" > <field 
+							name="name"/> <field name="type_id"/> <field name="job_id"/> <field name="working_hours"/> <field name="date_start"/> <field 
+							name="date_end"/> <field name="wage" /> <field name="state" /> </tree> </field> </page> </notebook> -->
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_eos_tree" model="ir.actions.act_window">
+			<field name="name">End of Services</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">employee.eos</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="view_eos_tree" />
+		</record>
+
+		<menuitem id="menu_document_config" name="EOS" action="action_eos_tree" parent="menu_eos_main" sequence="1" />
+
+		<!-- <record id="hr_contract_view_form_inh" model="ir.ui.view"> <field name="name">hr.contract.form.inherited</field> <field 
+			name="model">hr.contract</field> <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/> <field name="arch" type="xml"> 
+			<field name="wage" position="before"> <field name="gosi_wage" /> </field> </field> </record> -->
+
+		<record id="view_hr_payslip_form_inh" model="ir.ui.view">
+			<field name="name">hr.payslip.form.inherited</field>
+			<field name="model">hr.payslip</field>
+			<field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+			<field name="arch" type="xml">
+				<field name="struct_id" position="before">
+					<field name="eos_id" />
+				</field>
+			</field>
+		</record>
+
+	</data>
+</odoo>

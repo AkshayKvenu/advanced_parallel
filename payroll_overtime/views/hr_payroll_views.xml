@@ -1,0 +1,84 @@
+<odoo>
+	<data>
+
+		<record id="view_hr_payslip_overtime_tree" model="ir.ui.view">
+			<field name="name">hr.payroll_overtime.tree</field>
+			<field name="model">hr.payroll_overtime</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name_seq" />
+					<field name="name" />
+					<field name="created_user" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_hr_payslip_overtime_form" model="ir.ui.view">
+			<field name="name">hr.payroll_overtime.form</field>
+			<field name="model">hr.payroll_overtime</field>
+			<field name="arch" type="xml">
+				<form string="Payslip">
+					<header>
+						<button string="To Approve" name="action_approve"
+							type="object" states="draft" class="oe_highlight" />
+						<button string="Confirm" name="action_done"
+							states="approve" type='object'
+							groups='hr_payroll.group_hr_payroll_manager' class="oe_highlight" />
+						<button string="Cancel" name="action_cancel"
+							states="approve,done" type='object' class="oe_highlight" />
+						<field name="state" widget="statusbar" />
+
+					</header>
+					<sheet>
+						<div class="oe_title">
+							<h1>
+								<field name="name_seq" />
+							</h1>
+						</div>
+						<group col="4">
+							<field name="name" required="1"
+								attrs="{'readonly': [('state','!=', 'draft')]}" />
+							<field name="company" readonly="1" force_save="1"
+								required="1" />
+							<field name="created_user" readonly="1" force_save="1"
+								required="1" />
+							<field name="approved_user" readonly="1" force_save="1" />
+							<field name="Note"
+								attrs="{'readonly': [('state','!=', 'draft')]}" />
+						</group>
+						<notebook>
+							<page string="Payroll">
+								<field name="payroll_line_ids"
+									attrs="{'readonly': [('state','!=', 'draft')]}"
+									context="{'default_state':state}">
+									<tree string="payroll overtime" editable="bottom"
+										delete='1'>
+										<field name="employee_id" required="1" />
+										<field name="start_date" required="1" />
+										<field name="end_date" required="1" />
+										<field name="OT_float" required="1" />
+										<field name="state" invisible='1' />
+										<field name="Notes" />
+									</tree>
+								</field>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_view_hr_payslip_overtime_form"
+			model="ir.actions.act_window">
+			<field name="name">Overtime </field>
+			<field name="res_model">hr.payroll_overtime</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain" eval="False"></field>
+		</record>
+		<menuitem action="action_view_hr_payslip_overtime_form"
+			id="menu_payslip_overtime" parent="hr_payroll.menu_hr_payroll_root"
+			groups="hr_payroll.group_hr_payroll_user" />
+
+	</data>
+</odoo>

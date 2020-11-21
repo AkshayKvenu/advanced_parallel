@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_vacation_manager_ticket,access_employee_vacation_ticket_manager,model_employee_vacation_ticket,ticket_manager,1,1,1,1
+access_employee_vacation_ticket_user,access_employee_vacation_ticket_user,model_employee_vacation_ticket,ticket_user,1,0,0,0
+access_hr_employee_resume,access_hr_employee_resume,model_hr_employee_resume,base.group_user,1,1,1,1 

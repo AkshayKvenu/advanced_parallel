@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_payroll">
+			<t t-call="web.html_container">
+				<t t-set="data_report_margin_top" t-value="20" />
+				<t t-set="data_report_header_spacing" t-value="14" />
+				<t t-set="data_report_dpi" t-value="110" />
+				<t t-call="web.internal_layout">
+					<div class="page">
+						<style>
+							.table{border: 1px solid #e7e5fa;}
+							.table th{border: 1px
+							solid #e7e5fa;}
+							.table td{border: 1px solid #e7e5fa;}
+							.label-txt1{font-weight: bold;}
+							.label-txt2{padding-left: 10px;}
+							.label-txt3{font-size: 1.25em;}
+							.txt-bg1{background: lavender;}
+							.txt-bg2{background: silver;}
+							.row{margin: 10px -15px 25px
+							-15px;}
+							th{text-align: center;}
+							.page
+							{font-family: Inconsolata; }
+<!-- thistle silver -->
+						</style>
+						<!-- .page { font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, 
+							sans-serif; } -->
+						<h2>
+							<center>
+								Employee Payroll Statement
+							</center>
+						</h2>
+
+						<div class="row label-txt1" t-if="data['date_from'] and data['date_to']">
+							<div class="col-xs-1">From</div>
+							<div class="col-xs-1">:</div>
+							<div class="col-xs-10">
+								<t t-if="data['date_from']">
+									<span
+										t-esc="datetime.datetime.strptime(data['date_from'], '%Y-%m-%d').strftime('%d-%m-%Y')" />
+								</t>
+							</div>
+							<div class="col-xs-1">To</div>
+							<div class="col-xs-1">:</div>
+							<div class="col-xs-10">
+								<t t-if="data['date_to']">
+									<span
+										t-esc="datetime.datetime.strptime(data['date_to'], '%Y-%m-%d').strftime('%d-%m-%Y')" />
+								</t>
+							</div>
+						</div>
+
+						<div class="row label-txt1" t-else="">
+							<div class="col-xs-1">Batch</div>
+							<div class="col-xs-1">:</div>
+							<div class="col-xs-10">
+								<t t-if="data['batch_id']">
+									<span t-esc="data['batch_id'][1]" />
+								</t>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xs-12">
+								<table class="table table-condensed">
+
+									<thead>
+										<tr class="txt-bg1">
+											<th>Employee Name</th>
+											<th>Job Position</th>
+											<th t-foreach="docs['code']" t-as="code">
+												<span t-esc="code" />
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<t t-foreach="docs['lines']" t-as="doc">
+											<tr>
+												<td colspan="100%">
+													<b>
+														<span t-esc="doc" />
+													</b>
+												</td>
+											</tr>
+											<t t-foreach="docs['lines'][doc]" t-as="emp">
+												<tr>
+													<td>
+														<span t-esc="emp.name" />
+													</td>
+													<td>
+														<span t-esc="emp.job_id.name" />
+													</td>
+													<td t-foreach="docs['lines'][doc][emp]" t-as="line" class="text-right">
+														<span t-esc="'{0:,.2f}'.format(docs['lines'][doc][emp][line])" />
+													</td>
+												</tr>
+											</t>
+											<tr class="txt-bg2">
+												<td colspan="2" class="head-back">
+													<b>Total</b>
+												</td>
+												<td t-foreach="docs['code']" t-as="code" class="head-back text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(docs['lines'][doc][employee][code] for employee in docs['lines'][doc]))" />
+												</td>
+											</tr>
+										</t>
+
+
+
+										<!-- <tr t-foreach="docs.items()" t-as="doc"> -->
+										<!-- <td colspan="100%" class="text-left"> -->
+										<!-- <span t-esc="doc[0]" /> -->
+										<!-- </td> -->
+										<!-- <tr t-foreach="doc[1]" t-as="pay"> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-field="pay.employee_id.name" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-field="pay.employee_id.name" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-field="pay.employee_id.department_id.name" /> -->
+										<!-- </td> -->
+										<!-- <t t-foreach="pay.details_by_salary_rule_category" t-as="det"> -->
+										<!-- <td> -->
+										<!-- <span t-if="det.code=='BASIC'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td> -->
+										<!-- <span t-if="det.code=='GROSS'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-if="det.code=='NET'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-if="det.code=='HRA'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-if="det.code=='CA'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-if="det.code=='PT'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td t-if="det.code=='PF'" class="text-center"> -->
+										<!-- <span t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-if="det.code=='CAGG'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- <td class="text-center"> -->
+										<!-- <span t-if="det.code=='MA'" t-field="det.total" /> -->
+										<!-- </td> -->
+										<!-- </t> -->
+
+										<!-- </tr> -->
+										<!-- </tr> -->
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<!-- <div class="row"> -->
+						<!-- <div class="col-xs-12"> -->
+						<!-- <table class="table table-condensed"> -->
+						<!-- <thead> -->
+						<!-- <tr> -->
+						<!-- <th class="label-txt1 label-txt3" colspan="9">Sales Details -->
+						<!-- </th> -->
+						<!-- </tr> -->
+						<!-- </thead> -->
+						<!-- <tbody> -->
+						<!-- <t t-foreach="lines['sale'].values()" t-as="line"> -->
+						<!-- <tr> -->
+						<!-- <td colspan="9"> -->
+						<!-- <span class="label-txt2" t-esc="line[0][9]" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+
+						<!-- <tr class="txt-bg1"> -->
+						<!-- <th>Invoice No.</th> -->
+						<!-- <th>Reference</th> -->
+						<!-- <th>Inv Date</th> -->
+						<!-- <th>Partner</th> -->
+						<!-- <th>VAT #</th> -->
+						<!-- <th>VAT %</th> -->
+						<!-- <th>Taxable Amt</th> -->
+						<!-- <th>VAT Amount</th> -->
+						<!-- <th>Total Amount</th> -->
+						<!-- </tr> -->
+
+						<!-- <tr t-foreach="line" t-as="inv"> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span t-esc="inv[0]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span t-esc="inv[1]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span -->
+						<!-- t-esc="datetime.datetime.strptime(inv[2], '%Y-%m-%d').strftime('%d-%m-%Y')" 
+							/> -->
+						<!-- </td> -->
+						<!-- <td> -->
+						<!-- <span t-esc="inv[3]" /> -->
+						<!-- </td> -->
+						<!-- <td> -->
+						<!-- <span t-esc="inv[4]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span t-esc="inv[5]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv[6]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv[7]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv[6] + inv[7]" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr class="label-txt1"> -->
+						<!-- <td colspan="6"> -->
+						<!-- <span class="label-txt2">TOTAL</span> -->
+						<!-- </td> -->
+						<!-- <td class="text-right txt-bg1"> -->
+						<!-- <span t-esc="sum(t[6] for t in line)" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right txt-bg1"> -->
+						<!-- <span t-esc="sum(t[7] for t in line)" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right txt-bg1"> -->
+						<!-- <span t-esc="sum(t[6] + t[7] for t in line)" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td colspan="9"></td> -->
+						<!-- </tr> -->
+						<!-- </t> -->
+						<!-- </tbody> -->
+						<!-- </table> -->
+						<!-- </div> -->
+						<!-- </div> -->
+
+						<!-- <div class="row"> -->
+						<!-- <div class="col-xs-12"> -->
+						<!-- <table class="table table-condensed"> -->
+						<!-- <thead> -->
+						<!-- <tr> -->
+						<!-- <th class="label-txt1 label-txt3" colspan="4">VAT Summary</th> -->
+						<!-- </tr> -->
+						<!-- </thead> -->
+						<!-- <tbody> -->
+						<!-- <t t-foreach="lines['all']" t-as="line"> -->
+						<!-- <tr> -->
+						<!-- <td colspan="4"> -->
+						<!-- <span>VAT at </span> -->
+						<!-- <span class="label-txt2" t-esc="line" /> -->
+						<!-- <span>%</span> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+
+						<!-- <tr> -->
+						<!-- <th></th> -->
+						<!-- <th class="txt-bg1">Sales</th> -->
+						<!-- <th class="txt-bg1">Purchase</th> -->
+						<!-- <th class="txt-bg1">Difference</th> -->
+						<!-- </tr> -->
+						<!-- <t t-set="inv" t-value="lines['all'][line]" /> -->
+						<!-- <tr> -->
+						<!-- <td class="txt-bg1"> -->
+						<!-- <span>Taxable Amt</span> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span t-esc="inv['sale'][0]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv['purchase'][0]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv['sale'][0] - inv['purchase'][0]" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td class="txt-bg1"> -->
+						<!-- <span>Tax Amt</span> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span t-esc="inv['sale'][1]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv['purchase'][1]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv['sale'][1] - inv['purchase'][1]" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td class="txt-bg1"> -->
+						<!-- <span>Total Amt</span> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span t-esc="inv['sale'][2]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv['purchase'][2]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="inv['sale'][2] - inv['purchase'][2]" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td colspan="4"></td> -->
+						<!-- </tr> -->
+						<!-- </t> -->
+						<!-- </tbody> -->
+						<!-- </table> -->
+						<!-- </div> -->
+						<!-- </div> -->
+
+						<!-- <div class="row"> -->
+						<!-- <div class="col-xs-12"> -->
+						<!-- <table class="table table-condensed"> -->
+						<!-- <thead> -->
+						<!-- <tr> -->
+						<!-- <th class="label-txt1 label-txt3" colspan="4">Tax Details</th> -->
+						<!-- </tr> -->
+						<!-- <tr class="txt-bg1"> -->
+						<!-- <th>Tax Details</th> -->
+						<!-- <th>Taxable Amt</th> -->
+						<!-- <th>VAT Amount</th> -->
+						<!-- <th>Total Amount</th> -->
+						<!-- </tr> -->
+						<!-- </thead> -->
+						<!-- <tbody> -->
+						<!-- <tr> -->
+						<!-- <td class="label-txt1">Sale</td> -->
+						<!-- </tr> -->
+						<!-- <t t-foreach="lines['sale']" t-as="line"> -->
+						<!-- <tr> -->
+						<!-- <td> -->
+						<!-- <span t-esc="lines['sale'][line][0][9]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="sum(t[6] for t in lines['sale'][line])" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span t-esc="sum(t[7] for t in lines['sale'][line])" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[6] + t[7] for t in lines['sale'][line])" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- </t> -->
+						<!-- <tr class="label-txt1"> -->
+						<!-- <td> -->
+						<!-- <span>Total</span> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][6] for t in lines['sale'].values())" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][7] for t in lines['sale'].values())" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][6] + t[0][7] for t in lines['sale'].values())" 
+							/> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td colspan="9"></td> -->
+						<!-- </tr> -->
+
+						<!-- <tr> -->
+						<!-- <td class="label-txt1">Purchase</td> -->
+						<!-- </tr> -->
+						<!-- <t t-foreach="lines['purchase']" t-as="line"> -->
+						<!-- <tr> -->
+						<!-- <td> -->
+						<!-- <span t-esc="lines['purchase'][line][0][9]" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[6] for t in lines['purchase'][line])" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[7] for t in lines['purchase'][line])" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[6] + t[7] for t in lines['purchase'][line])" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- </t> -->
+						<!-- <tr class="label-txt1"> -->
+						<!-- <td> -->
+						<!-- <span>Total</span> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][6] for t in lines['purchase'].values())" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][7] for t in lines['purchase'].values())" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-right"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][6] + t[0][7] for t in lines['purchase'].values())" 
+							/> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td colspan="9"></td> -->
+						<!-- </tr> -->
+						<!-- </tbody> -->
+						<!-- </table> -->
+						<!-- </div> -->
+						<!-- </div> -->
+
+						<!-- <div class="row"> -->
+						<!-- <div class="col-xs-12"> -->
+						<!-- <table class="table table-condensed"> -->
+						<!-- <thead> -->
+						<!-- <tr> -->
+						<!-- <th class="label-txt1 label-txt3" colspan="3">Tax Difference -->
+						<!-- </th> -->
+						<!-- </tr> -->
+						<!-- <tr class="txt-bg1"> -->
+						<!-- <th>Sale</th> -->
+						<!-- <th>Purchase</th> -->
+						<!-- <th>Difference</th> -->
+						<!-- </tr> -->
+						<!-- </thead> -->
+						<!-- <tbody> -->
+						<!-- <tr class="label-txt1"> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][7] for t in lines['sale'].values())" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][7] for t in lines['purchase'].values())" /> -->
+						<!-- </td> -->
+						<!-- <td class="text-center"> -->
+						<!-- <span -->
+						<!-- t-esc="sum(t[0][7] for t in lines['sale'].values()) - sum(t[0][7] 
+							for t in lines['purchase'].values())" /> -->
+						<!-- </td> -->
+						<!-- </tr> -->
+						<!-- <tr> -->
+						<!-- <td colspan="9"></td> -->
+						<!-- </tr> -->
+						<!-- </tbody> -->
+						<!-- </table> -->
+						<!-- </div> -->
+						<!-- </div> -->
+					</div>
+				</t>
+			</t>
+		</template>
+
+		<!-- <template id="report_arabic_english_vat_range"> -->
+		<!-- <t t-call="report.html_container"> -->
+		<!-- <t t-set="data_report_margin_top" t-value="20" /> -->
+		<!-- <t t-set="data_report_header_spacing" t-value="14" /> -->
+		<!-- <t t-set="data_report_dpi" t-value="110" /> -->
+		<!-- <t t-foreach="docs" t-as="o"> -->
+		<!-- <t t-call="report.internal_layout"> -->
+		<!-- <div class="page"> -->
+		<!-- <style> -->
+		<!-- .table{border: 1px solid black} -->
+		<!-- .table th{border: 1px solid -->
+		<!-- black} -->
+		<!-- .table td{border: 1px solid black} -->
+		<!-- </style> -->
+		<!-- <h2> -->
+		<!-- VAT statement from -->
+		<!-- <t t-if="data['date_from']"> -->
+		<!-- <span t-esc="data['date_from']" /> -->
+		<!-- </t> -->
+		<!-- to -->
+		<!-- <t t-if="data['date_to']"> -->
+		<!-- <span t-esc="data['date_to']" /> -->
+		<!-- </t> -->
+		<!-- </h2> -->
+
+		<!-- <table class="table table-condensed"> -->
+		<!-- <thead> -->
+		<!-- <tr> -->
+		<!-- <th> -->
+		<!-- sl no. -->
+		<!-- <br /> -->
+		<!-- sl. لا -->
+		<!-- </th> -->
+		<!-- <th> -->
+		<!-- Invoice Number -->
+		<!-- <br></br> -->
+		<!-- رقم الفاتورة -->
+		<!-- </th> -->
+		<!-- <th> -->
+		<!-- Customer -->
+		<!-- <br></br> -->
+		<!-- زبون -->
+		<!-- </th> -->
+		<!-- <th> -->
+		<!-- VAT No. -->
+		<!-- <br></br> -->
+		<!-- VAT رقم -->
+		<!-- </th> -->
+		<!-- <th> -->
+		<!-- Total Amount -->
+		<!-- <br></br> -->
+		<!-- المبلغ الإجمالي -->
+		<!-- </th> -->
+		<!-- <th> -->
+		<!-- VAT Amount -->
+		<!-- <br></br> -->
+		<!-- VAT كمية -->
+		<!-- </th> -->
+		<!-- </tr> -->
+		<!-- </thead> -->
+		<!-- <tbody> -->
+		<!-- <tr t-foreach="get_invoices" t-if="inv.amount_tax" -->
+		<!-- t-as="inv"> -->
+		<!-- <td> -->
+		<!-- <span t-esc="inv_index + 1" /> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-esc="inv.number" /> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-if="inv.partner_id.arabic_name"> -->
+		<!-- <span t-esc="inv.partner_id.arabic_name" /> -->
+		<!-- </span> -->
+		<!-- <span t-if="not inv.partner_id.arabic_name"> -->
+		<!-- <span t-esc="inv.partner_id.name" /> -->
+		<!-- </span> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-esc="inv.partner_id.vat" /> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-esc="inv.amount_total" /> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-esc="inv.amount_tax" /> -->
+		<!-- </td> -->
+		<!-- </tr> -->
+		<!-- </tbody> -->
+		<!-- </table> -->
+
+		<!-- <div class="row"> -->
+		<!-- <div class="col-xs-4 pull-right"> -->
+		<!-- <table class="table table-condensed"> -->
+		<!-- <tr> -->
+		<!-- <td> -->
+		<!-- <strong> -->
+		<!-- Total -->
+		<!-- <br></br> -->
+		<!-- مجموع -->
+		<!-- </strong> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-esc="get_total" -->
+		<!-- t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" 
+			/> -->
+		<!-- </td> -->
+		<!-- </tr> -->
+		<!-- <tr> -->
+		<!-- <td> -->
+		<!-- <strong> -->
+		<!-- VAT Total -->
+		<!-- <br></br> -->
+		<!-- VAT مجموع -->
+		<!-- </strong> -->
+		<!-- </td> -->
+		<!-- <td> -->
+		<!-- <span t-esc="tax_total" -->
+		<!-- t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" 
+			/> -->
+		<!-- </td> -->
+		<!-- </tr> -->
+		<!-- </table> -->
+		<!-- </div> -->
+		<!-- </div> -->
+
+		<!-- </div> -->
+		<!-- </t> -->
+		<!-- </t> -->
+		<!-- </t> -->
+		<!-- </template> -->
+
+	</data>
+</odoo>

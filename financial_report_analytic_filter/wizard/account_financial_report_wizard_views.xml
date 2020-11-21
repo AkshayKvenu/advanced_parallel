@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="account_report_financial_view_analytic_id" model="ir.ui.view">
+		<field name="name">Trial Balance</field>
+		<field name="model">accounting.report</field>
+		<field name="inherit_id" ref="accounting_pdf_reports.accounting_report_view" />
+		<field name="arch" type="xml">
+			<field name="date_to" position="after">
+			<field name="account_analytic_id" widget="many2many_tags"/>
+			</field>
+		</field>
+	</record>
+
+</odoo>

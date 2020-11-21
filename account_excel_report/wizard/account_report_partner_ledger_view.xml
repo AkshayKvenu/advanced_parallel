@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="account_report_partner_ledger_view_inh_xlsx" model="ir.ui.view">
+		<field name="name">Partner Ledger</field>
+		<field name="model">account.report.partner.ledger</field>
+		<field name="inherit_id" ref="accounting_pdf_reports.account_report_partner_ledger_view" />
+		<field name="arch" type="xml">
+			<button name="check_report" position="after">
+				<button name="export_xls" type="object" string="Export XLSX" class="oe_highlight" context="{'xls_export':1}" icon="fa-download" />
+			</button>
+		</field>
+	</record>
+
+</odoo>

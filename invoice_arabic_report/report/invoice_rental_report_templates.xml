@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<template id="report_rental_invoice_template_document">
+			<!-- <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" /> -->
+			<div class="page">
+				<style>
+					div{
+					font-size: 12px;
+					}
+					.head-table tr td {
+					font-size: 12px;
+					font-weight: bold;
+					}
+					.head-right-table tbody tr td {
+					line-height: .50 !important;
+					}
+					.head-left-table { border: 1px solid #ddd; }
+					.head-left-td { width: 18%; }
+					.left-table {
+					margin-left:
+					10px;
+					}
+					.address {
+					margin-left: -10px;
+					}
+					table { line-height: 1; }
+					.body-table tbody tr td { padding: 5px 5px !important; }
+					.total .col-7 { padding-right: 0 !important; }
+					.body-table thead tr th {
+					    border-top: 2px solid;
+					    border-bottom: 2px solid;
+					}
+				</style>
+
+				<div>
+					<center>
+						<h3>
+							<strong t-if="doc.type=='out_invoice'">Tax Invoice / فاتورة ضريبية</strong>
+							<!-- <strong t-if="doc.type=='in_invoice'">Vendor Bills / فواتير البائع</strong> -->
+							<!-- <strong t-if="doc.type=='in_refund'">Debit Notes / مذكرات الخصم</strong> -->
+							<!-- <strong t-if="doc.type=='out_refund'">Credit Notes / ملاحظات الائتمان</strong> -->
+						</h3>
+					</center>
+				</div>
+				<div class="row">
+					<div class="col-6 address">
+						<table class="table table-condensed head-table head-left-table">
+							<tr>
+								<td class="head-left-td">
+									<span>To </span>
+								</td>
+								<td>
+									<span t-field="doc.partner_id.parent_id.name"
+										t-if="doc.partner_id.company_type=='person' and doc.partner_id.parent_id" />
+									<span t-field="doc.partner_id.name"
+										t-if="doc.partner_id.company_type=='company' or not doc.partner_id.parent_id" />
+									<div t-field="doc.partner_id.parent_id"
+										t-if="doc.partner_id.company_type=='person' and doc.partner_id.parent_id"
+										t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": True, "phone_icons": True}' />
+									<div t-field="doc.partner_id" t-if="doc.partner_id.company_type=='company' or not doc.partner_id.parent_id"
+										t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": True, "phone_icons": True}' />
+								</td>
+								<td class="text-right">
+									<span>إلى</span>
+								</td>
+							</tr>
+							<tr>
+								<td class="head-left-td">
+									<span>VAT #</span>
+								</td>
+								<td>
+									<span t-if="doc.partner_id.company_type == 'company'" t-esc="doc.partner_id.vat" />
+									<span t-if="doc.partner_id.company_type == 'person' and doc.partner_id.parent_id"
+										t-esc="doc.partner_id.parent_id.vat" />
+								</td>
+								<td class="text-right">
+									<span>الضريبي</span>
+								</td>
+							</tr>
+							<tr t-if="doc.partner_id.company_type=='person' and doc.partner_id.parent_id">
+								<td class="head-left-td">
+									<span>Attn</span>
+								</td>
+								<td>
+									<span t-field="doc.partner_id.name" />
+								</td>
+								<td class="text-right"></td>
+							</tr>
+						</table>
+						<!-- <div> -->
+						<!-- <div class="col-xs-2"> -->
+						<!-- <strong>To / إلى :</strong> -->
+						<!-- </div> -->
+						<!-- <div class="col-xs-9"> -->
+						<!-- <strong> -->
+						<!-- <span t-field="doc.partner_id.parent_id.name" t-if="doc.partner_id.company_type=='person' and doc.partner_id.parent_id" 
+							/> -->
+						<!-- <span t-field="doc.partner_id.name" t-if="doc.partner_id.company_type=='company' or not doc.partner_id.parent_id" 
+							/> -->
+						<!-- </strong> -->
+						<!-- <div t-field="doc.partner_id.parent_id" t-if="doc.partner_id.company_type=='person' and doc.partner_id.parent_id" -->
+						<!-- t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": True, "phone_icons": True}' 
+							/> -->
+						<!-- <div t-field="doc.partner_id" t-if="doc.partner_id.company_type=='company' or not doc.partner_id.parent_id" -->
+						<!-- t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": True, "phone_icons": True}' 
+							/> -->
+						<!-- </div> -->
+						<!-- </div> -->
+						<!-- <div style="margin-top: 8em;"> -->
+						<!-- <div class="col-xs-3 col-xs-12"> -->
+						<!-- <strong>VAT # / الضريبي: </strong> -->
+						<!-- </div> -->
+						<!-- <div class="col-xs-9"> -->
+						<!-- <span t-if="doc.partner_id.company_type == 'company'" t-esc="doc.partner_id.vat" /> -->
+						<!-- <span t-if="doc.partner_id.company_type == 'person' and doc.partner_id.parent_id" t-esc="doc.partner_id.parent_id.vat" 
+							/> -->
+						<!-- </div> -->
+						<!-- </div> -->
+						<!-- <div t-if="doc.partner_id.company_type=='person' and doc.partner_id.parent_id" style="margin-top: 10em;"> -->
+						<!-- <strong> -->
+						<!-- <div class="col-xs-3"> -->
+						<!-- <span>Attn: </span> -->
+						<!-- </div> -->
+						<!-- <div class="col-xs-9"> -->
+						<!-- <span t-field="doc.partner_id.name" /> -->
+						<!-- </div> -->
+						<!-- </strong> -->
+						<!-- </div> -->
+					</div>
+
+					<div class="col-6">
+						<table class="table table-condensed head-table head-right-table">
+							<tr>
+								<td>
+									<strong>Inv No</strong>
+								</td>
+								<td class="text-center mid-td">
+									<strong>
+										<span t-field="doc.number" />
+									</strong>
+								</td>
+								<td class="text-right">
+									<strong>رقم الفاتورة</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong>Inv Date</strong>
+								</td>
+								<td class="text-center mid-td">
+									<strong>
+										<span t-field="doc.date_invoice" />
+									</strong>
+								</td>
+								<td class="text-right">
+									<strong>تاريخ الفاتورة</strong>
+								</td>
+							</tr>
+
+							<tr>
+								<td>
+									<strong>Due Date</strong>
+								</td>
+								<td class="text-center mid-td">
+									<strong>
+										<span t-field="doc.date_due" />
+									</strong>
+								</td>
+								<td class="text-right">
+									<strong>تاريخ الاستحقاق</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong>Order #</strong>
+								</td>
+								<td class="text-center mid-td">
+									<strong>
+										<span t-field="doc.origin" />
+									</strong>
+								</td>
+								<td class="text-right">
+									<strong>رقم التسعيرة</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong>PO #</strong>
+								</td>
+								<td class="text-center mid-td">
+									<strong>
+										<span t-field="doc.name" />
+									</strong>
+								</td>
+								<td class="text-right">
+									<strong>رقم طلب الشراء</strong>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong>Our VAT #</strong>
+								</td>
+								<td class="text-center mid-td">
+									<strong>
+										<span t-field="res_company.vat" />
+									</strong>
+								</td>
+								<td class="text-right">
+									<strong>ضرائبنا</strong>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				<!-- Is there a discount on at least one line? -->
+				<t t-set="display_discount" t-value="any([l.discount for l in doc.invoice_line_ids])" />
+
+				<div class="row">
+					<table class="table table-condensed body-table" style="width: 100%">
+						<thead>
+							<tr>
+								<th style="text-align:left;">
+									<strong>
+										Sl #
+										<br />
+										رقم
+									</strong>
+								</th>
+								<th style="text-align:left; width: 65% !important">
+									<strong>Description</strong>
+									<br />
+									<strong>اﻟوﺻف</strong>
+								</th>
+								<th style="text-align:left;">
+									<strong>
+										Serial #
+										<br />
+										رقم سري
+									</strong>
+								</th>
+								<th style="text-align:left;">
+									<strong>
+										Period
+										<br />
+										فترة
+									</strong>
+								</th>
+								<th style="text-align:left;">
+									<strong>
+										Qty
+										<br />
+										اﻟﻛﻣﯾﺔ
+									</strong>
+								</th>
+								<th style="text-align:right;">
+									<strong>
+										Price
+										<br />
+										سعر 
+									</strong>
+								</th>
+								<th class="text-right" t-if="display_discount" groups="sale.group_discount_per_so_line" style="width: 12%;">
+									<strong>
+										Disc.(%)
+										<br />
+										(%) خصم
+									</strong>
+								</th>
+								<th style="text-align:right">
+									<strong>
+										Taxes
+										<br />
+										الضرائب
+									</strong>
+								</th>
+								<th style="text-align:right">
+									<strong>
+										Total
+										<br />
+										مجموع
+									</strong>
+								</th>
+							</tr>
+						</thead>
+						<tbody align="left">
+							<t t-set="i" t-value="1" />
+							<tr t-foreach="doc.invoice_line_ids" t-as="req">
+								<td>
+									<span t-esc="i" />
+								</td>
+								<t t-set="i" t-value="i+1" />
+								<td align="left">
+									<span t-field="req.name" />
+								</td>
+								<td align="left">
+									<span t-field="req.lot_id.name" />
+								</td>
+								<td align="left">
+									<span t-field="req.rent_period" />
+									<span t-field="req.rent_uom_id.name" style="padding-left: 5px;" />
+								</td>
+								<td align="left">
+									<span t-field="req.quantity" />
+									<span t-field="req.uom_id.name" style="padding-left: 5px;" />
+								</td>
+								<td align="right">
+									<span t-field="req.price_unit" />
+								</td>
+								<td class="text-right" t-if="display_discount" groups="sale.group_discount_per_so_line">
+									<span t-field="req.discount" />
+								</td>
+								<td align="right">
+									<span t-esc="', '.join(map(lambda x: (x.description or x.name), req.invoice_line_tax_ids))" />
+								</td>
+								<td align="right">
+									<span t-field="req.price_subtotal" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="row total" name="total">
+					<div class="col-5" />
+					<div class="col-7 pull-right">
+						<table class="table table-condensed">
+							<tr class="border-black">
+								<td>
+									<strong>Total Excluding VAT</strong>
+									<br />
+									<strong>اﻻﺟﻣﺎﻟﻲ ﺑدون اﻟﺿرﯾﺑﺔ</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="doc.amount_untaxed" t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+								</td>
+							</tr>
+							<tr class="border-black">
+								<td>
+									<strong>Total VAT</strong>
+									<br />
+									<strong>إجمالي ضريبة القيمة المضافة</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="doc.amount_tax" t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+								</td>
+							</tr>
+
+							<tr class="border-black">
+								<td>
+									<strong>Total Including VAT</strong>
+									<br />
+									<strong>اﻻﺟﻣﺎﻟﻲ ﺷﺎﻣل ﺿرﯾﺑﺔ اﻟﻘﯾﻣﺔ اﻟﻣﺿﺎﻓﺔ</strong>
+								</td>
+								<td class="text-right">
+									<span t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+								</td>
+							</tr>
+
+							<t t-set="payments_vals" t-value="doc._get_payments_vals()" />
+							<t t-foreach="payments_vals" t-as="payment_vals">
+								<tr>
+									<td>
+										<i class="oe_form_field text-right oe_payment_label">
+											Paid on
+											<t t-esc="payment_vals['date']" />
+										</i>
+										<br />
+										<i class="oe_form_field text-right oe_payment_label">
+											المدفوعة على
+											<t t-esc="payment_vals['date']" />
+										</i>
+									</td>
+									<td class="text-right">
+										<span t-esc="payment_vals['amount']"
+											t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+									</td>
+								</tr>
+							</t>
+							<t t-if="len(payments_vals) > 0">
+								<tr class="border-black">
+									<td>
+										<strong>Amount Due / المبلغ المستحق</strong>
+									</td>
+									<td class="text-right">
+										<span t-field="doc.residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}' />
+									</td>
+								</tr>
+							</t>
+						</table>
+					</div>
+				</div>
+
+				<div class="row" style="padding: 30px;" id="terms">
+					<div>
+						<p>
+							<span t-field="doc.comment"></span>
+						</p>
+
+					</div>
+				</div>
+
+				<div class="row" style="padding: 30px;" id="bank" t-if="doc.partner_bank_id">
+					<t t-set="bank" t-value="doc.partner_bank_id" />
+					<div>
+						<p>
+							<span>
+								Account Holder :
+							</span>
+							<span t-field="bank.acc_holder_name" t-if="bank.acc_holder_name" />
+							<span t-field="bank.partner_id.name" t-if="not bank.acc_holder_name" />
+							<br />
+							<span>
+								Bank Name :
+							</span>
+							<span t-field="bank.bank_id.name" />
+							<br />
+							<span>
+								Account Number :
+							</span>
+							<span t-field="bank.acc_number" />
+							<br />
+							<span>
+								Currency :
+							</span>
+							<span t-field="bank.currency_id.name" />
+							<br />
+						</p>
+					</div>
+				</div>
+
+				<div class="row" id="sign" style="margin-top: 50px; font-weight: bold; width: 100%;">
+					<div class="col-6" style="padding-left: 10px;">
+						<span>Issued By / صادر عن </span>
+					</div>
+					<div class="col-6 text-right" style="padding-right: 10px;">
+						<span>Received By / استلمت من قبل </span>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="report_rental_invoice_template">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="web.external_layout">
+						<t t-call="invoice_arabic_report.report_rental_invoice_template_document" />
+					</t>
+				</t>
+			</t>
+		</template>
+
+	</data>
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<record id="paperformat_invoice" model="report.paperformat">
+			<field name="name">Invoice Report Paper</field>
+			<field name="default" eval="True" />
+			<field name="format">custom</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">40</field>
+			<field name="margin_bottom">35</field>
+			<field name="margin_left">7</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">40</field>
+			<field name="dpi">90</field>
+		</record>
+
+		<report 
+            id="account.account_invoices"
+            model="account.invoice"
+            string="Invoices"
+            report_type="qweb-html"
+            name="account.report_invoice_with_payments"
+            file="account.report_invoice_with_payments"
+            print_report_name="(object._get_report_base_filename())"
+            groups="account.group_account_invoice"
+			paperformat="invoice_arabic_report.paperformat_invoice"
+        />
+
+        <report
+            id="account.account_invoices_without_payment"
+            model="account.invoice"
+            string="Invoices without Payment"
+            report_type="qweb-pdf"
+            name="invoice_arabic_report.report_arabic_invoice_template"
+            file="invoice_arabic_report.report_arabic_invoice_template"
+            print_report_name="(object._get_report_base_filename())"
+			paperformat="invoice_arabic_report.paperformat_invoice"
+			menu="False"
+        />
+
+
+        <report
+            id="account_invoices_without_header"
+            model="account.invoice"
+            string="Invoices without Header"
+            report_type="qweb-pdf"
+            name="invoice_arabic_report.report_arabic_invoice_template_without_header"
+            file="invoice_arabic_report.report_arabic_invoice_template_without_header"
+            print_report_name="(object._get_report_base_filename())"
+        />
+     
+     <report 
+     	string="Rental Invoice"
+        id="report_rental_invoice"
+        model="account.invoice"
+	    report_type="qweb-html"
+        name="invoice_arabic_report.report_rental_invoice_template"
+        file="invoice_arabic_report.report_rental_invoice_template"
+     />
+
+	</data>
+</odoo>

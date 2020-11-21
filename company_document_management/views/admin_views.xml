@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="view_company_document_tree" model="ir.ui.view">
+			<field name="name">document.tree</field>
+			<field name="model">admin.document</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Document" decoration-warning="state=='renew'" decoration-danger="state=='expired'" 
+										decoration-info="state=='open'" decoration-muted="state=='closed'">
+					<field name="cost_sub_type_id" />
+					<field name="document" />
+					<field name="start_date" />
+					<field name="expiration_date" />
+					<field name="days_left" invisible="1" />
+					<field name="next_reminder" />
+					<field name="mail_time" />
+					<field name="state" />
+				</tree>
+
+			</field>
+		</record>
+
+		<record id="view_company_document_form" model="ir.ui.view">
+			<field name="name">document.form</field>
+			<field name="model">admin.document</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Document logs">
+					<header>
+						<button name="contract_close" states="open,renew,expired" type="object" class="oe_highlight"
+							string="Terminate" groups="company_document_management.company_document_manager" />
+						<button modifiers="{'invisible': [['state', 'not in', ['closed']]]}" name="contract_open" states="closed" type="object" class="oe_highlight"
+							string="Set Contract In Draft" groups="company_document_management.company_document_manager" />
+						<button name="action_draft" states="draft" type="object" class="oe_highlight"
+							string="Validate" groups="hr.group_hr_manager" />
+						<button class="oe_highlight" name="act_renew_contract_" type="object" string="Renew" states="open,renew,expired"
+							help="Create a new contract automatically with all the same informations except for the date that will start at the end of current contract" 
+							groups="company_document_management.company_document_manager" confirm="Are you sure you want to renew this document?" />
+						<field name="state" widget="statusbar" />
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive"
+							groups="company_document_management.company_document_manager"  >
+								<field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+							</button>
+						</div>
+						<group string="Document details">
+						
+							<field name="admin_tags_ids" widget="many2many_tags"
+								placeholder="Tags" />
+<!-- 								<field name="admin_tags_ids" widget="many2many_tags" attrs="{'readonly': [('state', '!=', 'draft')]}" /> -->
+							<group>
+								<field name="cost_sub_type_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="document" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+							<group>
+								<field name="start_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="expiration_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+						</group>
+						<group col="2">
+							<group>
+								<field name="next_reminder" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="ins_ref" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="mail_time" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+							<group>
+								<field name="user_ids" widget="many2many_tags" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="date" string="Invoice Date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+						</group>
+						
+						<notebook>
+							<page string="Attachments">
+								<group>
+									<field name="attachment_ids" widget="many2many_binary" nolabel="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								</group>
+							</page>
+							
+							<page string="History">
+								<group>
+									<field name="history_ids" readonly="1" nolabel="1" >
+			
+									<tree>
+										<field name="start_date" />
+										<field name="expiration_date" />
+										<field name="next_reminder" />
+										<field name="date" />
+										<field name="ins_ref" />							
+									</tree>
+								</field>
+							</group>								
+							</page>							
+						</notebook>
+						<group string="Extra Notes">
+							<field name="notes" nolabel="1" placeholder="Write here all other information relative to this contract" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+						</group>
+					</sheet>
+					<div class="oe_chatter">
+<!-- 				         <field name="message_follower_ids" widget="mail_followers"/> -->
+				         <field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="act_renew_contract_" name="Renew Contract" res_model="admin.document" src_model="admin.document" view_mode="form"
+			view_type="form" />
+
+		<record id="action_admin_document_form"
+			model="ir.actions.act_window">
+			<field name="name">Company Documents</field>
+			<field name="res_model">admin.document</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Create the first document.</p>
+			</field>
+		</record>
+
+		<record id="view_list_document_tree" model="ir.ui.view">
+			<field name="name">document.tree</field>
+			<field name="model">admin.company</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="List of Documents">
+					<field name="name" />
+					<field name="reminder_before" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_list_document_form" model="ir.ui.view">
+			<field name="name">document.form</field>
+			<field name="model">admin.company</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="List of Documents">
+					<group>
+						<field name="name" required="1" />
+						<field name="user_id" widget="many2many_tags" required="1" />
+						<field name="reminder_before" required="1" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_admin_company_form"
+			model="ir.actions.act_window">
+			<field name="name">List of Documents</field>
+			<field name="res_model">admin.company</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Create the first document.</p>
+			</field>
+		</record>
+				
+		<record model="ir.ui.view" id="view_admin_tags_tree">
+			<field name="name">admin.tags.tree</field>
+			<field name="model">admin.tags</field>
+			<field name="arch" type="xml">
+				<tree string="Admin tags" editable="bottom">
+					<field name="name" required='1'/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window"
+			id="action_admin_tags">
+			<field name="name">Admin tags</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">admin.tags</field>
+			<field name="view_mode">tree</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					Nothing to show
+				</p>
+			</field>
+		</record>
+
+		<menuitem id="menu_admin_main" name="Admin" sequence="7" />
+
+		<menuitem id="menu_company_document" name="Company Documents"
+			parent="company_document_management.menu_admin_main" sequence="8"
+			action="action_admin_document_form" />
+
+		<menuitem id="menu_configuration" name="Configuration"
+			parent="company_document_management.menu_admin_main" sequence="10" />
+
+		<menuitem id="menu_list_document" name="List of Documents"
+			parent="company_document_management.menu_configuration" sequence="10"
+			action="action_admin_company_form" />
+
+		<menuitem id="menu_admin_tags" name="Tags"
+			parent="company_document_management.menu_configuration" sequence="10"
+			action="action_admin_tags" />
+
+	</data>
+</odoo>

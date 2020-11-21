@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<record model="ir.ui.view" id="stock_partner">
+		<field name="name">stock</field>
+		<field name="model">stock.picking</field>
+		<field name="inherit_id" ref="stock.view_picking_form" />
+		<field name="arch" type="xml">
+			
+			<xpath expr ="//form/sheet/group/group/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record>
+
+<record model="ir.ui.view" id="sale_partner">
+		<field name="name">sale</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="arch" type="xml">
+			
+			<xpath expr ="//form/sheet/group/group/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record>
+
+<record model="ir.ui.view" id="purchase_partner">
+		<field name="name">purchase</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_form" />
+		<field name="arch" type="xml">
+			
+			<xpath expr ="//form/sheet/group/group/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record>
+
+<record model="ir.ui.view" id="account_partner">
+		<field name="name">account</field>
+		<field name="model">account.invoice</field>
+		<field name="inherit_id" ref="account.invoice_form" />
+		<field name="arch" type="xml">
+			
+			<xpath expr ="//form/sheet/group/group/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record>
+
+<record model="ir.ui.view" id="acc_partner">
+		<field name="name">account</field>
+		<field name="model">account.invoice</field>
+		<field name="inherit_id" ref="account.invoice_supplier_form" />
+		<field name="arch" type="xml">
+			
+			<xpath expr ="//form/sheet/group/group/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record>
+
+ <record model="ir.ui.view" id="account_part">
+		<field name="name">account</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form" />
+		<field name="arch" type="xml">
+			
+			<xpath expr ="//form/sheet/notebook/page/field/tree/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record> 
+
+<record model="ir.ui.view" id="account_payment">
+		<field name="name">account</field>
+		<field name="model">account.payment</field>
+		<field name="inherit_id" ref="account.view_account_payment_form" />
+		<field name="arch" type="xml">
+			
+			
+			<xpath expr ="//form/sheet/group/group/field[@name='partner_id']" position="attributes"> 
+			<attribute name="options">{'no_create_edit': True, 'no_create':True, 'no_open':True}</attribute>
+			</xpath>
+		</field>
+</record> 
+</odoo>
+	

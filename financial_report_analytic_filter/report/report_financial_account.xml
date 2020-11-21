@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<odoo>
+	<template id="report_invoice_analytic_filter"
+		inherit_id="accounting_pdf_reports.report_financial">
+
+		<xpath expr="//div[@class='page']/div[@class='row mt32 mb32']/div[1]"
+			position="after">
+             <div class="col-4" t-if="data['account_analytic_id']">
+                 <strong>Analytic Account:</strong>
+                 <p>
+                     <t t-foreach="data['account_analytic_id_name']" t-as="a"> <span t-esc="a+','"/></t>
+                 </p>
+             </div>
+		</xpath>
+
+	</template>
+</odoo>

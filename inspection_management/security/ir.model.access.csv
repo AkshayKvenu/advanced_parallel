@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_equipment_inspection,access_equipment_inspection,model_equipment_inspection,base.group_user,1,1,1,1
+access_equipment_inspection_type,access_equipment_inspection_type,model_equipment_inspection_type,base.group_user,1,1,1,0

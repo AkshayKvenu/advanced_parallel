@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_payroll_overtime,access_hr_payroll_overtime,model_hr_payroll_overtime,overtime_user,1,1,1,0 
+access_hr_payroll_overtime_lines,access_hr_payroll_overtime_lines,model_hr_payroll_overtime_lines,overtime_user,1,1,1,1
+access_hr_payroll_overtime_manager,access_hr_payroll_overtime_manager,model_hr_payroll_overtime,overtime_manager,1,1,1,1 
+access_hr_payroll_overtime_lines_manager,access_hr_payroll_overtime_lines_manager,model_hr_payroll_overtime_lines,overtime_manager,1,1,1,1

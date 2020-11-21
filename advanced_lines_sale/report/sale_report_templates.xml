@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="report_saleorder_document_rental" inherit_id="sale.report_saleorder_document">
+
+		<xpath expr="//t/t[@t-set='address']/div[@t-field='doc.partner_id']" position="replace">
+			<strong>To,</strong>
+			<div t-field="doc.partner_id.parent_id" />
+			<div t-field="doc.partner_id.name" />
+			<div t-field="doc.partner_id.street" />
+			<div t-field="doc.partner_id.city" />
+			<div t-field="doc.partner_id.country_id" />
+		</xpath>
+
+	</template>
+
+	<template id="report_saleorder_dare_id" inherit_id="sale.report_saleorder_document">
+
+		<xpath expr="//div[@id='informations']/div/p[@t-field='doc.confirmation_date']" position="replace">
+			<p class="m-0" t-esc="doc.confirmation_date.strftime('%m/%d/%Y')" />
+		</xpath>
+		<xpath expr="//div[@id='informations']/div/p[@t-field='doc.date_order']" position="replace">
+			<p class="m-0" t-esc="doc.date_order.strftime('%m/%d/%Y')" />
+		</xpath>
+		<xpath expr="//div[@id='informations']" position="inside">
+			<div t-if="doc.collective_number" class="col-auto mw-100 mb-2">
+				<strong>Collective Number:</strong>
+				<p class="m-0" t-field="doc.collective_number" />
+			</div>
+		</xpath>
+		<xpath expr="//table[hasclass('o_main_table')]/thead/tr/th[1]" position="before">
+			<th class="text-left">Sl No</th>
+			<th t-if="doc.sale_type != 'rent'" class="text-left">Item Code</th>
+		</xpath>
+		<xpath expr="//table[hasclass('o_main_table')]/tbody/t/tr/t/td[1]" position="before">
+			<td t-esc="line_index + 1" />
+			<td t-if="doc.sale_type != 'rent'">
+				<span t-field="line.product_id.default_code" />
+			</td>
+		</xpath>
+
+
+		<xpath expr="//p/span[@t-field='doc.payment_term_id.note']" position="replace">
+		</xpath>
+
+
+		<xpath expr="//table[hasclass('o_main_table')]/thead/tr/th[3]" position="before">
+
+			<th t-if="doc.sale_type == 'rent'">Period</th>
+		</xpath>
+		<xpath expr="//table[hasclass('o_main_table')]/tbody/t/tr/t/td[3]" position="before">
+			<td t-if="doc.sale_type == 'rent'">
+				<span t-field="line.rental_qty" />
+				<span t-field="line.rental_uom_id.name" />
+			</td>
+		</xpath>
+	</template>
+</odoo>

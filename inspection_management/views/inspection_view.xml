@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="view_equipment_inspection_tree_view">
+			<field name="name">equipment.inspection.tree</field>
+			<field name="model">equipment.inspection</field>
+			<field name="arch" type="xml">
+				<tree string="Equipment Inspection Tree">
+					<field name="name" />
+					<field name="inspection_type_id" />
+					<field name="lot_id" />
+					<field name="date_expiry" /> 
+					<field name="date_inspect" />
+					<field name="product_id" />		
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<record id="view_equipment_inspection_form" model="ir.ui.view">
+			<field name="name">equipment.inspection.form</field>
+			<field name="model">equipment.inspection</field>
+			<field name="arch" type="xml">
+
+				<form string="Equipment inspection">
+					<header>
+						<button name="action_set_valid" type="object" string="Validate" class="btn-primary" states="draft" />
+						<button name="action_set_cancel" type="object" string="Cancel" states ="valid" />  
+						<field name="state" widget="statusbar" />
+					</header>
+
+					<sheet>
+						<h2>
+							<field name="name" readonly="1" />
+						</h2>
+
+						<group col="4" colspan="4">
+							<field name="inspection_type_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_create_edit': True}" />
+							<field name="date_inspect" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							<field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_create_edit': true}" />
+							<field name="date_expiry" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							<field name="lot_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_create_edit': true}" />
+							<field name="inspect_file" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+						</group>
+						<group>
+							<field name="note" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+						</group>
+					</sheet>
+				</form>
+
+			</field>
+		</record>
+
+		<record id="action_equipment_inspection_form" model="ir.actions.act_window">
+			<field name="name">Equipment inspection</field>
+			<field name="res_model">equipment.inspection</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Create the first inspection.</p>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_equipment_inspection_type_tree_view">
+			<field name="name">equipment.inspection.type.tree</field>
+			<field name="model">equipment.inspection.type</field>
+			<field name="arch" type="xml">
+				<tree string="Equipment Inspection Type Tree">
+					<field name="name" />
+					<field name="code" />
+				</tree>
+			</field>
+		</record>
+		
+		<record id="view_type_inspection_form" model="ir.ui.view">
+			<field name="name">equipment.inspection.type.form</field>
+			<field name="model">equipment.inspection.type</field>
+			<field name="arch" type="xml">
+
+				<form string="Inspection Type">
+
+
+					<sheet>
+
+						<group col="4" colspan="4">
+							<field name="name"/>
+							<field name="code"/>
+							<field name="sequence_id" invisible="1"/>
+							
+						</group>
+					</sheet>
+				</form>
+
+			</field>
+		</record>
+
+		<record id="action_type_inspection_form" model="ir.actions.act_window">
+			<field name="name">Equipment inspection type</field>
+			<field name="res_model">equipment.inspection.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Create the first inspection type.</p>
+			</field>
+		</record>
+		
+		<menuitem id="menu_inspection_main" name="Inspection" sequence="7"/>
+
+		<menuitem id="menu_inspection_second_main" name="Inspection" parent="inspection_management.menu_inspection_main"
+			 sequence="10" />
+
+		<menuitem id="manu_equipment_inspection_id" name="Equipment Inspection" parent="inspection_management.menu_inspection_second_main"
+			action="action_equipment_inspection_form" sequence="10" />
+
+		<menuitem id="manu_type_inspection_id" name="Inspection Type" parent="inspection_management.menu_inspection_second_main"
+			action="action_type_inspection_form" sequence="10" />
+
+	</data>
+</odoo>

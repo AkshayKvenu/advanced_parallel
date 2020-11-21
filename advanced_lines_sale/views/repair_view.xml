@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="product_to_repair" model="ir.ui.view">
+			<field name="name">repair.order.product</field>
+			<field name="model">repair.order</field>
+			<field name="inherit_id" ref="repair.view_repair_order_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='product_id']" position="attributes">
+					<attribute name="domain">
+						[('is_rental','=',True)]
+					</attribute>
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+
+				</xpath>
+
+				<xpath expr="//field[@name='name']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='product_qty']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='partner_id']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='location_id']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='guarantee_limit']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='invoice_method']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done', 'confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='operations']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done'])] }
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='fees_lines']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done'])] }
+					</attribute>
+
+				</xpath>
+
+				<xpath expr="//field[@name='internal_notes']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done','confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='quotation_notes']" position="attributes">
+					<attribute name="attrs">
+						{'readonly': [('state','in', ['cancel', 'done','confirmed', 'under_repair', 'ready',
+						'2binvoiced', 'invoice_except'])]}
+					</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='fees_lines']/tree/field[@name='product_uom_qty']" position="before">
+					<field name="repair_vendor_id" />
+				</xpath>
+
+				<xpath expr="//field[@name='fees_lines']/tree/field[@name='repair_vendor_id']" position="attributes">
+					<attribute name="domain">[('supplier','=','True')]</attribute>
+				</xpath>
+				
+			</field>
+		</record>
+	</data>
+</odoo>
+
+
+
+
+
+

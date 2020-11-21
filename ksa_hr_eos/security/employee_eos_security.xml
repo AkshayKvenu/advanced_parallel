@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+	<record id="eos_company_rule" model="ir.rule">
+        <field name="name">EOS multi-company</field>
+        <field name="model_id" ref="ksa_hr_eos.model_employee_eos"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
+</odoo>

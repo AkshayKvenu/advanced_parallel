@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018-2019 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+     
+    <record id="view_purchase_request_line_make_purchase_order_inherit_line_" model="ir.ui.view">
+        <field name="name">Purchase Request Line Make Purchase Order Inherit</field>
+        <field name="model">purchase.request.line.make.purchase.order</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_line_make_purchase_order"/>
+        <field name="arch" type="xml">
+        	<xpath expr="//group/field[@name='item_ids']/tree/field[@name='product_qty']" position='after'> 
+                 <field name="product_qty_copy" invisible='1'/>
+				
+			</xpath>
+        </field>
+    </record>
+    
+
+
+</odoo>
+

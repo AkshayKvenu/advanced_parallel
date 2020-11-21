@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+
+		<!-- Inspection Sequences -->
+		<record id="sequence_equipment_inspection_machine" model="ir.sequence">
+			<field name="name">Machine Checklist Inspection Sequence</field>
+			<field name="code">equipment.inspection.machine</field>
+			<field name="prefix">MC/</field>
+			<field eval="1" name="number_next" />
+			<field eval="1" name="number_increment" />
+			<field name="padding">4</field>
+		</record>
+
+		<record id="sequence_equipment_inspection_visual" model="ir.sequence">
+			<field name="name">Visual Checklist Inspection Sequence</field>
+			<field name="code">equipment.inspection.visual</field>
+			<field name="prefix">VC/</field>
+			<field eval="1" name="number_next" />
+			<field eval="1" name="number_increment" />
+			<field name="padding">4</field>
+		</record>
+
+		<record id="sequence_equipment_inspection_mpi" model="ir.sequence">
+			<field name="name">MPI Checklist Inspection Sequence</field>
+			<field name="code">equipment.inspection.mpi</field>
+			<field name="prefix">MPI/</field>
+			<field eval="1" name="number_next" />
+			<field eval="1" name="number_increment" />
+			<field name="padding">4</field>
+		</record>
+		
+		<record id="sequence_equipment_inspection_hydro" model="ir.sequence">
+			<field name="name">Hydro Test Inspection Sequence</field>
+			<field name="code">equipment.inspection.hydro</field>
+			<field name="prefix">HT/</field>
+			<field eval="1" name="number_next" />
+			<field eval="1" name="number_increment" />
+			<field name="padding">4</field>
+		</record>
+
+		<record id="sequence_equipment_inspection_spark" model="ir.sequence">
+			<field name="name">Spark Test Inspection Sequence</field>
+			<field name="code">equipment.inspection.spark</field>
+			<field name="prefix">ST/</field>
+			<field eval="1" name="number_next" />
+			<field eval="1" name="number_increment" />
+			<field name="padding">4</field>
+		</record>
+
+	</data>
+</odoo>

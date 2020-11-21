@@ -1,0 +1,61 @@
+<odoo>
+  <data>
+    
+    <record model="ir.ui.view" id="cancel_invoice_number_id">
+      <field name="name">Cancel invoice number</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form" />
+      <field name="arch" type="xml">
+      <xpath expr="//field[@name='number']" position="replace">
+      	<br/>
+          <field name="number" readonly="1" class="oe_inline" 
+          attrs="{'invisible': [('state','in',('draft',)),('number','=','false')]}"/>
+      
+      </xpath>
+       
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="cancel_invoice_number.action_window">
+      <field name="name">cancel_invoice_number window</field>
+      <field name="res_model">cancel_invoice_number.cancel_invoice_number</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="cancel_invoice_number.action_server">
+      <field name="name">cancel_invoice_number server</field>
+      <field name="model_id" ref="model_cancel_invoice_number_cancel_invoice_number"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="cancel_invoice_number" id="cancel_invoice_number.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="cancel_invoice_number.menu_1" parent="cancel_invoice_number.menu_root"/>
+    <menuitem name="Menu 2" id="cancel_invoice_number.menu_2" parent="cancel_invoice_number.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="cancel_invoice_number.menu_1_list" parent="cancel_invoice_number.menu_1"
+              action="cancel_invoice_number.action_window"/>
+    <menuitem name="Server to list" id="cancel_invoice_number" parent="cancel_invoice_number.menu_2"
+              action="cancel_invoice_number.action_server"/>
+    -->
+  </data>
+</odoo>

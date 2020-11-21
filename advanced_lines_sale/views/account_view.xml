@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="account_invoice_form_view_inherit" model="ir.ui.view">
+			<field name="name">account.invoice.form.inherit</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+					<field name="lot_id" />
+					<field name="rent_period" />
+					<field name="rent_uom_id" />
+				</xpath>
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']"
+					position="before">
+					<field name="part_number"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="account_invoice_supplier_form_view_inherit" model="ir.ui.view">
+			<field name="name">account.invoice.supplier.form.inherit</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_supplier_form" />
+			<field name="arch" type="xml">
+		
+				<xpath expr="//page[@name='other_info']/group/group[2]"
+					position="inside">
+					<field name="payment_voucher_id" readonly='1'/>
+					<field name="amount_to_pay" invisible='0'/>
+				</xpath>
+		
+			</field>
+		</record>
+		
+				
+
+	</data>
+</odoo>

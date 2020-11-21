@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="web.external_layout_standard">
+		<div class="header">
+
+			<t t-if="company.header_img">
+				<div class="row">
+					<div class="col-xs-12">
+						<img 
+							t-att-src="'data:image/png;base64,%s' % to_text(company.header_img)"
+							style="max-height: 150px; width: 65em;" />
+					</div>
+				</div>
+				<div class="row zero_min_height">
+					<div class="col-xs-12">
+						<div style="border-bottom: 1px solid black;"></div>
+					</div>
+				</div>
+			</t>
+
+			<t t-if="not company.header_img">
+				<div class="row">
+					<div class="col-xs-3">
+						<img t-if="company.logo"
+							t-att-src="'data:image/png;base64,%s' % company.logo"
+							style="max-height: 45px;" />
+					</div>
+					<div class="col-xs-9 text-right" style="margin-top:20px;"
+						t-field="company.report_header" />
+				</div>
+				<div class="row zero_min_height">
+					<div class="col-xs-12">
+						<div style="border-bottom: 1px solid black;"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6" name="company_address">
+						<span t-field="company.partner_id"
+							t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+							style="border-bottom: 1px solid black; display:inline-block;" />
+					</div>
+				</div>
+			</t>
+		</div>
+
+		<div class="article o_report_layout_standard"
+			t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+			t-att-data-oe-lang="o and o.env.context.get('lang')">
+			<t t-call="web.address_layout" />
+			<t t-raw="0" />
+		</div>
+		<div class="footer o_standard_footer">
+			<t t-if="not doc and o">
+				<t t-set="doc" t-value="o" />
+			</t>
+
+			<t t-if="company.footer_img">
+				<div class="row">
+					<div class="col-xs-12">
+						<img 
+							t-att-src="'data:image/png;base64,%s' % to_text(company.footer_img)"
+							style="max-height: 150px;" />
+					</div>
+				</div>
+			</t>
+			<t t-if="not company.footer_img">
+
+				<div class="text-center" style="border-top: 1px solid black;">
+					<ul class="list-inline mb4">
+						<li t-if="company.phone" class="list-inline-item">
+							Phone:
+							<span t-field="company.phone" />
+						</li>
+						<li t-if="company.email" class="list-inline-item">
+							Email:
+							<span t-field="company.email" />
+						</li>
+						<li t-if="company.website" class="list-inline-item">
+							Web:
+							<span t-field="company.website" />
+						</li>
+						<li t-if="company.vat" class="list-inline-item">
+							<t
+								t-esc="(company.country_id.vat_label or 'Tax ID').replace(' ','\N{NO-BREAK SPACE}')" />
+							:
+							<span t-esc="company.vat.replace(' ','\N{NO-BREAK SPACE}')" />
+						</li>
+					</ul>
+
+					<div name="financial_infos">
+						<span t-field="company.report_footer" />
+					</div>
+
+					<div t-if="report_type == 'pdf'" class="text-muted">
+						Page:
+						<span class="page" />
+						/
+						<span class="topage" />
+					</div>
+				</div>
+			</t>
+		</div>
+	</template>
+
+</odoo>

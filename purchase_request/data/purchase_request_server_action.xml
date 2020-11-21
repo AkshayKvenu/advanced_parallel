@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+	<record id="add_follower_purchase_request" model="ir.actions.server">
+		<field name="name">Purchase Request Add follower</field>
+		<field name="model_id" ref="model_purchase_request" />
+		<field name="condition">True</field>
+		<field name="type">ir.actions.server</field>
+		<field name="state">followers</field>
+	</record>
+
+
+</odoo>

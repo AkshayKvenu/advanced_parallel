@@ -1,0 +1,25 @@
+<odoo>
+	<data>
+
+	<report
+            id="report_tax_xlsx"
+            model="account.tax.report"
+            string="XSLX"
+            report_type="xlsx"
+            name="sipa_tax_report.report_tax_xlsx"
+            file="Tax Report"
+            attachment_use="False"
+        />
+
+	<report
+            id="report_account_tax"
+            model="account.tax.report"
+            string="Tax Report"
+            report_type="qweb-pdf"
+            name="sipa_tax_report.report_tax"
+            file="sipa_tax_report.report_tax"
+            attachment_use="False"
+        />
+        
+	</data>
+</odoo>

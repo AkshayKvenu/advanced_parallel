@@ -1,0 +1,76 @@
+<odoo>
+    <data>
+
+        <template id="assets_backend_new" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/silent_inventory_adjustment/static/js/download_csv.js"></script>
+            </xpath>
+        </template>
+
+        <record id="download_stock_inventory_csv" model="ir.ui.view">
+            <field name="name">Stock Inventory Export View</field>
+            <field name="model">stock.inventory.export</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Export Inventory Product">
+                    <group>
+                        <p>
+                            Do you want to Export inventory adjustment ?
+                        </p>
+                    </group>
+                    <footer>
+                        <button string="OK" class="btn-default" type="object" name="export_inventory_adjustment_csv"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="import_stock_inventory" model="ir.ui.view">
+            <field name="name">Stock Inventory Import View</field>
+            <field name="model">stock.inventory.import</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import Inventory Product">
+                    <group>
+                        <field name="data_file" nolabel="1" filename="file_name" />
+                        <button name="import_file" string="Import" type="object" />
+                        <field name="file_name" invisible="1" />
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+<!--        <record id="import_stock_inventory_single_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Import</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">stock.inventory.import</field>-->
+<!--            <field name="src_model">stock.inventory</field>-->
+<!--            <field name="view_type">form</field>-->
+<!--            <field name="view_mode">form</field>-->
+<!--            <field name="view_id" ref="import_stock_inventory"/>-->
+<!--            <field name="target">new</field>-->
+<!--        </record>-->
+
+        <act_window name="Export"
+                    res_model="stock.inventory.export"
+                    src_model="stock.inventory"
+                    target="new"
+                    view_mode="form"
+                    view_id="download_stock_inventory_csv"
+                    id="download_stock_inventory_csv_single_action"/>
+
+        <act_window name="Import"
+                    res_model="stock.inventory.import"
+                    src_model="stock.inventory"
+                    target="new"
+                    view_mode="form"
+                    view_id="import_stock_inventory"
+                    id="import_stock_inventory_single_action"/>
+
+
+    </data>
+</odoo>

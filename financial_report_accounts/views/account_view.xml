@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_account_inh_financial_form" model="ir.ui.view">
+			<field name="name">account.inh.financial.form</field>
+			<field name="model">account.account</field>
+			<field name="inherit_id" ref="account.view_account_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//sheet/group/group[1]" position="inside">
+					<field name="financial_report_ids" widget="many2many_tags" />
+				</xpath>
+
+			</field>
+		</record>
+
+
+		<record id="view_account_inh_financial_list" model="ir.ui.view">
+			<field name="name">account.account.inh.financial.list</field>
+			<field name="model">account.account</field>
+			<field name="inherit_id" ref="account.view_account_list" />
+			<field name="arch" type="xml">
+
+				<field name="company_id" position="after">
+					<field name="financial_report_ids" widget="many2many_tags" />
+				</field>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

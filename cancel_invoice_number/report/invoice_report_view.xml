@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<odoo>
+	<template id="report_invoice_cancel_draft_number"
+		inherit_id="invoice_arabic_report.report_arabic_invoice_template_document">
+
+		<xpath expr="//span[@t-field='doc.number']"
+			position="replace">
+			 <span t-if="doc.state not in ['draft','cancel']" t-field="doc.number" />
+		</xpath>
+		<xpath expr="//span[@t-field='doc.date_invoice']"
+			position="replace">
+			 <span t-if="doc.state not in ['draft','cancel']" t-field="doc.date_invoice" />
+		</xpath>
+		<xpath expr="//span[@t-field='doc.date_due']"
+			position="replace">
+			 <span t-if="doc.state not in ['draft','cancel']" t-field="doc.date_due" />
+		</xpath>
+	</template>
+	<template id="report_rental_invoice_cancel_draft_number"
+		inherit_id="invoice_arabic_report.report_rental_invoice_template_document">
+
+		<xpath expr="//span[@t-field='doc.number']"
+			position="replace">
+			 <span t-if="doc.state not in ['draft','cancel']" t-field="doc.number" />
+		</xpath>
+		<xpath expr="//span[@t-field='doc.date_invoice']"
+			position="replace">
+			 <span t-if="doc.state not in ['draft','cancel']" t-field="doc.date_invoice" />
+		</xpath>
+		<xpath expr="//span[@t-field='doc.date_due']"
+			position="replace">
+			 <span t-if="doc.state not in ['draft','cancel']" t-field="doc.date_due" />
+		</xpath>
+	</template>
+</odoo>

@@ -1,0 +1,25 @@
+<odoo>
+	<data>
+		<record id="view_employee_resume_date_id" model="ir.ui.view">
+			<field name="name">hr.employee</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@name='button_box']" position="inside">
+					<button class="oe_stat_button" string="Resume date"
+						name="open_resume_date" type="object" icon="fa-calendar">
+						<!-- <field string="Posted Entries" name="posted_entries" widget="statinfo"/> -->
+					</button>
+					<button class="oe_stat_button" string="Tickets"
+						name="open_tickets" type="object" icon="fa-plane">
+						<!-- <field string="Posted Entries" name="posted_entries" widget="statinfo"/> -->
+					</button>
+
+				</xpath>
+			</field>
+		</record>
+
+
+	</data>
+</odoo>
+                       

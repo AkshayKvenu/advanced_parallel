@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="sipa_tax_report.report_tax">
+			<t t-call="web.html_container">
+				<t t-set="data_report_margin_top" t-value="20" />
+				<t t-set="data_report_header_spacing" t-value="14" />
+				<t t-set="data_report_dpi" t-value="110" />
+				<t t-call="web.internal_layout">
+					<div class="page">
+						<style>
+							.table{border: 1px solid #e7e5fa;}
+							.table th{border: 1px
+							solid #e7e5fa;}
+							.table td{border: 1px solid #e7e5fa;}
+							.label-txt1{font-weight: bold;}
+							.label-txt2{padding-left: 10px;}
+							.label-txt3{font-size: 1.25em;}
+							.txt-bg1{background: lavender;}
+							.row{margin: 10px -15px 25px
+							-15px;}
+							th{text-align: center;}
+							.page
+							{font-family: Inconsolata; }
+
+						</style>
+						<!-- .page { font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, 
+							sans-serif; } -->
+						<h2>
+							<center>
+								<u>Tax Declaration</u>
+							</center>
+						</h2>
+
+						<div class="row label-txt1">
+							<div class="col-xs-1">From</div>
+							<div class="col-xs-1">:</div>
+							<div class="col-xs-10">
+								<t t-if="data['date_from']">
+									<span
+										t-esc="datetime.datetime.strptime(data['date_from'], '%Y-%m-%d').strftime('%d-%m-%Y')" />
+								</t>
+							</div>
+							<div class="col-xs-1">To</div>
+							<div class="col-xs-1">:</div>
+							<div class="col-xs-10">
+								<t t-if="data['date_to']">
+									<span
+										t-esc="datetime.datetime.strptime(data['date_to'], '%Y-%m-%d').strftime('%d-%m-%Y')" />
+								</t>
+							</div>
+						</div>
+
+
+						<div class="row" t-if="lines['purchase']">
+							<div class="col-xs-12">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th class="label-txt1 label-txt3" colspan="9">Purchase Details
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<t t-foreach="lines['purchase'].values()" t-as="line">
+											<tr>
+												<td colspan="9">
+													<span class="label-txt2" t-esc="line[0][9]" />
+												</td>
+											</tr>
+
+											<tr class="txt-bg1">
+												<th>Journal No.</th>
+												<th>Inv No</th>
+												<th style="width: 8%;">Inv Date</th>
+												<th>Partner</th>
+												<th>VAT #</th>
+												<th>VAT %</th>
+												<th>Taxable Amt</th>
+												<th>VAT Amount</th>
+												<th>Total Amount</th>
+											</tr>
+
+											<tr t-foreach="line" t-as="inv">
+												<td class="text-center">
+													<span t-esc="inv[0]" />
+												</td>
+												<td class="text-center">
+													<span t-esc="inv[1]" />
+												</td>
+												<td class="text-center">
+													<span
+														t-esc="datetime.datetime.strptime(str(inv[2]), '%Y-%m-%d').strftime('%d-%m-%Y')" />
+												</td>
+												<td>
+													<span t-esc="inv[3]" />
+												</td>
+												<td>
+													<span t-esc="inv[4]" />
+												</td>
+												<td class="text-center">
+													<span t-esc="'{0:,.2f}'.format(inv[5])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv[6])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv[7])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv[6] + inv[7])" />
+												</td>
+											</tr>
+											<tr class="label-txt1">
+												<td colspan="6">
+													<span class="label-txt2">TOTAL</span>
+												</td>
+												<td class="text-right txt-bg1">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] for t in line))" />
+												</td>
+												<td class="text-right txt-bg1">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[7] for t in line))" />
+												</td>
+												<td class="text-right txt-bg1">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] + t[7] for t in line))" />
+												</td>
+											</tr>
+											<tr>
+												<td colspan="9"></td>
+											</tr>
+										</t>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="row" t-if="lines['sale']">
+							<div class="col-xs-12">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th class="label-txt1 label-txt3" colspan="9">Sales Details
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<t t-foreach="lines['sale'].values()" t-as="line">
+											<tr>
+												<td colspan="9">
+													<span class="label-txt2" t-esc="line[0][9]" />
+												</td>
+											</tr>
+
+											<tr class="txt-bg1">
+												<th>Invoice No.</th>
+												<th>Reference</th>
+												<th>Inv Date</th>
+												<th>Partner</th>
+												<th>VAT #</th>
+												<th>VAT %</th>
+												<th>Taxable Amt</th>
+												<th>VAT Amount</th>
+												<th>Total Amount</th>
+											</tr>
+
+											<tr t-foreach="line" t-as="inv">
+												<td class="text-center">
+													<span t-esc="inv[0]" />
+												</td>
+												<td class="text-center">
+													<span t-esc="inv[1]" />
+												</td>
+												<td class="text-center">
+													<span
+														t-esc="datetime.datetime.strptime(str(inv[2]), '%Y-%m-%d').strftime('%d-%m-%Y')" />
+												</td>
+												<td>
+													<span t-esc="inv[3]" />
+												</td>
+												<td>
+													<span t-esc="inv[4]" />
+												</td>
+												<td class="text-center">
+													<span t-esc="'{0:,.2f}'.format(inv[5])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv[6])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv[7])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv[6] + inv[7])" />
+												</td>
+											</tr>
+											<tr class="label-txt1">
+												<td colspan="6">
+													<span class="label-txt2">TOTAL</span>
+												</td>
+												<td class="text-right txt-bg1">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] for t in line))" />
+												</td>
+												<td class="text-right txt-bg1">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[7] for t in line))" />
+												</td>
+												<td class="text-right txt-bg1">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] + t[7] for t in line))" />
+												</td>
+											</tr>
+											<tr>
+												<td colspan="9"></td>
+											</tr>
+										</t>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th class="label-txt1 label-txt3" colspan="4">VAT Summary</th>
+										</tr>
+									</thead>
+									<tbody>
+										<t t-foreach="lines['all']" t-as="line">
+											<tr>
+												<td colspan="4">
+													<span>VAT at </span>
+													<span class="label-txt2" t-esc="line" />
+													<span>%</span>
+												</td>
+											</tr>
+
+											<tr>
+												<th></th>
+												<th class="txt-bg1">Sales</th>
+												<th class="txt-bg1">Purchase</th>
+												<th class="txt-bg1">Difference</th>
+											</tr>
+											<t t-set="inv" t-value="lines['all'][line]" />
+											<tr>
+												<td class="txt-bg1">
+													<span>Taxable Amt</span>
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv['sale'][0])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv['purchase'][0])" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(inv['sale'][0] - inv['purchase'][0])" />
+												</td>
+											</tr>
+											<tr>
+												<td class="txt-bg1">
+													<span>Tax Amt</span>
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv['sale'][1])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv['purchase'][1])" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(inv['sale'][1] - inv['purchase'][1])" />
+												</td>
+											</tr>
+											<tr>
+												<td class="txt-bg1">
+													<span>Total Amt</span>
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv['sale'][2])" />
+												</td>
+												<td class="text-right">
+													<span t-esc="'{0:,.2f}'.format(inv['purchase'][2])" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(inv['sale'][2] - inv['purchase'][2])" />
+												</td>
+											</tr>
+											<tr>
+												<td colspan="4"></td>
+											</tr>
+										</t>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th class="label-txt1 label-txt3" colspan="4">Tax Details</th>
+										</tr>
+										<tr class="txt-bg1">
+											<th>Tax Details</th>
+											<th>Taxable Amt</th>
+											<th>VAT Amount</th>
+											<th>Total Amount</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="label-txt1">Sale</td>
+										</tr>
+										<t t-foreach="lines['sale']" t-as="line">
+											<tr>
+												<td>
+													<span t-esc="lines['sale'][line][0][9]" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] for t in lines['sale'][line]))" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[7] for t in lines['sale'][line]))" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] + t[7] for t in lines['sale'][line]))" />
+												</td>
+											</tr>
+										</t>
+										<tr class="label-txt1">
+											<td>
+												<span>Total</span>
+											</td>
+											<td class="text-right">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[6] for t in lines['sale'].values() for tl in t))" />
+											</td>
+											<td class="text-right">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[7] for t in lines['sale'].values() for tl in t))" />
+											</td>
+											<td class="text-right">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[6] + tl[7] for t in lines['sale'].values() for tl in t))" />
+											</td>
+										</tr>
+										<tr>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td class="label-txt1">Purchase</td>
+										</tr>
+										<t t-foreach="lines['purchase']" t-as="line">
+											<tr>
+												<td>
+													<span t-esc="lines['purchase'][line][0][9]" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] for t in lines['purchase'][line]))" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[7] for t in lines['purchase'][line]))" />
+												</td>
+												<td class="text-right">
+													<span
+														t-esc="'{0:,.2f}'.format(sum(t[6] + t[7] for t in lines['purchase'][line]))" />
+												</td>
+											</tr>
+										</t>
+										<tr class="label-txt1">
+											<td>
+												<span>Total</span>
+											</td>
+											<td class="text-right">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[6] for t in lines['purchase'].values() for tl in t))" />
+											</td>
+											<td class="text-right">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[7] for t in lines['purchase'].values() for tl in t))" />
+											</td>
+											<td class="text-right">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[6] + tl[7] for t in lines['purchase'].values() for tl in t))" />
+											</td>
+										</tr>
+										<tr>
+											<td colspan="9"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th class="label-txt1 label-txt3" colspan="3">Tax Difference
+											</th>
+										</tr>
+										<tr class="txt-bg1">
+											<th>Sale</th>
+											<th>Purchase</th>
+											<th>Difference</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="label-txt1">
+											<td class="text-center">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[7] for t in lines['sale'].values() for tl in t))" />
+											</td>
+											<td class="text-center">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[7] for t in lines['purchase'].values() for tl in t))" />
+											</td>
+											<td class="text-center">
+												<span
+													t-esc="'{0:,.2f}'.format(sum(tl[7] for t in lines['sale'].values() for tl in t) - sum(tl[7] for t in lines['purchase'].values() for tl in t))" />
+											</td>
+										</tr>
+										<tr>
+											<td colspan="9"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</template>
+
+
+
+	</data>
+</odoo>

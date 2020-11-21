@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_voucher,access_payment_voucher,model_payment_voucher,base.group_user,1,1,1,0 
+access_purchase_mode_of_shipment,access_purchase_mode_of_shipment,model_purchase_mode_of_shipment,base.group_user,1,1,1,0 

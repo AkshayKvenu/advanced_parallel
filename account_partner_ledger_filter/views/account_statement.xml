@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<template id="report_partnerledger_customize_id"
+			inherit_id="accounting_pdf_reports.report_partnerledger">
+
+			<xpath expr="//div[@class='page']/h2[1]" position="replace" />
+			<xpath expr="//div[@class='row']" position="before">
+
+				<h2>Account Statement - كشف حساب‬
+				</h2>
+
+			</xpath>
+		</template>
+		<menuitem id="accounting_pdf_reports.menu_partner_ledger"
+			name="Account Statement" sequence="2"
+			parent="accounting_pdf_reports.menu_finance_legal_statement"
+			action="accounting_pdf_reports.action_account_partner_ledger_menu"
+			groups="account.group_account_user" />
+
+	</data>
+</odoo>

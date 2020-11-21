@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data> 
+		<record id="accrual_wizard_related_purchase_form" model="ir.ui.view">
+		<field name="name">wizard.modify.related.purchase.form</field>
+		<field name="model">wizard.related.purchase</field>
+		<field name="arch" type="xml">
+			<form string="Add related purchase">
+                <field name="account_type" invisible="1"/>
+                <field name="move_line_ids" widget='many2many'
+					domain="[(account_type,'=','0'),('move_id.state','=','posted')]">
+                <tree string="Related move lines" >
+					<field name="date"/>
+					<field name="account_id" />
+					<field name="company_id" />
+					<field name="name" />
+					<field name="debit" />
+					<field name="credit" />
+				</tree>
+				</field>
+                <footer>
+                    <button name="action_get_move_lines" string="Add" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+            </field>
+            </record>
+          
+    
+	
+<!--             return {'domain': {'journal_id': [('debit','=','0'),('move_line_ids.move_id.state','=','posted')]}} -->
+	
+	<record id="accrual_wizard_related_purchase_action" model="ir.actions.act_window">
+		<field name="name">Add:Journal Items</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">wizard.related.purchase</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+	</data>
+</odoo>

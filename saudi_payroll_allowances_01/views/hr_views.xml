@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<!-- Add allowance field to existing view -->
+		<record id="hr_contract_form_inherit_allowance" model="ir.ui.view">
+			<field name="name">hr.contract.form.inhrit.allowance</field>
+			<field name="model">hr.contract</field>
+			<field name="inherit_id" ref="hr_payroll.hr_contract_form_inherit" />
+			<field name="arch" type="xml">
+				<div name="wage" position="after">
+					<field name="hra" />
+					<field name="ta" />
+					<field name="food_allowance" />
+					<field name="other_allowance" />
+					<field name="gosi_employee" />
+					<field name="gosi_local" />
+					<field name="gosi_expat" />
+					<field name="dependent_fee" />
+					<field name="total_package" />
+				</div>
+			</field>
+		</record>
+
+		<record id="hr_employee_view_form_" model="ir.ui.view">
+			<field name="name">hr.employee.allowance</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='children']" position="after">
+					<field name="blood_group" />
+				</xpath>
+
+				<field name="visa_expire" position="after">
+					<field name="gosi_no" />
+				</field>
+
+				<field name="visa_no" position="after">
+					<field name="employee_profession_id" />
+				</field>
+
+			</field>
+		</record>
+
+		<record id="view_employee_form_inherit_barcode" model="ir.ui.view">
+			<field name="name">hr.employee.form.inherit.barcode</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr_attendance.view_employee_form_inherit_hr_attendance" />
+			<field name="arch" type="xml">
+
+				<field name="barcode" position="replace" />
+
+				<field name="category_ids" position="after">
+					<group>
+						<group>
+							<field name="barcode" />
+						</group>
+					</group>
+				</field>
+
+			</field>
+		</record>
+
+		<record id="hr_employee_profession_view_tree" model="ir.ui.view">
+			<field name="name">hr.employee.profession.tree</field>
+			<field name="model">hr.employee.profession</field>
+			<field name="arch" type="xml">
+
+				<tree editable="top">
+					<field name="name" />
+					<field name="arabic_name" />
+				</tree>
+
+			</field>
+		</record>
+
+
+
+		<record id="hr_employee_profession_search" model="ir.ui.view">
+			<field name="name">hr.employee.profession.search</field>
+			<field name="model">hr.employee.profession</field>
+			<field name="arch" type="xml">
+				<search string="Profession">
+					<field name="name" filter_domain="['|', ('name','ilike',self), ('arabic_name','ilike',str(self)+'%')]"
+						string="Profession" />
+				</search>
+			</field>
+		</record>
+
+		<record id="action_hr_employee_profession" model="ir.actions.act_window">
+			<field name="name">Employee Profession</field>
+			<field name="res_model">hr.employee.profession</field>
+			<field name="view_mode">tree</field>
+			<field name="search_view_id" ref="hr_employee_profession_search" />
+		</record>
+
+		<menuitem id="menu_employee_profession" action="action_hr_employee_profession"
+			parent="hr.menu_human_resources_configuration" sequence="5" />
+
+	</data>
+
+
+
+	<record id="view_employee_kanban_inherit_barcode" model="ir.ui.view">
+		<field name="name">hr.employee.kanban.inherit.barcode</field>
+		<field name="model">hr.employee</field>
+		<field name="inherit_id" ref="hr.hr_kanban_view_employees" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<br />
+				<field name="barcode" />
+			</xpath>
+
+			<xpath expr="//kanban" position="attributes">
+				<attribute name="default_order">barcode</attribute>
+			</xpath>
+			<!-- <kanban default_order="barcode"/> -->
+
+		</field>
+	</record>
+
+	<record id="view_employee_tree_inherit_barcode" model="ir.ui.view">
+		<field name="name">hr.view.employee.tree</field>
+		<field name="model">hr.employee</field>
+		<field name="inherit_id" ref="hr.view_employee_tree" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="barcode" />
+			</xpath>
+
+		</field>
+	</record>
+
+	<record id="view_employee_search_inherit_barcode" model="ir.ui.view">
+		<field name="name">hr.employee.search.inherit.barcode</field>
+		<field name="model">hr.employee</field>
+		<field name="inherit_id" ref="hr.view_employee_filter" />
+		<field name="arch" type="xml">
+			<xpath expr="//search" position="inside">
+				<field name="barcode" />
+			</xpath>
+
+		</field>
+	</record>
+
+</odoo>

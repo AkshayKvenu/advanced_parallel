@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="payslip_report" inherit_id="hr_payroll.report_payslip">
+
+		<xpath expr="//table/tr[2]" position="replace">
+			<tr>
+				<td>
+					<strong>Address</strong>
+				</td>
+				<td>
+					<div t-field="o.employee_id.address_home_id"
+						t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}' />
+				</td>
+				<td>
+					<strong>Badge Id</strong>
+				</td>
+				<td>
+					<span t-field="o.employee_id.barcode" />
+				</td>
+			</tr>
+		</xpath>
+
+		<xpath expr="//table[2]" position="after">
+
+			<t t-foreach="o.get_lines_by_contribution_register().get(o.id, [])" t-as="c_line">
+				<div class="row">
+					<div class="text-right col-8">
+						<b>
+							<span t-esc="c_line.get('name', '')" />
+						</b>
+					</div>
+					<div class="text-right col-3">
+						<b>
+							<span t-esc="c_line.get('total', 0)"
+								t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}' />
+						</b>
+					</div>
+				</div>
+			</t>
+
+			<div t-if="o.worked_days_line_ids">
+				<h4>Details</h4>
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th>Description</th>
+							<th>Number of Days</th>
+							<th>Number of Hours</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr t-foreach="o.worked_days_line_ids" t-as="w_line">
+							<td>
+								<span t-field="w_line.name" />
+							</td>
+							<td>
+								<span t-field="w_line.number_of_days" />
+							</td>
+							<td>
+								<span t-field="w_line.number_of_hours" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div t-if="o.input_line_ids">
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th>Description</th>
+							<th>Amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr t-foreach="o.input_line_ids" t-as="i_line">
+							<td>
+								<span t-field="i_line.name" />
+							</td>
+							<td>
+								<span t-esc="i_line.amount" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}' />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</xpath>
+
+		<xpath expr="//p[2]" position="replace">
+			<p class="text-right">
+				<strong>Signature</strong>
+			</p>
+		</xpath>
+		
+		
+		
+		<xpath expr="//table[@class='table table-sm table-bordered']/tr[5]" position="after">
+			<tr>
+			<td><strong>Basic Salary</strong></td> 
+			<td><span t-esc="o.contract_id.wage"/></td>
+			<td><strong>House Rent Allowance</strong></td>
+			<td><span t-esc="o.contract_id.hra"/></td>
+			</tr>
+			
+			<tr>	</tr>
+			
+			<tr>
+			<td><strong>Food Allowance</strong></td> 
+			<td><span t-esc="o.contract_id.food_allowance"/></td>
+			<td><strong>Transport Allowance</strong></td>
+			<td><span t-esc="o.contract_id.ta"/></td>
+			</tr>
+			
+			<tr>
+			<td><strong>Other Allowance</strong></td>
+			<td><span t-esc="o.contract_id.other_allowance"/></td>
+			<td><strong>Total Package</strong></td>
+			<td><strong><span t-esc="o.contract_id.total_package"/></strong></td>
+			</tr>
+		</xpath>
+		
+<!-- 		<xpath expr="//table[@class='table table-sm table-bordered']" position="after"> -->
+<!-- 			<table class="table table-sm"> -->
+<!-- 			<td><h4>Salary Details</h4></td> -->
+			
+<!-- 			<tr> -->
+<!-- 			<td t-if="o.contract_id.wage > 0"><strong>Basic Salary</strong></td>  -->
+<!-- 			<td><span t-if="o.contract_id.wage > 0" t-esc="o.contract_id.wage"/></td> -->
+<!-- 			</tr> -->
+			
+<!-- 			<tr> -->
+<!-- 			<td t-if="o.contract_id.hra > 0"><strong>House Rent Allowance</strong></td>  -->
+<!-- 			<td><span t-if="o.contract_id.hra > 0" t-esc="o.contract_id.hra"/></td> -->
+<!-- 			</tr> -->
+			
+<!-- 			<tr> -->
+<!-- 			<td t-if="o.contract_id.ta > 0"><strong>Transport Allowance</strong></td> -->
+<!-- 			<td><span t-if="o.contract_id.ta > 0" t-esc="o.contract_id.ta"/></td> -->
+<!-- 			</tr> -->
+			
+<!-- 			<tr> -->
+<!-- 			<td t-if="o.contract_id.food_allowance > 0"><strong>Food Allowance</strong></td> -->
+<!-- 			<td><span t-if="o.contract_id.food_allowance > 0" t-esc="o.contract_id.food_allowance"/></td> -->
+<!-- 			</tr> -->
+			
+<!-- 			<tr> -->
+<!-- 			<td t-if="o.contract_id.other_allowance > 0"><strong>Other Allowance</strong></td> -->
+<!-- 			<td><span t-if="o.contract_id.other_allowance > 0" t-esc="o.contract_id.other_allowance"/></td> -->
+<!-- 			</tr> -->
+			
+<!-- 			<tr> -->
+<!-- 			<td t-if="o.contract_id.total_package > 0"><strong style="font-size:19px">Total Package</strong></td> -->
+<!-- 			<td><strong><span t-if="o.contract_id.total_package > 0" t-esc="o.contract_id.total_package"/></strong></td> -->
+<!-- 			</tr> -->
+			
+			
+<!-- 			</table> -->
+<!-- 		</xpath> -->
+		
+
+	</template>
+</odoo>

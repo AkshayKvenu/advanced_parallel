@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+	<!-- session form view -->
+	<record model="ir.ui.view" id="payment_voucher_form_view">
+		<field name="name">payment.voucher.form</field>
+		<field name="model">payment.voucher</field>
+		<field name="arch" type="xml">
+			<form string="Payment Voucher Form">
+			<header>
+				<button name="action_confirm_payment_voucher" string="Confirm" class="btn-primary" type="object" attrs="{'invisible':['|',('state','=', 'open'),('state','=', 'paid')]}"/>
+				<button name="action_paid_payment_voucher" string="Paid" class="btn-primary" type="object" attrs="{'invisible':['|',('state','=', 'draft'),('state','=', 'paid')]}"/>
+				<field name="state" widget="statusbar" statusbar_visible="draft,open,paid" clickable="True" />
+			</header>
+				<sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+					<group string="General">
+						<group>
+							<field name="vendor_id" attrs="{'required': True,'readonly': [('state','!=', 'draft')]}" 
+							domain="[('supplier','=','true')]"/>
+							<field name="voucher_date" attrs="{'required': True,'readonly': [('state','!=', 'draft')]}" />
+						</group>
+						<group>
+							<field name="total_amount_due" />
+							<field name="amount_to_pay" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+							<field name="company_id" readonly="1"/>
+							<field name="total_invoice_amount" invisible="True" />
+						</group>
+					</group>
+				<notebook>
+					<page string="Payment Voucher">			
+						<field name="invoices_ids" attrs="{'readonly': [('state','!=', 'draft')]}" 
+								domain="[('state', '=', 'open'),('payment_voucher_id','=',False),('partner_id','=',vendor_id)]" >
+							<tree string="Invoice Payment" editable="bottom">
+								<field name="number" />
+								<field name="date_invoice" />
+								<field name="date_due" />
+								<field name="amount_total_signed" string="Invoice Amount"/>
+								<field name="residual_signed" />
+								<field name="currency_id" />
+								<field name="amount_to_pay"  readonly="0"/>
+								<field name="state" invisible="True"/>
+							</tree>
+						</field>
+					</page>
+				</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<!-- session tree/list view -->
+	<record model="ir.ui.view" id="payment_voucher_tree_view">
+		<field name="name">payment.voucher.tree</field>
+		<field name="model">payment.voucher</field>
+		<field name="arch" type="xml">
+            <tree string="Payment Voucher Tree">
+				<field name="name" string="Payment Number"/>
+				<field name="vendor_id" />
+				<field name="voucher_date" />
+				<field name="total_amount_due" />
+			</tree>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="payment_voucher_search_view">
+		<field name="name">payment.voucher.search</field>
+		<field name="model">payment.voucher</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="vendor_id" />
+				<field name="voucher_date" />
+			</search>
+		</field>
+	</record>
+	
+	<record model="ir.actions.act_window" id="payment_voucher_view">
+		<field name="name">Payment Voucher</field>
+		<field name="res_model">payment.voucher</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">Create
+			</p>
+		</field>
+	</record>
+	
+	
+		<menuitem id="menu_account_Voucher" name="Payment Voucher"
+            parent="account.menu_finance_payables"
+            action="payment_voucher_view" sequence="200"/>
+	</data>
+
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="hr_payslip_form_inherit" model="ir.ui.view">
+			<field name="name">hr.payslip.form.inhrit</field>
+			<field name="model">hr.payslip</field>
+			<field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+			<field name="arch" type="xml">
+
+				<field name="worked_days_line_ids" position="attributes">
+					<attribute name="context">{'default_contract_id': contract_id}</attribute>
+				</field>
+
+				<field name="input_line_ids" position="attributes">
+					<attribute name="context">{'default_contract_id': contract_id}</attribute>
+				</field>
+
+<!-- 				<xpath expr="//field[@name='number']" position="before"> -->
+<!-- 					<field name="duration" /> -->
+<!-- 				</xpath> -->
+
+				<xpath expr="//field[@name='number']" position="before">
+					<label for="duration" string="Working Duration" />
+					<div>
+						<field name="duration" class="oe_inline" />  Months
+					</div>
+				</xpath>
+
+			</field>
+		</record>
+		
+		<record id="hr_payslip_run_inherit" model="ir.ui.view">
+			<field name="name">hr.payslip.run.inherit</field>
+			<field name="model">hr.payslip.run</field>
+			<field name="inherit_id" ref="hr_payroll.hr_payslip_run_form" />
+			<field name="arch" type="xml">
+			<xpath expr="//sheet/group" position='inside'>
+				<field name="company_id" readonly='1'/>
+			</xpath>
+			
+			</field>
+		</record>
+	</data>
+</odoo>

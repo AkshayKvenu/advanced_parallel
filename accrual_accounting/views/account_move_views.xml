@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+ 	<record id="view_auto_post_move" model="ir.ui.view">
+			<field name="name">auto.post.move</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page[2]" position="inside">
+				<group>
+				<field name="auto_post"/>
+<!-- 				attrs="{'invisible': [('type', '!=', 'entry')],  -->
+<!-- 						'readonly': [('reversed_entry_id', '!=', False)]}"/> -->
+				</group>
+				</xpath>
+			</field>
+		</record>
+  	
+  
+  </data>
+</odoo>

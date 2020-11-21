@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+
+		<!--Email template -->
+		<record id="email_template_description_user" model="mail.template">
+			<field name="name">Demo mail</field>
+			<field name="email_from">${(user.email and '&quot;%s&quot; &lt;%s&gt;' % (user.name, user.email) or '')|safe}</field>
+			<field name="subject">Validation</field>
+			<field name="partner_to">${str(object.company_id.email_notification_ids.mapped('partner_id').ids).replace('[','').replace(']','')}</field>
+			<field name="model_id" ref="stock.model_stock_picking" />
+			<field name="auto_delete" eval="False" />
+			<field name="body_html"><![CDATA[
+				<p>Dear Sir/Madam,</p>
+				
+			
+				]]></field>
+		</record>
+
+	</data>
+</odoo>
+						

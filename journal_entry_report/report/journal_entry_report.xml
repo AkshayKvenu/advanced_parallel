@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- QWeb Reports -->
+		<record id="ncr_custom_paperformat_euro"
+			model="report.paperformat">
+			<field name="name">LMC European A4</field>
+			<field name="default" eval="True" />
+			<field name="format">A4</field>
+			<field name="page_height">0</field>
+			<field name="page_width">0</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">40</field>
+			<field name="margin_bottom">23</field>
+			<field name="margin_left">7</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">23</field>
+			<field name="dpi">90</field>
+		</record>
+
+		<report id="action_report_journal_entry" model="account.move"
+			string="Journal Entry" report_type="qweb-html"
+			name="journal_entry_report.report_journal_entry"
+			file="journal_entry_report.report_journal_entry" />
+			
+<!-- 		<report id="action_report_invoice_journal_entry" model="account.invoice" -->
+<!-- 			string="Journal Entry" report_type="qweb-html" -->
+<!-- 			name="journal_entry_report.report_journal_entry" -->
+<!-- 			file="journal_entry_report.report_journal_entry" /> -->
+			
+<!-- 		<report id="action_report_voucher_journal_entry" model="account.voucher" -->
+<!-- 			string="Journal Entry" report_type="qweb-html" -->
+<!-- 			name="journal_entry_report.report_journal_entry" -->
+<!-- 			file="journal_entry_report.report_journal_entry"/> -->
+			
+<!-- 		<report id="action_report_payment_journal_entry" model="account.payment" -->
+<!-- 			string="Journal Entry" report_type="qweb-html" -->
+<!-- 			name="journal_entry_report.report_journal_entry" -->
+<!-- 			file="journal_entry_report.report_journal_entry"/> -->
+
+
+		<report id="action_report_invoice_journal_entry" model="account.invoice"
+			string="Journal Entry" report_type="qweb-html"
+			name="journal_entry_report.report_journal_entry_invoice"
+			file="journal_entry_report.report_journal_entry_invoice" />
+			
+		<report id="action_report_voucher_journal_entry" model="account.voucher"
+			string="Journal Entry" report_type="qweb-html"
+			name="journal_entry_report.report_journal_entry_voucher"
+			file="journal_entry_report.report_journal_entry_voucher"/>
+			
+		<report id="action_report_payment_journal_entry" model="account.payment"
+			string="Journal Entry" report_type="qweb-html"
+			name="journal_entry_report.report_journal_entry_payment"
+			file="journal_entry_report.report_journal_entry_payment"/>
+		
+
+		<!-- <report id="report_journal_entry" -->
+		<!-- model="account.move" -->
+		<!-- string="Journal Entry" -->
+		<!-- report_type="qweb-html" -->
+		<!-- name="journal_entry_report.report_journal_entry_template" -->
+		<!-- file="journal_entry_report.report_journal_entry_template" /> -->
+
+	</data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Sequences for payment.vouche -->
+        <record id="seq_payroll_overtime" model="ir.sequence">
+            <field name="name">Payroll Overtime</field>
+            <field name="code">hr.payroll_overtime</field>
+            <field name="prefix">OT</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

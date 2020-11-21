@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<report id="report_payment_voucher" model="payment.voucher"
+		string="Print voucher"
+		name="advanced_lines_sale.report_payment_voucher_view"
+		file="advanced_lines_sale.report_payment_voucher_view"
+		report_type="qweb-html" />
+
+	<template id="report_payment_voucher_view">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="web.external_layout">
+					<div class="page">
+						<h1 class="text-center">Payment Voucher</h1>
+						<br/>
+						<h2 t-field="doc.name" />
+						<br/>
+						<div class="row">
+							<div class="col-auto" style="font-size:20px">
+								<strong>Vendor</strong>
+								<p class="m-0" t-field="doc.vendor_id" />
+							</div>
+							<div class="col-auto ">
+							</div>
+							<div class="col-auto ">
+								<strong>Date</strong>
+								<p class="m-0" t-field="doc.voucher_date" />
+							</div>
+						</div>
+						<div class="col-xs-8"></div>
+						<br />
+						<h5>
+							<div class="col-xs-8">
+								<strong>Invoice Details</strong>
+							</div>
+						</h5>
+						<br />
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Doc No</th>
+									<th class="text-right">Vendor ref</th>
+									<th class="text-right">Invoice Date</th>
+									<th class="text-right">Due Date</th>
+									<th class="text-right">Invoice Amount</th>
+									<th class="text-right">Amount Due</th>
+									<th class="text-right">Currency</th>
+								</tr>
+							</thead>
+							<tbody>
+								<t t-foreach="doc.invoices_ids" t-as="line">
+									<tr>
+										<td class="text-right">
+											<span t-field="line.number" />
+										</td>
+										<td class="text-right">
+											<span t-field="line.reference" />
+										</td>
+										<td class="text-right">
+											<span t-field="line.date_invoice" />
+										</td>
+										<td class="text-right">
+											<span t-field="line.date_due" />
+										</td>
+										<td class="text-right">
+											<span t-field="line.amount_total_signed" />
+										</td>
+										<td class="text-right">
+											<span t-field="line.residual_signed" />
+										</td>
+										<td class="text-right">
+											<span t-field="line.currency_id" />
+										</td>
+									</tr>
+								</t>
+								<tr>
+									<td class="text-right" colspan="4">
+
+										<strong>Total</strong>
+									</td>
+									<td class="text-right">
+										<span class="m-0" t-field="doc.total_invoice_amount" />
+									</td>
+									<td class="text-right">
+										<span class="m-0" t-field="doc.total_amount_due" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+					<div class="row"
+						style="position:absolute;top:950px; page-break-inside: avoid;width:100%">
+
+						<div class="col-3">
+							<strong>Prepared By</strong>
+							<p>
+								<div t-field="doc.create_uid.name"></div>
+							</p>
+						</div>
+						<div class="col-3">
+							<strong>Verified By</strong>
+						</div>
+						<div class="col-3">
+							<strong>Reviewed By</strong>
+						</div>
+						<div class="col-3">
+							<strong>Approved By</strong>
+						</div>
+					</div>
+
+				</t>
+			</t>
+
+
+		</t>
+	</template>
+
+
+
+
+</odoo>
+
+

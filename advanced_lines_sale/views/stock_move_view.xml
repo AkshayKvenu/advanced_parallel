@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_move_form_button_inherit" model="ir.ui.view">
+			<field name="name">stock.move.form.button.inherit</field>
+			<field name="model">stock.move</field>
+			<field name="inherit_id" ref="stock.view_move_picking_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//header" position="inside">
+					<button name="action_set_waiting" type="object" string="Set Waiting" />
+				</xpath>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Sequences for payment.vouche -->
+        <record id="seq_ticket_number" model="ir.sequence">
+            <field name="name">Ticket Number</field>
+            <field name="code">employee.vacation.ticket</field>
+            <field name="prefix">TKT</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

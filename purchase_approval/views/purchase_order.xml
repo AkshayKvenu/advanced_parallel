@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view"
+			id="show_button_sale_view_order_form">
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase_order_approved.purchase_order_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//button[@name='button_release']"
+					position="attributes">
+					<attribute name="groups">purchase_approval.group_purchase_order_button</attribute>
+				</xpath>
+
+			</field>
+		</record>
+	</data>
+</odoo>
+		
+		
+		

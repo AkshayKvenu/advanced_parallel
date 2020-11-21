@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<odoo>
+	<data>
+
+		<record id="view_hr_holidays_form_manager" model="ir.ui.view">
+			<field name="name">hr.holidays.inherited.form.view</field>
+			<field name="model">hr.leave</field>
+			<field name="type">form</field>
+			<field name="inherit_id"
+				ref="hr_holidays.hr_leave_view_form_manager" />
+			<field name="arch" type="xml">
+				<field name="department_id" position="after">
+					<field name="pending_approver" />
+				</field>
+			</field>
+		</record>
+
+		<record id="view_hr_holidays_form" model="ir.ui.view">
+			<field name="name">hr.holidays.inherited.form</field>
+			<field name="model">hr.leave</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="hr_holidays.hr_leave_view_form" />
+			<field name="arch" type="xml">
+				<button name="action_validate" position="replace">
+					<button string="Validate" name="action_validate"
+						states="confirm" type="object"
+						groups="hr_holidays.group_hr_holidays_manager"
+						class="oe_highlight" />
+				</button>
+				<button name="action_approve" position="replace">
+					<field name="current_user_is_approver" invisible="True" />
+					<button string="Approve" name="action_approve" type="object"
+						attrs="{'invisible': ['|', ('current_user_is_approver', '!=', True), ('state', '!=', 'confirm')]}"
+						class="oe_highlight" />
+				</button>
+				<field name="department_id" position="after">
+					<field name="pending_approver" />
+				</field>
+				<xpath expr="//sheet/group[1]" position="after">
+					<notebook>
+						<page string="Approbations">
+							<field name="approbations">
+								<tree>
+									<field name="approver" />
+									<field name="date" />
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</xpath>
+			</field>
+		</record>
+
+		<menuitem id="hr_holidays.menu_hr_holidays_approvals"
+			name="Leaves to Approve" parent="hr_holidays.menu_hr_holidays_root"
+			sequence="3" groups="base.group_user" />
+
+		<record id="open_holidays_approve"
+			model="ir.actions.act_window">
+			<field name="name">Holidays requests to validate</field>
+			<field name="res_model">hr.leave</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar</field>
+			<!-- <field name="context">{'default_type':'remove'}</field> -->
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click here to create a new leave request.
+				</p>
+			</field>
+			<field name="domain">['|', ('pending_approver_user','=', uid),
+				('pending_transfered_approver_user','=', uid)]</field>
+			<field name="search_view_id"
+				ref="hr_holidays.view_hr_holidays_filter" />
+		</record>
+
+		<menuitem id="hr_holidays.menu_open_department_leave_approve"
+			name="Leaves" parent="hr_holidays.menu_hr_holidays_approvals"
+			groups="base.group_user" action="open_holidays_approve" sequence="1" />
+
+		<record id="open_holidays_allocation_approve"
+			model="ir.actions.act_window">
+			<field name="name">Holidays allocations to validate</field>
+			<field name="res_model">hr.leave</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar</field>
+			<!-- <field name="context">{'default_type':'add'}</field> -->
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click here to create a new holidays allocation request.
+				</p>
+			</field>
+			<field name="domain">[('pending_approver_user', '=', uid)]</field>
+			<field name="search_view_id"
+				ref="hr_holidays.view_hr_holidays_filter" />
+		</record>
+
+		<menuitem
+			id="hr_holidays.menu_open_department_leave_allocation_approve"
+			groups="base.group_user" name="Leaves Allocation"
+			parent="hr_holidays.menu_hr_holidays_approvals"
+			action="open_holidays_allocation_approve" sequence="2" />
+
+	</data>
+</odoo>

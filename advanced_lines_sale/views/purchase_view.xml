@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="vendor_change_purchase_order" model="ir.ui.view">
+			<field name="name">purchase.order.vendor</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//sheet/group/group/field[@name='date_order']" position="after">
+					<field name="ikvta" />
+					<field name="Updated_date" />
+                	<field name="amount_words" invisible='1'/>
+				</xpath>
+
+				<xpath expr="//page[@name='purchase_delivery_invoice']/group/group" position="inside">
+					<field name="mode_of_shipment" />
+				</xpath>
+
+			</field>
+		</record>
+
+
+		<record id="paperformat_landscape" model="report.paperformat">
+			<field name="name">Purchase Order Landscape</field>
+			<field name="format">custom</field>
+			<field name="page_height">297</field>
+			<field name="page_width">210</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">90</field>
+			<field name="margin_bottom">22</field>
+			<field name="margin_left">5</field>
+			<field name="margin_right">5</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">90</field>
+			<field name="dpi">110</field>
+		</record>
+
+		<record id="purchase.action_report_purchase_order" model="ir.actions.report">
+			<field name="paperformat_id" ref="advanced_lines_sale.paperformat_landscape" />
+		</record>
+	</data>
+	
+	
+ 
+</odoo>

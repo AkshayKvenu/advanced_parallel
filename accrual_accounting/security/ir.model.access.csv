@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_accrual_expense_accounting,access_accrual_expense_accounting,model_accrual_expense_accounting,base.group_user,1,1,1,1 
+access_accrual_revenue_accounting,access_accrual_revenue_accounting,model_accrual_revenue_accounting,base.group_user,1,1,1,1 

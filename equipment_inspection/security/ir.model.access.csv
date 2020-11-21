@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_equipment_inspection,access_equipment_inspection,model_equipment_inspection,base.group_user,1,1,1,1
+access_equipment_inspection_type,access_equipment_inspection_type,model_equipment_inspection_type,base.group_user,1,1,1,0
+access_maintenance_equipment_type,access_maintenance_equipment_type,model_maintenance_equipment_type,base.group_user,1,1,1,0
+access_maintenance_request_material,access_maintenance_request_material,model_maintenance_request_material,base.group_user,1,1,1,0
+access_maintenance_type,access_maintenance_type,model_maintenance_type,base.group_user,1,1,1,0
+

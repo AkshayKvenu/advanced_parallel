@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="employee_payroll_view" model="ir.ui.view">
+		<field name="name">Employee Payroll</field>
+		<field name="model">emp.pay.report</field>
+		<field name="inherit_id" ref="account.account_common_report_view" />
+		<field name="arch" type="xml">
+			<data>
+				<xpath expr="//group[1]" position="replace">
+					<group>
+						<group>
+							<field name="payroll_type" widget="radio" options="{'horizontal': true}" />
+						</group>
+					</group>
+					<group col="4" colspan="4" attrs="{'invisible': [('payroll_type', '=', 'batch')]}">
+						<field name="date_from" string="Start Date" attrs="{'required': [('payroll_type', '=', 'date')]}" />
+						<field name="date_to" string="End Date" attrs="{'required': [('payroll_type', '=', 'date')]}" />
+					</group>
+				</xpath>
+				<xpath expr="//field[@name='journal_ids']" position="attributes">
+					<attribute name="invisible">1</attribute>
+					<attribute name="required">0</attribute>
+				</xpath>
+
+				<field name="company_id" position="attributes">
+					<attribute name="attrs">{'invisible': [('payroll_type', '=', 'batch')]}</attribute>
+				</field>
+
+				<xpath expr="//group[2]" position="after">
+					<group>
+						<group>
+							<field name="batch_id"
+								attrs="{'invisible': [('payroll_type', '=', 'date')], 'required': [('payroll_type', '=', 'batch')]}" />
+						</group>
+						<group>
+							<field name="emp_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}" />
+						</group>
+					</group>
+				</xpath>
+
+				<button name="check_report" position="replace">
+					<button name="export_xls" type="object" default_focus="1" string="Export XLS" class="oe_highlight"
+						context="{'xls_export':1}" icon="fa-download" />
+				</button>
+			</data>
+		</field>
+	</record>
+
+	<record id="action_employee_payroll" model="ir.actions.act_window">
+		<field name="name">Employee Payroll</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">emp.pay.report</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="employee_payroll_view" />
+		<field name="target">new</field>
+	</record>
+
+	<menuitem id="menu_payroll_report" name="Reporting" string="Reporting" sequence="60"
+		parent="hr_payroll.menu_hr_payroll_root" />
+
+	<menuitem id="menu_payroll_stmt" name="Payroll Statement" string="Payroll Statement"
+		parent="employee_payroll.menu_payroll_report" action="action_employee_payroll" />
+
+</odoo>

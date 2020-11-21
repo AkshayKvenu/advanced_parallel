@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_journal_entry_document">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<t>
+
+							<div class="page">
+								<style>
+									.table_journal thead {background: #9e9c95;
+									color: #ffffff;}
+									table { line-height: 1; }
+									.table_journal thead tr th, .table_journal tbody tr td { padding: 5px; }
+								</style>
+								<div>
+									<h3 align="center" t-field="o.journal_id.name" />
+								</div>
+								<div class="head-part">
+									<div class="row">
+										<div class="col-2">
+											<strong>
+												Doc No:
+											</strong>
+										</div>
+										<div class="col-4">
+											<strong>
+												<span t-field="o.name" />
+											</strong>
+										</div>
+										<div class="col-2">
+											<strong>
+												Reference:
+											</strong>
+										</div>
+										<div class="col-4">
+											<strong>
+												<span t-field="o.ref" />
+											</strong>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-2">
+											<strong>
+												Date:
+											</strong>
+										</div>
+										<div class="col-4">
+											<strong>
+												<span t-field="o.date" />
+											</strong>
+										</div>
+										<div class="col-2">
+											<strong>
+												Partner:
+											</strong>
+										</div>
+										<div class="col-4">
+											<strong>
+												<span t-field="o.partner_id.name" />
+											</strong>
+										</div>
+									</div>
+								</div>
+
+								<div class="body-part">
+									<table class="table table-condensed table_journal">
+										<thead>
+											<tr>
+												<th>Sl No.</th>
+												<th>Account</th>
+<!-- 												<th>Operating Unit</th> -->
+												<th>Partner</th>
+												<!-- <th>Cost Center</th> -->
+												<th groups="analytic.group_analytic_accounting">Analytic Account</th>
+												<th>Label</th>
+												<th style="text-align:right">Debit</th>
+												<th style="text-align:right">Credit</th>
+											</tr>
+										</thead>
+										<tbody>
+											<t t-set="i" t-value="1" />
+											<t t-foreach="o.line_ids.sorted(reverse=True)" t-as="line">
+												<t t-if="(not line.debit and not line.credit) == 0.0">
+													<tr>
+														<td>
+															<span t-esc="i" />
+															<t t-set="i" t-value="i+1" />
+														</td>
+														<td>
+															<span
+																t-esc="line.account_id.code + ' '+ line.account_id.name" />
+														</td>
+<!-- 														<td> -->
+<!-- 															<span t-esc="line.operating_unit_id.name" /> -->
+<!-- 														</td> -->
+														<td>
+															<span t-esc="line.partner_id.name" />
+														</td>
+														<!-- <td class="ver_line"> -->
+														<!-- <span t-esc="line.cost_center_id.code" /> -->
+														<!-- </td> -->
+														<td groups="analytic.group_analytic_accounting">
+															<span t-field="line.analytic_account_id" />
+														</td>
+														<td>
+															<span t-esc="line.name" />
+														</td>
+														<td class="text-right">
+															<span t-esc="'{0:,.2f}'.format(line.debit)" />
+														</td>
+														<td class="text-right">
+															<span t-esc="'{0:,.2f}'.format(line.credit)" />
+														</td>
+													</tr>
+												</t>
+											</t>
+										</tbody>
+									</table>
+									<div class="row">
+										<div class="col-8" />
+										<div class="col-2 pull-right">
+											<table class="table table-condensed table_journal">
+												<tr class="border-black">
+													<td>
+														<strong>Total</strong>
+													</td>
+													<t t-set="sum_debit"
+														t-value="sum(line.debit for line in o.line_ids.sorted(key=lambda x: x.debit, reverse=True))" />
+													<td>
+														<span t-esc="sum_debit"
+															t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+													</td>
+													<t t-set="sum_credit"
+														t-value="sum(line.credit for line in o.line_ids.sorted(key=lambda x: x.debit, reverse=True))" />
+													<td>
+														<span t-esc="sum_credit"
+															t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+									<p t-if="o.narration">
+										<span t-field="o.narration" />
+									</p></div>
+									<div class="row"
+										style="margin-top:100px; page-break-inside: avoid;width:100%">
+
+										<div class="col-4">
+											<strong>Prepared By</strong>
+											<p>
+												<div t-field="o.create_uid.name"></div>
+											</p>
+										</div>
+										<div class="col-4">
+											<strong>Reviewed By</strong>
+										</div>
+										<div class="col-4">
+											<strong>Approved By</strong>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+						</t>
+					</t>
+				</t>
+			</t>
+		</template>
+		
+		
+		
+		<template id="report_journal_entry">
+			<t t-call="journal_entry_report.report_journal_entry_document" />
+		</template>
+		
+		<template id="report_journal_entry_invoice">
+			<t t-call="journal_entry_report.report_journal_entry_document" />
+		</template>
+		
+		<template id="report_journal_entry_payment">
+			<t t-call="journal_entry_report.report_journal_entry_document" />
+		</template>
+		
+		<template id="report_journal_entry_voucher">
+			<t t-call="journal_entry_report.report_journal_entry_document" />
+		</template>
+		
+
+	</data>
+</odoo>

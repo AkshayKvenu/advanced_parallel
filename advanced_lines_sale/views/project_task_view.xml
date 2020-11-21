@@ -1,0 +1,87 @@
+<odoo>
+
+	<record id="project_delivery_date_field" model="ir.ui.view">
+		<field name="name">project.delivery.date</field>
+		<field name="model">project.task</field>
+		<field name="inherit_id" ref="project.view_task_form2" />
+		<field name="arch" type="xml">
+
+			<header position="inside">
+				<button name="%(advanced_lines_sale.action_timesheet_report_wizard_form)d" type="action" string="Print Timesheet" />
+				<button name="action_set_maintenance" type="object" string="Under Maintenance" class="btn-primary" states="rent" />
+				<button name="action_set_rent" type="object" string="Maintenance Completed" class="btn-primary" states="maintenance" />
+				<button name="action_set_demobilize" type="object" string="Demobilize" class="btn-primary" states="rent" confirm="Are you sure you want to Return to the Yard?" />
+				<field name="state" widget="statusbar" statusbar_visible="rent,maintenance,demobilize"/>
+			</header>
+
+			<xpath expr="//field[@name='stage_id']" position="replace" />
+
+			<xpath expr="//field[@name='date_deadline']" position="before">
+				<field name="stage_id" />
+				<field name="delivery_date" />
+				<field name="return_stock_picking_id" />
+			</xpath>
+
+		</field>
+	</record>
+
+	<record id="project_task_hide_field_id" model="ir.ui.view">
+		<field name="name">project.field.hidden.view</field>
+		<field name="model">project.task</field>
+		<field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited" />
+		<field name="arch" type="xml">
+
+			<xpath expr="//field[@name='planned_hours']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='progress']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='planned_hours']" position="before">
+				<button string="Add Timesheet" class="btn-primary" type="action" name="%(launch_timesheet_wizard)d" states="rent" />
+			</xpath>
+
+			<xpath expr="//field[@name='timesheet_ids']" position="attributes">
+				<attribute name="readonly">1</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='timesheet_ids']/tree/field[@name='unit_amount']" position="attributes">
+				<attribute name="string">Duration</attribute>
+				<attribute name="widget">False</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='remaining_hours']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='effective_hours']" position="attributes">
+				<attribute name="string">Total duration</attribute>
+			</xpath>
+
+			<xpath expr="//field[@name='timesheet_ids']/form/sheet/group" position="inside">
+				<field name="task_id" />
+			</xpath>
+
+		</field>
+	</record>
+
+
+	<record id="project_task_lot" model="ir.ui.view">
+		<field name="name">project.task.lot</field>
+		<field name="model">project.task</field>
+		<field name="inherit_id" ref="sale_timesheet.view_sale_service_inherit_form2" />
+		<field name="arch" type="xml">
+
+			<field name="sale_line_id" position="after">
+				<field name="product_id" readonly="1" />
+				<field name="lot_id" readonly="1" />
+			</field>
+
+		</field>
+	</record>
+
+
+
+</odoo>

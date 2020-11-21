@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record model="ir.ui.view" id="vacation_ticket_form_view">
+		<field name="name">vacation.form</field>
+		<field name="model">employee.vacation.ticket</field>
+		<field name="arch" type="xml">
+			<form string="Vacation Ticket" create="false">
+				<header>
+					<button name="action_confirm_ticket" string="Confirm"
+						class="oe_highlight" states="draft" type="object"
+						groups='employee_ticket_management.ticket_manager' />
+					<button name="action_cancel_ticket" string="Cancel"
+						class="oe_highlight" states="confirm" type="object"
+						groups='employee_ticket_management.ticket_manager' />
+					<field name="state" widget="statusbar" />
+				</header>
+				<sheet>
+					<group>
+						<group>
+							<div class="oe_title">
+								<h1>
+									<field name="employee_sequence_number" readonly="1" />
+								</h1>
+							</div>
+							<div></div>
+							<field name="employee_id" required="1"
+								attrs="{'readonly': [('state', '=', 'confirm')]}" />
+							<field name="leave_id"
+								attrs="{'readonly': [('state', '=', 'confirm')]}"
+								domain="[('employee_id', '=', employee_id),('state', '=', 'validate'),('vacation_ticket_id','=',False),('holiday_status_id.is_annual_vacation','=',True)]" />
+						</group>
+					</group>
+					<notebook>
+						<page string="Flight Details">
+							<group>
+								<field name="type" widget="radio"
+									attrs="{'readonly': [('state', '=', 'confirm')]}" />
+							</group>
+							<group>
+								<group>
+									<field name="from_dest"
+										placeholder="Any worldwide city or airport"
+										attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									<field name="depart_on" placeholder="Pick a date"
+										attrs="{'readonly': [('state', '=', 'confirm')]}" />
+								</group>
+								<group>
+									<field name="to_dest"
+										placeholder="Any worldwide city or airport"
+										attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									<field name="return_on" placeholder="Pick a date"
+										attrs="{'invisible': [('type', '=', 'one_way')],'required': [('type', '=', 'round_trip')], 'readonly': [('state', '=', 'confirm')]}" />
+								</group>
+								<group>
+									<group>
+										<field name="adults"
+											attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									</group>
+									<group>
+										<field name="children"
+											attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									</group>
+								</group>
+								<group>
+									<group>
+										<field name="infants"
+											attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									</group>
+								</group>
+								<group>
+									<field name="total_amount"
+										attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									<field name="inv_number"
+										attrs="{'readonly': [('state', '=', 'confirm')]}" />
+									<field name="pnr"
+										attrs="{'readonly': [('state', '=', 'confirm')]}" />
+								</group>
+							</group>
+						</page>
+					</notebook>
+
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="vacation_tree_view">
+		<field name="name">vacation.tree</field>
+		<field name="model">employee.vacation.ticket</field>
+		<field name="arch" type="xml">
+			<tree create="false"
+				default_order="employee_sequence_number desc">
+				<field name="employee_sequence_number" string="Ticket Number" />
+				<field name="employee_id" />
+				<field name="leave_id" />
+				<field name="state" string="Status" />
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="vacation_leave_action">
+		<field name="name">Tickets</field>
+		<field name="res_model">employee.vacation.ticket</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">Create the first course
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="main_ticket_menu" name="Tickets" sequence="5" />
+	<menuitem id="vacation_ticket_menu" name="Vacation Tickets"
+		parent="main_ticket_menu" action="vacation_leave_action" />
+
+
+	<record id="leave_form_inherit" model="ir.ui.view">
+		<field name="name">leave.form.inherit</field>
+		<field name="model">hr.leave</field>
+		<field name="inherit_id"
+			ref="hr_holidays.hr_leave_view_form_manager" />
+		<field name="arch" type="xml">
+
+			<xpath expr="//field[@name='name']" position="after">
+				<field name="vacation_ticket_id" />
+			</xpath>
+		</field>
+	</record>
+</odoo>

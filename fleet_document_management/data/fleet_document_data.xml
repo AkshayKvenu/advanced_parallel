@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="email_template_fleet_document_reminder_mail" model="mail.template">
+            <field name="name">Fleet Document: Reminder</field>
+            <field name="model_id" ref="fleet_document_management.model_fleet_document_management"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">${(user.email or '')|safe}</field>
+            <field name="partner_to">${object.get_partner_ids(object.user_ids)}</field>
+            <field name="subject">Reminder: Document ${object.name} about to expire</field>
+            <field name="body_html"><![CDATA[
+	<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p>Hello,</p>
+    <p>Vehicle: ${object.fleet_id.model_id.name},${object.fleet_id.license_plate}</p>
+    <p>Document: ${object.name} will expire with in ${object.cost_subtype_id.reminder_before} days.Please Renew before ${object.expiration_date}</p>
+    </div>
+            ]]></field>
+        </record>
+		
+		<record id="email_template_fleet_document_expiry_mail" model="mail.template">
+            <field name="name">Fleet Document: Expired</field>
+            <field name="model_id" ref="fleet_document_management.model_fleet_document_management"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">${(user.email or '')|safe}</field>
+            <field name="partner_to">${object.get_partner_ids(object.user_ids)}</field>
+            <field name="subject">Reminder: Document ${object.name} expired</field>
+            <field name="body_html"><![CDATA[
+	<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p>Hello,</p>
+    <p>Vehicle: ${object.fleet_id.model_id.name},${object.fleet_id.license_plate}</p>
+    <p>Document: ${object.name} is expired. Please Renew it as soon as possible.</p>
+    </div>
+            ]]></field>
+        </record>
+		
+    </data>
+      
+      <record forcecreate="True" id="ir_cron_mail_manage_fleet" model="ir.cron">
+        <field name="name">Fleet Document Management Mail</field>
+        <field eval="True" name="active" />
+        <field name="model_id" ref="model_fleet_document_management"/>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+        <field name="state">code</field>
+        <field name="code">model.action_sendmail()</field>
+      </record>
+      
+      <record forcecreate="True" id="ir_cron_renew_manage_fleet" model="ir.cron">
+        <field name="name">Fleet Document Management Renew</field>
+        <field eval="True" name="active" />
+        <field name="model_id" ref="model_fleet_document_management"/>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+        <field name="state">code</field>
+        <field name="code">model.set_as_pending()</field>
+      </record>
+      
+	<record forcecreate="True" id="ir_cron_close_manage_fleet" model="ir.cron">
+        <field name="name">Fleet Document Management Expire</field>
+        <field eval="True" name="active" />
+        <field name="model_id" ref="model_fleet_document_management"/>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+        <field name="state">code</field>
+        <field name="code">model.set_as_close()</field>
+      </record>
+      
+</odoo>
+    

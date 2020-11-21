@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="vendor_change_field_id" model="ir.ui.view">
+			<field name="name">res.partner.vendor</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='vat']" position="after">
+					<field name="cr_number" />
+				</xpath>
+				<xpath
+					expr="//page[@name='sales_purchases']/group/group/field[@name='supplier']"
+					position="after">
+					<field name="ikvta"
+						attrs="{'invisible': [('supplier', '=', False)]}" />
+					<field name="Updated_date"
+						attrs="{'invisible': [('supplier', '=', False)]}" />
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

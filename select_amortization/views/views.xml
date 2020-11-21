@@ -1,0 +1,269 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="view_account_asset_asset_formm">
+        <field name="name">Amortization.form</field>
+        <field name="model">account.asset.asset.amortization</field>
+        <field name="arch" type="xml">
+            <form string="Amortization">
+                <header>
+                    <button name="validate" states="draft" string="Confirm" type="object" class="oe_highlight"/>
+                    <button type="object" name="compute_depreciation_board" string="Compute Amortizations" states="draft"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="open_entries"  type="object" icon="fa-pencil">
+                            <field string="Items" name="entry_count" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Internet"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="date" help="Date of Amortization"/>
+                            <!-- <field name="date_first_depreciation"/> -->
+
+                                   <!-- attrs="{'invisible': [('date_first_depreciation', '!=', 'manual')], 'required': [('date_first_depreciation', '=', 'manual')]}" -->
+                            <field name="first_depreciation_manual_date" string = "First Amortization"/>
+                            <field name="account_analytic_id" attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                            <field name="journal_id" required='1' attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="balance" invisible="1" />
+                        	<field name="entry_type" widget="radio" required="1" attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                            <field name="value" widget="monetary" options="{'currency_field': 'currency_id'}" help="Gross value of asset"
+                            	attrs="{'invisible':[('entry_type', '!=', 'single')]}"/>
+                            <!-- <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/> -->
+                            
+                            <field name="debit_id" string="Debit Account" 
+                            	attrs="{'required':[('entry_type', '=', 'single')],'readonly':[('state','!=', 'draft')],'invisible':[('entry_type', '!=', 'single')]}"/>
+                            <field name="credit_id" string="Credit Account" 
+                            	attrs="{'required':[('entry_type', '=', 'single')],'readonly':[('state','!=', 'draft')],'invisible':[('entry_type', '!=', 'single')]}"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Amortization Board" attrs="{'invisible':[('entry_type', '=', 'multi')]}">
+                            <field name="depreciation_line_ids" mode="tree" options="{'reload_whole_on_button': true}"
+                            	attrs="{'readonly':[('state','!=', 'draft')]}">
+                                <tree string="Amortization Lines" decoration-info="(move_check == False)" create="false">
+                                    <field name="depreciation_date" string="Amortization Date"/>
+                                    <field name="amount" widget="monetary" string="Amortization"/>
+                                    <field name="depreciated_value" readonly="1" string="Amortization Value"/>
+                                    <field name="remaining_value" readonly="1" widget="monetary" string="Amortization Residual"/>
+                                    <field name="move_check" widget="deprec_lines_toggler" attrs="{'invisible': [('parent_state', '!=', 'open')]}"/>
+                                    <field name="move_posted_check" invisible="1"/>
+                                    <field name="parent_state" invisible="1"/>
+                                </tree>
+                                <form string="Amortization Lines" create="false">
+                                    <group>
+                                        <group>
+                                            <field name="parent_state" invisible="1"/>
+                                            <field name="name"/>
+                                            <field name="sequence"/>
+                                            <field name="move_id"/>
+                                            <field name="move_check"/>
+                                            <field name="parent_state" invisible="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="amount" widget="monetary"/>
+                                            <field name="depreciation_date"/>
+                                            <field name="depreciated_value"/>
+                                            <field name="remaining_value"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Amortization Board" attrs="{'invisible':[('entry_type', '=', 'single')]}">
+                        	<group class='col-12'>
+	                        <field name="entry_line_ids" mode="tree"  nolabel="1"
+	                            	attrs="{'readonly':[('state','!=', 'draft')]}">
+	                                <tree string="Entry Lines" editable="bottom" create="false">
+	                                    <field name="date"/>
+                                    	<field name="move_check" widget="deprec_lines_toggler"
+                                    		attrs="{'invisible': [('parent_state', '!=', 'open')]}"/>
+										<field name="move_posted_check" invisible="1"/>
+                                    	<field name="parent_state" invisible="1"/>
+                                        <field name="sequence" invisible="1"/>
+	                                </tree>
+	                        </field></group>
+	                        </page>
+                        <page string="Amortization Information">
+                            <group>
+                            	<field name="auto_post_entry" attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                <field name="prorata"/>
+                            </group>
+                            <group>
+                                <field name="method_number" string="Number of Periods"/>
+                                <field name="method_period" />
+                            </group>
+                        </page>
+                        <page string="Entry Lines" attrs="{'invisible':[('entry_type', '=', 'single')]}">
+	                        <field name="journal_items_ids" mode="tree" context="{'default_account_analytic_id':account_analytic_id}"
+	                            	attrs="{'readonly':[('state','!=', 'draft')]}">
+	                                <tree string="Entry Lines" editable="bottom">
+	                                    <field name="account_id" required='1'/>
+	                                    <field name="partner_id"/>
+	                                    <field name="account_analytic_id" />
+	                                    <field name="analytic_tag_ids" widget="many2many_tags"/>
+	                                    <field name="debit" sum="Total Debit"/>
+	                                    <field name="credit" sum="Total Credit"/>
+<!-- 	                                    <field name="parent_state" invisible="1"/> -->
+	                                </tree>
+	                        </field>
+	                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="view_account_asset_asset_purchase_treem">
+        <field name="name">Amortization tree</field>
+        <field name="model">account.asset.asset.amortization</field>
+        <field name="arch" type="xml">
+            <tree string="Amortization" decoration-info="(state == 'draft')" decoration-muted="(state == 'close')">
+                <field name="name" string="Amortization"/>
+                <field name="date"/>
+                <field name="value" string="Value"/>
+                <field name="value_residual" widget="monetary"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="action_account_asset_asset_formm">
+        <field name="name">Amortization</field>
+        <field name="res_model">account.asset.asset.amortization</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_account_asset_asset_purchase_treem"/>
+    </record>
+
+
+
+
+    <menuitem name="Amortization" id="menu_action_account_asset_asset_formm" action="action_account_asset_asset_formm" sequence="101"/>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- explicit list view definition -->
+
+    <!-- <record model="ir.ui.view" id="select_amortization.list">
+      <field name="name">Amortization List</field>
+      <field name="model">select_amortization.select_amortization</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="date_from"/>
+          <field name="date_to"/>
+          <field name="total_value"/>
+          <field name="total_move"/>
+          <field name="amortization_payment"/>
+          <field name="journal_id"/>
+          <field name="period_rule"/>
+          <field name="service_account"/>
+          <field name="period_due"/>
+          <field name="number_of_periods"/>
+        </tree>
+      </field>
+    </record> -->
+
+    <!-- <record model="ir.ui.view" id="select_amortization.form">
+      <field name="name">Amortization Form</field>
+      <field name="model">select_amortization.select_amortization</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button name="confirm" string="Confirm" type="object"/>
+          </header>
+          <group>
+            <field name="name"/>
+            <field name="service_account"/>
+            <field name="amortization_payment"/>
+            <field name="journal_id"/>
+            <field name="total_move"/>
+          </group>
+          <group>
+            <field name="date_from"/>
+            <field name="date_to"/>
+          </group>
+          <group>
+            <field name="period_rule"/>
+            <field name="period_due"/>
+            <field name="number_of_periods"/>
+            <field name="total_value"/>
+          </group>
+          <notebook>
+            <page string="Details Of Entry">
+              <field name="details_entry" string="Details Of Entry"/>
+            </page>
+          </notebook>
+        </form>
+      </field>
+    </record> -->
+
+
+    <!-- actions opening views on models -->
+
+    <!-- <record model="ir.actions.act_window" id="select_amortization.action_window">
+      <field name="name">Amortization Window</field>
+      <field name="res_model">select_amortization.select_amortization</field>
+      <field name="view_mode">tree,form</field>
+    </record> -->
+
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="select_amortization.action_server">
+      <field name="name">select_amortization server</field>
+      <field name="model_id" ref="model_select_amortization_select_amortization"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+<!-- action="select_amortization.action_window" -->
+    <!-- <menuitem name="Amortization" id="select_amortization.menu_root"  web_icon='select_amortization,business-amortization-concept-outline-icon-vector-18344535.jpg'/> -->
+
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="select_amortization.menu_1" parent="select_amortization.menu_root"/>
+    <menuitem name="Menu 2" id="select_amortization.menu_2" parent="select_amortization.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="select_amortization.menu_1_list" parent="select_amortization.menu_1"
+              action="select_amortization.action_window"/>
+    <menuitem name="Server to list" id="select_amortization" parent="select_amortization.menu_2"
+              action="select_amortization.action_server"/>
+    -->
+  </data>
+</odoo>

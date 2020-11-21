@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+
+	<report
+            id="account_report_general_ledger_xlsx"
+            model="account.report.general.ledger"
+            string="XLSX"
+            report_type="xlsx"
+            name="account_excel_report.report_general_ledger"
+            file="General Ledger"
+            attachment_use="False"
+        />
+
+	<report
+            id="account_report_partner_ledger_xlsx"
+            model="account.report.partner.ledger"
+            string="XLSX"
+            report_type="xlsx"
+            name="account_excel_report.report_partner_ledger"
+            file="Partner Ledger"
+            attachment_use="False"
+        />
+        
+
+	<report
+            id="account_report_trial_balance_xlsx"
+            model="account.balance.report"
+            string="XLSX"
+            report_type="xlsx"
+            name="account_excel_report.report_trialbalance"
+            file="Trial Balance"
+            attachment_use="False"
+        />
+        
+
+	<report
+            id="account_report_financial_xlsx"
+            model="account.financial.report"
+            string="XLSX"
+            report_type="xlsx"
+            name="account_excel_report.report_financial"
+            file="Financial Report"
+            attachment_use="False"
+        />
+        
+  
+  </data>
+</odoo>

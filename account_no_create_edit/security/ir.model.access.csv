@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_no_create_edit_account_no_create_edit,account_no_create_edit.account_no_create_edit,model_account_no_create_edit_account_no_create_edit,,1,0,0,0

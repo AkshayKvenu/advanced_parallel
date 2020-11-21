@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_document_type,access_employee_document_type,model_employee_document_type,,1,0,0,0
+access_hr_employee_contract,access_hr_employee_contract,model_hr_employee_contract,hr.group_hr_manager,1,1,1,1
+access_hr_employee_contract_history,access_hr_employee_contract_history,model_hr_employee_contract_history,hr.group_hr_manager,1,1,1,1
+access_hr_employee_contract_user,access_hr_employee_contract_user,model_hr_employee_contract,hr.group_hr_user,1,1,1,0
+access_hr_employee_contract_base_user,access_hr_employee_contract_base_user,model_hr_employee_contract,base.group_user,1,0,0,0
+access_hr_document,access_hr_document,model_hr_document,hr.group_hr_manager,1,1,1,1
+access_hr_document_user,access_hr_document_user,model_hr_document,hr.group_hr_user,1,0,0,0

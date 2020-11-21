@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <template id="minimal_layout_inherit" inherit_id="web.minimal_layout">
+      <xpath expr="//head" position="inside">
+             <link rel='stylesheet' href="/advanced_lines_sale/static/src/css/report.css"/>
+      </xpath>
+</template>
+
+    <report
+        string="Timesheet"
+        id="report_task_timesheet"
+        model="project.task"
+        report_type="xlsx"
+        name="advanced_lines_sale.task_timesheet_report.xlsx"
+        file="Timesheet"
+        attachment_use="False"
+        menu="False"
+     />
+     
+</odoo>

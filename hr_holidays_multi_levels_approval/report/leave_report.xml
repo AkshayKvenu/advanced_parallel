@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+		<template id="report_employee_leave_request">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="web.external_layout">
+						<t>
+							<div class="page">
+
+								<div style="font-size:10px; margin-top: 40px;">
+
+									<h3 align="center" style=" background-color:  #3498DB;">
+										<font color="#fff">Leave Request</font>
+									</h3>
+
+								</div>
+
+								<div class="body-part">
+									<div class="row"
+										style="margin-top:30px; page-break-inside: avoid;width:100%">
+
+
+										<div class="col-6" style="text-align: left;">
+											<div>
+												<strong>Employee Information:</strong>
+												<div t-field="o.employee_id.name" />
+												<div t-field="o.employee_id.work_location" />
+												<div t-field="o.employee_id.work_email" />
+											</div>
+										</div>
+										<div class="col-6" style="text-align: right;">
+
+											<div>
+												<strong>Date :</strong>
+												<span t-field="o.create_date"
+													t-options="{'format': 'MM/dd/yyyy'}" />
+											</div>
+											<div>
+												<strong>Status:</strong>
+												<span t-field="o.state" />
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+
+								<div class="row mt32 mb32">
+
+
+									<div class="col-12">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<td
+														style="background-color:#3498DB !important;color:#FFF !important;">
+														<b>Leave Request </b>
+													</td>
+													<td>
+														<span t-field="o.name" />
+													</td>
+												</tr>
+												<tr>
+													<td
+														style="background-color:#3498DB !important;color:#FFF !important;">
+														<b>Leave Type </b>
+													</td>
+													<td>
+														<span t-field="o.holiday_status_id.name" />
+
+													</td>
+												</tr>
+												<tr>
+													<td
+														style="background-color:#3498DB !important;color:#FFF !important;">
+														<b>Duration </b>
+													</td>
+													<td>
+														<div class="oe_inline">
+															<span t-field="o.request_date_from"
+																t-options="{'format': 'MM/dd/yyyy'}" />
+															<b> To </b>
+															<span t-field="o.request_date_to"
+																t-options="{'format': 'MM/dd/yyyy'}" />
+
+														</div>
+
+													</td>
+												</tr>
+
+												<tr>
+													<td
+														style="background-color:#3498DB !important;color:#FFF !important;">
+														<b>Days </b>
+													</td>
+													<td>
+														<span t-field="o.number_of_days_display" />
+													</td>
+												</tr>
+												<tr>
+													<td
+														style="background-color:#3498DB !important;color:#FFF !important;">
+														<b>Pending Approver </b>
+													</td>
+													<td>
+														<span t-field="o.pending_approver.name" />
+													</td>
+												</tr>
+
+
+											</thead>
+										</table>
+
+									</div>
+								</div>
+								<div style="margin-top:50px">
+									<strong>Comment By Manager:</strong>
+									<p t-field="o.report_note" />
+								</div>
+
+								<div class="body-part">
+									<div class="row"
+										style="margin-top:100px; page-break-inside: avoid;width:100%">
+
+										<div class="col-6" style="text-align: left;">
+
+											<strong>Manager:</strong>
+											<p>
+												<div t-field="o.employee_id.parent_id.name"></div>
+											</p>
+										</div>
+										<div class="col-6" style="text-align: right;">
+
+											<strong>Signature:</strong>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</t>
+					</t>
+
+				</t>
+			</t>
+		</template>
+
+
+		<report id="action_report_hr_leave" string="Leave Request"
+			model="hr.leave" report_type="qweb-pdf"
+			file="hr_holidays_multi_levels_approval.report_employee_leave_request"
+			name="hr_holidays_multi_levels_approval.report_employee_leave_request"
+
+			print_report_name="'Leave Request - %s' % (object.employee_id.name)" />
+	</data>
+</odoo>
+			

@@ -1,0 +1,202 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hr_holidays_multi_levels_approval
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-16 13:10+0000\n"
+"PO-Revision-Date: 2017-03-16 13:10+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_sequence
+msgid "Approbation sequence"
+msgstr "Séquence d'approbation"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.ui.view,arch_db:hr_holidays_multi_levels_approval.view_hr_holidays_form
+msgid "Approbations"
+msgstr "Approbations"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_holidays_approbations
+msgid "Approvals"
+msgstr "Approbations"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.ui.view,arch_db:hr_holidays_multi_levels_approval.view_hr_holidays_form
+msgid "Approve"
+msgstr "Approuver"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_approver
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_approver
+msgid "Approver"
+msgstr "Approuver"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_sequence
+msgid "Approver sequence"
+msgstr "Séquence approuver"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approvers
+msgid "Approvers chain"
+msgstr "Chaîne d'approbation"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.actions.act_window,help:hr_holidays_multi_levels_approval.open_holidays_allocation_approve
+msgid "Click here to create a new holidays allocation request."
+msgstr "Cliquer ici pour créer une nouvelle demande d'allocation de congés."
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.actions.act_window,help:hr_holidays_multi_levels_approval.open_holidays_approve
+msgid "Click here to create a new leave request."
+msgstr "Cliquer ici pour créer une nouvelle demande d'absence"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_create_uid
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_create_date
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_holidays_current_user_is_approver
+msgid "Current user is approver"
+msgstr "L'utilisateur courant est l'approuveur"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_date
+msgid "Date"
+msgstr "Date "
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_display_name
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model,name:hr_holidays_multi_levels_approval.model_hr_employee
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_employee
+msgid "Employee"
+msgstr "Employé"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.ui.view,arch_db:hr_holidays_multi_levels_approval.view_employee_form
+msgid "Generate approvers chain based on management hierarchy"
+msgstr "Générer la chaîne de validation selon la hiérarche de management"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_holidays
+msgid "Holidays"
+msgstr "Congés"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.actions.act_window,name:hr_holidays_multi_levels_approval.open_holidays_allocation_approve
+msgid "Holidays allocations to validate"
+msgstr "Allocations de congés à valider"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.ui.view,arch_db:hr_holidays_multi_levels_approval.view_employee_form
+msgid "Holidays approvers chain"
+msgstr "Chaîne des approuveurs"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.actions.act_window,name:hr_holidays_multi_levels_approval.open_holidays_approve
+msgid "Holidays requests to validate"
+msgstr "Demandes d'abasence à valider"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_id
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_id
+msgid "ID"
+msgstr "ID"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation___last_update
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_write_uid
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approbation_write_date
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_holidays_approver_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model,name:hr_holidays_multi_levels_approval.model_hr_holidays
+msgid "Leave"
+msgstr "Congé"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_holidays_pending_approver
+msgid "Pending Approver"
+msgstr "Approuveur en attente"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_holidays_pending_approver_user
+msgid "Pending approver user"
+msgstr "Utilisateur approuveur en attente"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_holidays_pending_transfered_approver_user
+msgid "Pending transfered approver user"
+msgstr "Utilisateur remplaçant en atente"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,help:hr_holidays_multi_levels_approval.field_hr_employee_transfer_holidays_approvals_to_user
+#: model:ir.model.fields,help:hr_holidays_multi_levels_approval.field_hr_holidays_pending_approver_user
+msgid "Related user name for the resource to manage its access."
+msgstr "Utilisateur associé à la ressource pour gérer les droits d'accès."
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.ui.view,arch_db:hr_holidays_multi_levels_approval.view_employee_form
+msgid "Set default chain"
+msgstr "Assigner la chaine par défaut"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_transfer_holidays_approvals_to
+msgid "Transfer approval rights to"
+msgstr "Tranférer droit de validation à"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model.fields,field_description:hr_holidays_multi_levels_approval.field_hr_employee_transfer_holidays_approvals_to_user
+msgid "Transfer approval rights to user"
+msgstr "Transférer droit de validation à l'utilisateur"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.ui.view,arch_db:hr_holidays_multi_levels_approval.view_hr_holidays_form
+msgid "Validate"
+msgstr "Valider"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model,name:hr_holidays_multi_levels_approval.model_hr_employee_holidays_approbation
+msgid "hr.employee.holidays.approbation"
+msgstr "hr.employee.holidays.approbation"
+
+#. module: hr_holidays_multi_levels_approval
+#: model:ir.model,name:hr_holidays_multi_levels_approval.model_hr_employee_holidays_approver
+msgid "hr.employee.holidays.approver"
+msgstr "hr.employee.holidays.approver"
+

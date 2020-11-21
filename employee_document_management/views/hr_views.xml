@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="view_document_tree" model="ir.ui.view">
+			<field name="name">document.tree</field>
+			<field name="model">hr.document</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="List of Documents">
+					<field name="name" />
+					<field name="reminder_before" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_document_form" model="ir.ui.view">
+			<field name="name">document.form</field>
+			<field name="model">hr.document</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="List of Documents">
+					<group>
+						<field name="name" required="1" />
+						<field name="user_id" widget="many2many_tags" required="1" />
+						<field name="reminder_before" required="1" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_document_tree" model="ir.actions.act_window">
+			<field name="name">List of Documents</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hr.document</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="view_document_tree" />
+		</record>
+
+		<!-- <menuitem id="menu_document_config" name="Documents" -->
+		<!-- parent="hr.menu_human_resources_configuration" sequence="5"/> -->
+
+		<menuitem action="action_document_tree" id="menu_document_tree" parent="hr.menu_human_resources_configuration" sequence="5" />
+
+		<record model="ir.ui.view" id="view_hr_candidate_form">
+			<field name="name">hr.employee.form.inherit</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='work_phone']" position="after">
+					<field name="working_status" />
+				</xpath>
+				<xpath expr="//field[@name='resource_calendar_id']" position="after">
+					<field name="joining_date" />
+				</xpath>
+				<xpath expr="//div[@name='button_box']" position="inside">
+					<button name="return_action_to_open" type="object" class="oe_stat_button" icon="fa-book"
+						context="{'xml_id':'view_employee_document_contract_form_action'}" help="show the document for this employee">
+						<field name="contract_count" widget="statinfo" string="Documents" />
+					</button>
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_employee_tree_inh">
+			<field name="name">hr.employee.tree.inherit</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//tree" position="attributes">
+					<attribute name='decoration-warning'>contract_renewal_due_soon and not contract_renewal_overdue</attribute>
+					<attribute name='decoration-danger'>contract_renewal_overdue</attribute>
+				</xpath>
+				<xpath expr="//field[@name='parent_id']" position="after">
+					<field name="contract_renewal_due_soon" invisible="1" />
+					<field name="contract_renewal_overdue" invisible="1" />
+					<field name="contract_renewal_total" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_employee_filter_inh">
+			<field name="name">hr.employee.filter.inherit</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='job_id']" position="after">
+					<filter name="alert_true" domain="['|',('contract_renewal_due_soon','=',True),('contract_renewal_overdue','=',True)]" string="Has Alert(s)" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_employee_kanban_inh">
+			<field name="name">hr.employee.kanban.inherit</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.hr_kanban_view_employees" />
+			<field name="arch" type="xml">
+				<xpath expr="//templates" position="before">
+					<field name="contract_renewal_due_soon" />
+					<field name="contract_renewal_overdue" />
+					<field name="contract_renewal_name" />
+					<field name="contract_renewal_total" />
+				</xpath>
+<!-- 				<xpath expr="//t[@t-name='kanban-box']/div/div[2]" position="after"> -->
+<!-- 					<div> -->
+<!-- 						<a t-if="record.contract_renewal_due_soon.raw_value and !record.contract_renewal_overdue.raw_value" data-type="object" data-name="return_action_to_open" -->
+<!-- 							href="#" class="oe_kanban_action btn btn-sm btn-warning" data-context='{"xml_id":"view_employee_document_contract_form_action"}'> -->
+<!-- 							<field name="contract_renewal_name" /> -->
+<!-- 							<t t-if="record.contract_renewal_total.raw_value > 0"> -->
+<!-- 								and -->
+<!-- 								<field name="contract_renewal_total" /> -->
+<!-- 								other(s) -->
+<!-- 							</t> -->
+<!-- 						</a> -->
+<!-- 						<a t-if="record.contract_renewal_overdue.raw_value" data-type="object" data-name="return_action_to_open" href="#" -->
+<!-- 							class="oe_kanban_action btn btn-sm btn-danger" data-context='{"xml_id":"view_employee_document_contract_form_action"}'> -->
+<!-- 							<field name="contract_renewal_name" /> -->
+<!-- 							<t t-if="record.contract_renewal_total.raw_value > 0"> -->
+<!-- 								and -->
+<!-- 								<field name="contract_renewal_total" /> -->
+<!-- 								other(s) -->
+<!-- 							</t> -->
+<!-- 						</a> -->
+<!-- 					</div> -->
+<!-- 				</xpath> -->
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_employee_document_contract_form">
+			<field name="name">hr.employee.contract.form</field>
+			<field name="model">hr.employee.contract</field>
+			<field name="arch" type="xml">
+				<form string="Contract logs">
+					<header>
+						<button name="contract_close" states="open,renew,expired" type="object" class="oe_highlight"
+							string="Terminate" groups="hr.group_hr_manager" />
+						<button name="contract_open" states="open,renew,expired,closed" type="object" class="oe_highlight"
+							string="Set Contract In draft" groups="hr.group_hr_manager" />
+						<button name="action_draft" states="draft" type="object" class="oe_highlight"
+							string="Validate" groups="hr.group_hr_manager" />
+						<button class="oe_highlight" name="act_renew_contract" type="object" string="Renew" states="open,renew,expired"
+							help="Create a new contract automatically with all the same informations except for the date that will start at the end of current contract"
+							groups="hr.group_hr_manager" confirm="Are you sure you want to renew this document?"/>
+						<field name="state" widget="statusbar" />
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+								<field name="active" widget="boolean_button" options='{"terminology": "archive"}' />
+							</button>
+						</div>
+						<group string="Document details">
+							<group>
+								<field name="employee_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							</group>
+							<group>
+							</group>
+						</group>
+						<group col="2">
+							<group>
+								<field name="cost_subtype_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="start_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+							<group>
+								<field name="document" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="expiration_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+						</group>
+						<group col="2">
+							<group>
+								<field name="next_reminder" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="date" string="Invoice Date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="mail_time"  />
+							</group>
+							<group>
+								<field name="user_ids" widget="many2many_tags"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								<field name="ins_ref"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+							</group>
+						</group>
+						<notebook>
+							<page string="Attachments">
+								<group>
+									<field name="attachment_ids" widget="many2many_binary" nolabel="1"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+								</group>
+							</page>
+							
+							<page string="History">
+								<group>
+									<field name="history_ids" readonly="1" nolabel="1" >
+			
+									<tree>
+										<field name="start_date" />
+										<field name="expiration_date" />
+										<field name="next_reminder" />
+										<field name="date" />
+										<field name="ins_ref" />							
+									</tree>
+								</field>
+							</group>								
+							</page>							
+						</notebook>
+						<group string="Extra Notes">
+							<field name="notes" nolabel="1" placeholder="Write here all other information relative to this contract" 
+							 attrs="{'readonly': [('state', '!=', 'draft')]}" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="act_renew_contract" name="Renew Contract" res_model="hr.employee.contract" src_model="hr.employee.contract" view_mode="form"
+			view_type="form" />
+
+		<record id='view_employee_document_contract_form_tree' model='ir.ui.view'>
+			<field name="name">hr.employee.contract.tree</field>
+			<field name="model">hr.employee.contract</field>
+			<field name="arch" type="xml">
+				<tree string="Document logs" decoration-warning="state=='renew'" decoration-danger="state=='expired'" 
+											 decoration-info="state=='open'" decoration-muted="state=='closed'">
+					<field name="active" invisible="1" />
+					<field name="employee_id" />
+					<field name="cost_subtype_id" />
+					<field name="document" />
+					<field name="start_date" />
+					<field name="expiration_date" />
+					<field name="days_left" invisible="1" />
+					<field name="next_reminder" />
+					<field name="mail_time" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_employee_document_contract_form_graph" model="ir.ui.view">
+			<field name="name">hr.employee.contract.graph</field>
+			<field name="model">hr.employee.contract</field>
+			<field name="arch" type="xml">
+				<graph string="Documents Status Per Month" type="bar" stacked="True">
+					<field name="date" type="row" />
+					<field name="employee_id" type="row" />
+				</graph>
+			</field>
+		</record>
+
+		<record id="view_employee_document_contract_form_search" model="ir.ui.view">
+			<field name="name">hr.employee.contract.search</field>
+			<field name="model">hr.employee.contract</field>
+			<field name="arch" type="xml">
+				<search string="Employee Documents">
+					<filter string="Archived" name="inactive" domain="[('active','=',False)]" />
+					<separator />
+					<field name="cost_subtype_id" />
+					<field name="document" />
+					<field name="start_date" />
+					<field name="expiration_date" />
+					<field name="next_reminder" />
+					<field name="employee_id" />
+					<group expand="0" string="Group By">
+						<filter name="employee" string="Employee Name" domain="[]" context="{'group_by':'employee_id'}" />
+						<filter name="document" string="Document Name" domain="[]" context="{'group_by':'cost_subtype_id'}" />
+						<filter name="document_no" string="Document #" domain="[]" context="{'group_by':'document'}" />
+						<filter name="date_start" string="Date Start" domain="[]" context="{'group_by':'start_date'}" />
+						<filter name="date_expiry" string="Date Expiry" domain="[]" context="{'group_by':'expiration_date'}" />
+						<filter name="next_reminder" string="Next Reminder" domain="[]" context="{'group_by':'next_reminder'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id='view_employee_document_contract_form_action' model='ir.actions.act_window'>
+			<field name="name">Employee Documents</field>
+			<field name="res_model">hr.employee.contract</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+			<field name="search_view_id" ref="view_employee_document_contract_form_search" />
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to create a new Document.
+				</p>
+				<p>
+					Manage all your documents (passport, insurances, etc.)
+					Application will automatically warn
+					you when some documents have to be renewed.
+				</p>
+				<p>
+					Each document (e.g.: passport) may include several services
+					(reparation, insurances, periodic maintenance).
+				</p>
+			</field>
+		</record>
+		
+		
+		
+		
+		<record model="ir.ui.view" id="view_employee_private_address">
+			<field name="name">hr.employee.address</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+			
+			<xpath expr="//field[@name='address_home_id']" position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+				
+				
+			</field>
+			</record>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		<menuitem action="view_employee_document_contract_form_action" parent="hr.menu_hr_root" id="employee_contract_menu"
+			groups="hr.group_hr_user,hr.group_hr_manager" />
+
+	</data>
+</odoo>

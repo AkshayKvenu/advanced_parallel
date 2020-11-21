@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_purchase_receipt_form_inherit_partner"
+			model="ir.ui.view">
+			<field name="name">purchase.receipt.form.partner</field>
+			<field name="model">account.voucher</field>
+			<field name="inherit_id"
+				ref="account_voucher.view_purchase_receipt_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//form/sheet/label" position="replace" />
+				<xpath expr="//form/sheet/h1" position="before">
+					<label for="number" string="Expenses" />
+				</xpath>
+
+				<xpath
+					expr="//field[@name='line_ids']/tree/field[@name='name']"
+					position="after">
+					<field name="partner_id" />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="account_voucher.action_purchase_receipt"
+			model="ir.actions.act_window">
+			<field name="name">Expenses</field>
+		</record>
+
+		<record id="account.action_account_payments"
+			model="ir.actions.act_window">
+			<field name="name">Receipts</field>
+		</record>
+
+
+		<record id="view_sale_receipt_form_inherit_partner"
+			model="ir.ui.view">
+			<field name="name">sale.receipt.form.partner</field>
+			<field name="model">account.voucher</field>
+			<field name="inherit_id"
+				ref="account_voucher.view_sale_receipt_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//form/sheet/label" position="replace" />
+				<xpath expr="//form/sheet/h1" position="before">
+					<label for="number" string="Other Income" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="account_voucher.action_sale_receipt"
+			model="ir.actions.act_window">
+			<field name="name">Other Income</field>
+		</record>
+
+		<record id="view_inernal_reference" model="ir.ui.view">
+			<field name="name">internal.reference</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//form/sheet/div/div[@class='o_row']"
+					position="after">
+					<field name="ref" placeholder="Code" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="view_purchase_receipt" model="ir.ui.view">
+			<field name="name">purchase.receipt</field>
+			<field name="model">account.voucher</field>
+			<field name="inherit_id"
+				ref="account_voucher.view_voucher_tree" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//tree/field[@name='partner_id']"
+					position="after">
+					<field name="reference" />
+				</xpath>
+				<xpath expr="//tree/field[@name='partner_id']"
+					position="after">
+					<field name="name" />
+				</xpath>
+				<xpath expr="//tree/field[@name='partner_id']"
+					position="after">
+					<field name="pay_now" />
+				</xpath>
+			</field>
+		</record>
+		
+		<menuitem action="account.action_account_payments"
+			id="account.menu_action_account_payments_receivable" name="Receipts"
+			parent="account.menu_finance_receivables" sequence="15" />
+
+		<menuitem id="account_voucher.menu_action_sale_receipt"
+			name="Other Income" action="account_voucher.action_sale_receipt"
+			parent="account.menu_finance_receivables" sequence="10" />
+			
+		<menuitem id="account_voucher.menu_action_purchase_receipt"
+			name="Expenses" action="account_voucher.action_purchase_receipt"
+			parent="account.menu_finance_payables" sequence="10" />
+
+	</data>
+</odoo>

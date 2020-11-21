@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="asset_revaluate_wizard_form_view">
+		<field name="name">tasset.revaluate.wizard.form</field>
+		<field name="model">asset.revaluate.wizard</field>
+		<field name="arch" type="xml">
+			<form string="Date">
+				<group col="2" colspan="2">
+					<field name="value" readonly="0"/>
+				</group>
+				<footer>
+					<button name="update_value" type="object" string="Save" class="oe_highlight" />
+					or
+					<button special="cancel" string="Cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="asset_revaluate_wizard">
+		<field name="name">Gross value</field>
+		<field name="res_model">asset.revaluate.wizard</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="asset_revaluate_wizard_form_view" />
+		<field name="target">new</field>
+	</record>
+
+</odoo>

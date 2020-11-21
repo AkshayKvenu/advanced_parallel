@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="ticket_manager" model="res.groups">
+		<field name="name">Ticket / Manager</field>
+		<field name="users"
+			eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+	</record>
+	<record id="ticket_user" model="res.groups">
+		<field name="name">Ticket / User</field>
+	</record>
+
+</odoo>

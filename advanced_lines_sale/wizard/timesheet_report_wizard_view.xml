@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="timesheet_report_wizard_form_view">
+		<field name="name">timesheet.report.wizard.form</field>
+		<field name="model">timesheet.report.wizard</field>
+		<field name="arch" type="xml">
+			<form string="Date">
+				<group col="4" colspan="4">
+					<field name="start_date" />
+					<field name="end_date" />
+				</group>
+				<footer>
+					<button name="print_timesheet_report" type="object" string="Print Timesheet" class="oe_highlight" />
+					or
+					<button special="cancel" string="Cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_timesheet_report_wizard_form">
+		<field name="name">Timesheet Report</field>
+		<field name="res_model">timesheet.report.wizard</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="timesheet_report_wizard_form_view" />
+		<field name="target">new</field>
+		<field name="binding_model_id" ref="project.model_project_task" />
+	</record>
+
+</odoo>

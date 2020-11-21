@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cancel_invoice_number_cancel_invoice_number,cancel_invoice_number.cancel_invoice_number,model_cancel_invoice_number_cancel_invoice_number,,1,0,0,0
