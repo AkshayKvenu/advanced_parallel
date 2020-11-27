@@ -81,12 +81,12 @@ class AccountInvoice(models.Model):
     
     is_unique = fields.Boolean('Is Unique',default=False)
     payment_voucher_id = fields.Many2one('payment.voucher','Payment Voucher', copy=False)
-    amount_to_pay = fields.Float('Amount to Pay', compute='_compute_amount_pay', store=True)
+    amount_to_pay = fields.Float('Amount to Pay', store=True)
     
-    @api.one
-    @api.depends('residual')
-    def _compute_amount_pay(self):
-        self.amount_to_pay = self.residual
+#     @api.one
+#     @api.depends('residual')
+#     def _compute_amount_pay(self):
+#         self.amount_to_pay = self.residual
     
     @api.multi
     def write(self, vals):
@@ -133,24 +133,27 @@ class PaymentVoucher(models.Model):
     total_amount_to_pay = fields.Float('Amount To Pay', compute='_compute_total_amount_pay',readonly=True)
 #     amount_to_pay = fields.Float('Amount To Pay')
     total_invoice_amount = fields.Float('Invoice Amount',readonly=True)
+    
+    payment_voucher_line_ids = fields.One2many('payment.voucher.lines', 'payment_voucher_id', string="Payment Voucher Lines")
         
     @api.depends('invoices_ids')
     def _compute_total_amount_pay(self):
         for rec in self:
-            for line in rec.invoices_ids:
+            for line in rec.payment_voucher_line_ids:
                 rec.total_amount_to_pay += line.amount_to_pay
         
     @api.depends('invoices_ids')
     def _compute_total_amount_due(self):
         for rec in self:
-            for line in rec.invoices_ids:
-                rec.total_amount_due += line.residual_signed
+            for line in rec.payment_voucher_line_ids:
+                rec.total_amount_due += line.amount_due
         
         
                 
     @api.onchange('vendor_id')
     def invoiceids_clear(self):
         self.invoices_ids=False
+        self.payment_voucher_line_ids=False
         
         
     @api.model
@@ -160,10 +163,10 @@ class PaymentVoucher(models.Model):
         result.total_amount_due=0
         result.total_invoice_amount=0
         result.total_amount_to_pay=0
-        for line in result.invoices_ids:
+        for line in result.payment_voucher_line_ids:
 #             line.payment_voucher_id=result.id
-            result.total_amount_due=result.total_amount_due+line.residual_signed
-            result.total_invoice_amount=result.total_invoice_amount+line.amount_total_signed
+            result.total_amount_due=result.total_amount_due+line.amount_due
+            result.total_invoice_amount=result.total_invoice_amount+line.invoice_amount
             result.total_amount_to_pay=result.total_amount_to_pay+line.amount_to_pay
         vals['company_id'] = self.env.user.company_id
             
@@ -178,20 +181,23 @@ class PaymentVoucher(models.Model):
         total_amount=0
         total_invoice=0
         total_amount_to_pay=0
-        for line in self.invoices_ids:
+        for line in self.payment_voucher_line_ids:
 #             line.payment_voucher_id=self.id
-            total_amount=total_amount+line.residual_signed
-            total_invoice=total_invoice+line.amount_total_signed
+            total_amount=total_amount+line.amount_due
+            total_invoice=total_invoice+line.invoice_amount
             total_amount_to_pay=total_amount_to_pay+line.amount_to_pay
         vals['total_amount_due'] = total_amount
         vals['total_invoice_amount'] = total_invoice
         vals['total_amount_to_pay'] = total_amount_to_pay
         
-        result = super(PaymentVoucher, self).write(vals)
+#         result = super(PaymentVoucher, self).write(vals)
         return result
 
     
     def action_confirm_payment_voucher(self):
+        for line in self.payment_voucher_line_ids:
+            if line.invoice_id.amount_to_pay+line.amount_to_pay > line.invoice_id.residual_signed:
+                raise UserError(_("Amount to pay exceeds Amount due."))
 #         self.state = 'open'
         for line in self.invoices_ids:
             if line.payment_voucher_id.id != False:
@@ -204,12 +210,16 @@ class PaymentVoucher(models.Model):
         
      
     def action_paid_payment_voucher(self):
-        for line in self.invoices_ids:
-            if line.payment_voucher_id and line.payment_voucher_id!=self:
-                raise UserError(_("%s is already selected in another voucher.") % (line.number,))
-            else:
-#                 self.env['account.invoice']
-                line.payment_voucher_id = self
+        for line in self.payment_voucher_line_ids:
+#             if line.payment_voucher_id and line.payment_voucher_id!=self:
+#                 raise UserError(_("%s is already selected in another voucher.") % (line.number,))
+#             else:
+# #                 self.env['account.invoice']
+#                 line.payment_voucher_id = self
+            if line.invoice_id.amount_to_pay+line.amount_to_pay > line.invoice_id.residual_signed:
+                raise UserError(_("Amount to pay exceeds."))
+                
+            line.invoice_id.amount_to_pay += line.amount_to_pay
         self.state = 'paid'
      
     @api.onchange('invoices_ids') 
@@ -219,6 +229,67 @@ class PaymentVoucher(models.Model):
         for amount in self.invoices_ids:
             self.total_amount_due=self.total_amount_due+amount.residual_signed
             self.total_invoice_amount=self.total_invoice_amount+amount.amount_total_signed
+        
+     
+    @api.constrains('payment_voucher_line_ids') 
+    def line_invoice_validation(self):
+        invoices = []
+        for voucher_line in self.payment_voucher_line_ids:
+            invoices.append(voucher_line.invoice_id.id)
+        print(invoices)
+        if any(invoices.count(x) > 1 for x in invoices):
+            raise UserError(_("Invoice is alreday used"))
+            
+            
+            
+
+class PaymentVoucherLines(models.Model):
+    _name = 'payment.voucher.lines'
+    
+    vendor_id = fields.Many2one('res.partner','Vendor')
+#                                 , related='payment_voucher_id.vendor_id')
+    
+    invoice_id = fields.Many2one('account.invoice', string='Inovice')
+#     , domain=_get_domain_inovice)
+    date_invoice = fields.Date('Inovice Date', related='invoice_id.date_invoice')
+    date_due = fields.Date('Due Date', related='invoice_id.date_due')
+    invoice_amount = fields.Monetary('Inovice Amount', related='invoice_id.amount_total_signed')
+    amount_due = fields.Monetary('Amount Due', related='invoice_id.residual_signed')
+    currency_id = fields.Many2one('res.currency', string='Currency', related='invoice_id.currency_id')
+    amount_to_pay = fields.Monetary('Amount to pay')
+    invoice_amount_to_pay = fields.Float('Amount to pay in invoice', related='invoice_id.amount_to_pay')
+    
+    payment_voucher_id = fields.Many2one('payment.voucher','Payment Voucher', copy=False)
+
+    @api.onchange('invoice_id') 
+    def amount_to_pay_onchange(self):
+        if self.invoice_id:
+            if self.invoice_id.amount_to_pay == self.invoice_id.residual_signed:
+                    raise UserError(_("Invoice no amount to pay ."))
+                
+            line_obj = self.search([('invoice_id','=',self.invoice_id.id)])
+            for line in line_obj:
+                if line.payment_voucher_id and line.payment_voucher_id.state != 'paid':
+                    raise UserError(_("Invoice is alreday used."))
+                
+                    
+                    
+            self.amount_to_pay = self.invoice_id.residual_signed - self.invoice_id.amount_to_pay
+        
+     
+    @api.constrains('amount_to_pay') 
+    def amount_to_pay_validation(self):
+        for rec in self:
+            if rec.amount_to_pay > rec.amount_due:
+                raise UserError(_("Amount to pay should not be greater than Amount due."))
+            
+    @api.model
+    def write(self, vals):
+        if 'amount_to_pay' in vals:
+            if vals['amount_to_pay'] > self.amount_due:
+                raise UserError(_("Amount to pay should not be greater than Amount due."))
+        
+        return super(PaymentVoucherLines, self).write(vals)
         
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

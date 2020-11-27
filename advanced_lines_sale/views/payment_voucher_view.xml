@@ -34,18 +34,36 @@
 						</group>
 					</group>
 				<notebook>
-					<page string="Payment Voucher">			
-						<field name="invoices_ids" attrs="{'readonly': [('state','!=', 'draft')]}" 
-								domain="[('state', '=', 'open'),('payment_voucher_id','=',False),('partner_id','=',vendor_id)]" >
-							<tree string="Invoice Payment" editable="bottom">
-								<field name="number" />
-								<field name="date_invoice" />
+<!-- 					<page string="Payment Voucher">			 -->
+<!-- 						<field name="invoices_ids" attrs="{'readonly': [('state','!=', 'draft')]}"  -->
+<!-- 								domain="[('state', '=', 'open'),('payment_voucher_id','=',False),('partner_id','=',vendor_id)]" > -->
+<!-- 							<tree string="Invoice Payment" editable="bottom"> -->
+<!-- 								<field name="number" /> -->
+<!-- 								<field name="date_invoice" /> -->
+<!-- 								<field name="date_due" /> -->
+<!-- 								<field name="amount_total_signed" string="Invoice Amount"/> -->
+<!-- 								<field name="residual_signed" sum="Total Amount Due" /> -->
+<!-- 								<field name="currency_id" /> -->
+<!-- 								<field name="amount_to_pay"  sum="Total Amount To Pay" readonly="0"/> -->
+<!-- 								<field name="state" invisible="True"/> -->
+<!-- 							</tree> -->
+<!-- 						</field> -->
+<!-- 					</page> -->
+					<page string="Payment Voucher lines">			
+						<field name="payment_voucher_line_ids" attrs="{'readonly': [('state','!=', 'draft')]}" 
+							 context="{'default_vendor_id': vendor_id}" >
+							<tree string="Payment Voucher lines" editable="bottom" >
+								<field name="vendor_id" invisible='1'/>
+								<field name="invoice_id"  required="1"
+								domain="[('state', '=', 'open'),('partner_id','=',vendor_id)]"/>
+								<field name="date_invoice"/>
 								<field name="date_due" />
-								<field name="amount_total_signed" string="Invoice Amount"/>
-								<field name="residual_signed" sum="Total Amount Due" />
+								<field name="invoice_amount" string="Invoice Amount"/>
+								<field name="amount_due" sum="Total Amount Due"/>
 								<field name="currency_id" />
-								<field name="amount_to_pay"  sum="Total Amount To Pay" readonly="0"/>
-								<field name="state" invisible="True"/>
+								<field name="amount_to_pay" sum="Total Amount To Pay" readonly="0"/>
+								<field name="invoice_amount_to_pay" invisible="1"/>
+<!-- 								<field name="payment_voucher_id" /> -->
 							</tree>
 						</field>
 					</page>

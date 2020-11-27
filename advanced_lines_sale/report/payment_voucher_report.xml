@@ -50,13 +50,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<t t-foreach="doc.invoices_ids" t-as="line">
+								<t t-foreach="doc.payment_voucher_line_ids" t-as="line">
 									<tr>
-										<td class="text-right">
-											<span t-field="line.number" />
+										<td class="text-center">
+											<span t-field="line.invoice_id.number" />
 										</td>
 										<td class="text-right">
-											<span t-field="line.reference" />
+											<span t-field="line.invoice_id.reference" />
 										</td>
 										<td class="text-right">
 											<span t-field="line.date_invoice" />
@@ -65,10 +65,10 @@
 											<span t-field="line.date_due" />
 										</td>
 										<td class="text-right">
-											<span t-field="line.amount_total_signed" />
+											<span t-field="line.invoice_amount" />
 										</td>
 										<td class="text-right">
-											<span t-field="line.residual_signed" />
+											<span t-field="line.amount_due" />
 										</td>
 										<td class="text-right">
 											<span t-field="line.currency_id" />
