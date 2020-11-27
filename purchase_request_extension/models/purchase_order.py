@@ -10,7 +10,6 @@ import math
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-
     @api.multi
     def button_confirm(self):
         res = super(PurchaseOrder, self).button_confirm()
@@ -32,16 +31,29 @@ class PurchaseOrder(models.Model):
             for rec in self.order_line:
                 request_lines = self.env['purchase.order.line'].search([('id','in',order_line_ids),('product_id','=',rec.product_id.id)])
                 total_qty_po = 0
+                total_done_qty = 0
                 for req_obj in request_lines:
                     total_qty_po += req_obj.product_qty
+#                     for purchase_lines in req_obj.purchase_lines:
+                    for move in req_obj.move_ids:
+                        if move.state != 'cancel':
+                            total_done_qty += move.product_uom_qty
+                                
+
                 total_qty_pr = 0
+                
                 for pr_line in pr_obj.line_ids:
                     if pr_line.product_id == rec.product_id:
                         total_qty_pr += pr_line.product_qty
                       
-                if total_qty_po+rec.product_qty > total_qty_pr:
+                if total_done_qty+rec.product_qty > total_qty_pr:
                     raise UserError(
-                        _('%s product Quantity exceeds.')% rec.product_id.name)
+                        _('%s product Quantity exceeds by %s.')% (rec.product_id.name,(total_done_qty+rec.product_qty)-total_qty_pr))
+                    
+                    
+#             for rec in self.order_line:
+#                 request_lines = self.env['purchase.order.line'].search([('id','in',order_line_ids),('product_id','=',rec.product_id.id)])
+                
                 
                 
             for pr in pr_obj.line_ids:
@@ -53,6 +65,14 @@ class PurchaseOrder(models.Model):
         
         return res 
     
+
+class PurchaseRequestLine(models.Model):
+    _inherit = "purchase.request"
+
+
+    def button_reset_to_approve(self):
+        if self.state == 'done':
+            self.write({'state':'approved'})
 
 class PurchaseRequestLine(models.Model):
     _inherit = "purchase.request.line"

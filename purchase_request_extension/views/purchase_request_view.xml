@@ -7,6 +7,13 @@
 		<field name="model">purchase.request</field>
 		<field name="inherit_id" ref="purchase_request.view_purchase_request_form"/>
 		<field name="arch" type="xml">
+			<xpath expr="//header" position="inside">
+                <button name="button_reset_to_approve"
+                        string="Reset to Approve"
+                        type="object"
+                        attrs="{'invisible':['|', ('login_user', '=', False), ('state', 'not in', ['done'])]}"
+                        groups="purchase_request_extension.reset_to_approve_user"/>
+            </xpath>
 			<xpath expr="//field[@name='line_ids']/form/sheet/group/group/field[@name='analytic_account_id']" position='replace'>
               <field name="analytic_account_id"
                      groups="analytic.group_analytic_accounting"
@@ -16,7 +23,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 			<xpath expr="//field[@name='line_ids']/form/sheet/group/group/field[@name='name']" position="after">
-                <field name="item_code"/>
+                <field name="item_code" invisible='1'/>
             </xpath>
 			<xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
                 <field name="item_code"/>

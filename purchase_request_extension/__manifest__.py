@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "purchase_request_extension",
+    'name': "Purchase Request Extension",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        Purchase Request Extension""",
 
     'description': """
-        Long description of module's purpose
+        Purchase Request Extension
     """,
 
     'author': "My Company",
@@ -17,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/12.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': '20.4',
+    'version': '20.5',
 
     # any module necessary for this one to work correctly
     'depends': ['base','purchase_request','advanced_lines_sale'],
@@ -25,6 +24,7 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'security/security_purchase_request.xml',
         'wizard/purchase_request_line_make_purchase_order_view.xml',
         'views/purchase_request_view.xml',
         'report/pruchase_request_report_view.xml',
