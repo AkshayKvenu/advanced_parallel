@@ -58,7 +58,10 @@ class GeneralLedgerReportXls(models.AbstractModel):
         if data['form'].get('journal_ids', False):
             codes = [journal.code for journal in self.env['account.journal'].search([('id', 'in', data['form']['journal_ids'])])]
 
-        accounts = docs if data['model'] == 'account.account' else self.env['account.account'].search([])
+        if data['form']['account_ids']:
+            accounts = self.env['account.account'].browse(data['form']['account_ids'])
+        else:
+            accounts = docs if data['model'] == 'account.account' else self.env['account.account'].search([])
         accounts_res = self.env['report.accounting_pdf_reports.report_generalledger'].with_context(data['form'].get('used_context',{}))._get_account_move_entry(accounts, init_balance, sortby, display_account)
         data = data['form']
         

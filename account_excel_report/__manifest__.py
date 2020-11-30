@@ -32,7 +32,7 @@
     'author' : 'KITE',
 
     'category': 'Accounting',
-    'version': '1.2',
+    'version': '1.3',
 
     # any module necessary for this one to work correctly
     'depends': ['base',
@@ -40,6 +40,7 @@
         'report_xlsx',
         'om_account_accountant',
         'web',
+        'accounting_pdf_reports',
      ],
 
     # always loaded

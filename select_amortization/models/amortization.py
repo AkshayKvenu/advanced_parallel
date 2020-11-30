@@ -19,6 +19,7 @@ class JournalItemsAmortization(models.Model):
     analytic_tag_ids = fields.Many2many('account.analytic.tag', string='Analytic Tag')
     debit = fields.Float("Debit")
     credit = fields.Float("Credit")
+    label = fields.Char("Label")
     balance = fields.Float(compute='_store_balance')
     asset_id_amortization = fields.Many2one('account.asset.asset.amortization', string='Asset', required=True, ondelete='cascade')
     
@@ -101,9 +102,9 @@ class AmortizationLineItems(models.Model):
     def _prepare_move(self, line):
         move_lines = []
         for lines in line.asset_id_amortization.journal_items_ids:
-            asset_name = line.asset_id_amortization.name + ' (%s/%s)' % (line.sequence, len(line.asset_id_amortization.entry_line_ids))
+#             asset_name = line.asset_id_amortization.name + ' (%s/%s)' % (line.sequence, len(line.asset_id_amortization.entry_line_ids))
             move_line = {
-                'name': asset_name,
+                'name': lines.label,
                 'account_id': lines.account_id.id,
                 'debit': lines.debit,
                 'credit': lines.credit,
@@ -115,8 +116,9 @@ class AmortizationLineItems(models.Model):
             }
             move_lines.append((0, 0, move_line))
 #             }
+        asset_name = line.asset_id_amortization.name + ' (%s/%s)' % (line.sequence, len(line.asset_id_amortization.entry_line_ids))
         move_vals = {
-            'ref': line.asset_id_amortization.name,
+            'ref': asset_name,
             'date': line.date or False,
             'journal_id': line.asset_id_amortization.journal_id.id or 3,
             'line_ids': move_lines,

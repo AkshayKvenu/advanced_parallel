@@ -39,7 +39,8 @@ class AccountReportGeneralLedger(models.TransientModel):
         used_context = self._build_contexts(data)
         data['form']['used_context'] = dict(used_context, lang=self.env.context.get('lang') or 'en_US')
         data = self.pre_print_report(data)
-        data['form'].update(self.read(['initial_balance', 'sortby'])[0])
+#         data['form'].update(self.read(['initial_balance', 'sortby'])[0])
+        data['form'].update(self.read(['initial_balance', 'sortby','account_ids'])[0])
         if data['form'].get('initial_balance') and not data['form'].get('date_from'):
             raise UserError(_("You must define a Start Date"))
         records = self.env[data['model']].browse(data.get('ids', []))
