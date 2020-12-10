@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+    	<record id='asset_sequence_id' model='ir.sequence'>
+    	<field name='name'>Asset sequence</field>
+    	<field name='code'>account.asset.asset</field>
+    	<field name='prefix'>ASST</field>
+    	<field name='padding'>4</field>
+    	<field name='company_id' eval='False'/>
+    	
+    	</record>
+    
+    </data>
+</odoo>
+

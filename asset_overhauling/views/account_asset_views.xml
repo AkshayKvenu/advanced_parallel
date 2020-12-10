@@ -7,8 +7,21 @@
 			<field name="inherit_id" ref="om_account_asset.view_account_asset_asset_form" />
 			<field name="arch" type="xml">
 		
+				<xpath expr="//button[@name='open_entries']"
+					position="after">
+					<button class="oe_stat_button" name="open_items" type="object" icon="fa-pencil">
+                            <field string="Journal Items" name="item_count" widget="statinfo"/>
+                    </button>
+				</xpath>
+				
+				<xpath expr="//sheet/group/group[1]/field[@name='category_id']"
+					position="before">
+                    <field name="name_seq"/>
+				</xpath>
+				
 				<xpath expr="//sheet/group/group[1]"
 					position="inside">
+<!--                     <field name="name_seq"/> -->
                     <field name="quantity" attrs="{'readonly': [('state','!=','draft')]}"/>
                     <field name="price_unit" attrs="{'readonly': [('state','!=','draft')]}"/>
                     <field name="reference" attrs="{'readonly': [('state','!=','draft')]}"/>
@@ -33,6 +46,21 @@
 				
 			</field>
 		</record>
+
+		<record id="account_move_line_inherit_asset" model="ir.ui.view">
+			<field name="name">account.move.line.inherit</field>
+			<field name="model">account.move.line</field>
+			<field name="inherit_id" ref="account.view_move_line_form" />
+			<field name="arch" type="xml">
+		
+				<xpath expr="//notebook/page[1]/group/group[2]"
+					position="inside">
+                    <field name='asset_id' readonly='0'/>
+                    <field name='parent_state' invisible='1'/>
+				</xpath>
+			</field>
+		</record>
+			
   
   </data>
 </odoo>

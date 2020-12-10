@@ -6,10 +6,24 @@
 		<field name="arch" type="xml">
 			<form string="Date">
 				<group col="2" colspan="2">
-					<field name="value" readonly="0"/>
+					<field name="value" readonly="1"/>
+<!-- 					<field name="value_tmp" invisible="0"/> -->
+					<field name="move_line_ids"  widget='many2many'
+					domain="[('parent_state','=','posted'),('journal_id.type','=', 'purchase'),
+							('asset_id','=', False),('debit','>', 0.0)]">
+		                <tree string="Related move lines" >
+							<field name="date"/>
+							<field name="move_id" />
+							<field name="journal_id" />
+							<field name="name" />
+							<field name="debit" />
+							<field name="credit" />
+						</tree>
+						</field>
+<!-- 					<field name="temp_move_line_ids" invisible="0"/> -->
 				</group>
 				<footer>
-					<button name="update_value" type="object" string="Save" class="oe_highlight" />
+					<button name="update_value" confirm="Are you sure you want to update gross value?" type="object" string="Save" class="oe_highlight" />
 					or
 					<button special="cancel" string="Cancel" />
 				</footer>
