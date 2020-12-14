@@ -7,7 +7,8 @@ from ast import literal_eval
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
     
-    mail_send_to = fields.Many2many('res.users',related='company_id.mail_send_to',readonly=False)
+    mail_send_to = fields.Many2many('res.users',string='Send mail on "To Approve"', related='company_id.mail_send_to',readonly=False,
+                                             help='Emails to be send when RFQ in "To Approve" state')
     approved_mail_send_to = fields.Many2many('res.users',related='company_id.approved_mail_send_to',readonly=False)
       
     

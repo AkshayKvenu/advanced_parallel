@@ -74,6 +74,8 @@ class PurchaseOrder(models.Model):
             template_id = self.env['mail.template'].browse(template.id)
             template_id.with_context(url=base_url,mail=email_list_new).send_mail(self.id, force_send=True)
         
+        return res
+        
         
         
         

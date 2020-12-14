@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id='draft_purchase_order_report' inherit_id='advanced_lines_sale.purchase_order_layout'>
+		<xpath expr='//div[@class="header"]/h2[1]' position='after'>
+			<h2 t-if="o.state in ['approved']" style="text-align:center;">
+				Draft Purchase Order
+			</h2>
+		</xpath>
+	
+	</template>
+	
+</odoo>

@@ -16,15 +16,16 @@
     # Check https://github.com/odoo/odoo/blob/12.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': '0.1.20.2',
+    'version': '0.1.20.3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','purchase_order_approved','mail','purchase'],
+    'depends': ['base','purchase_order_approved','mail','purchase','advanced_lines_sale'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'security/security.xml',
+        'report/purchase_order_report.xml',
         'views/res_company.xml',
         'views/purchase_order.xml',
         'data/confirm_mail.xml',

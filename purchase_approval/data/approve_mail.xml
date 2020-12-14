@@ -10,14 +10,16 @@
 			<field name="email_from">${user.email |safe}
 			</field>
 			<field name="email_to">${ctx['mail']}</field>
-			<field name="subject">Purchase Order Approved (Ref ${object.name})
+			<field name="subject">RFQ Approved (Ref ${object.name})
 			</field>
 			<field name="body_html" type="html">
 				<div style="margin: 0px; padding: 0px;">
 					<p style="margin: 0px; padding: 0px; font-size: 13px;">
 						<p>
-							RFQ is Approved
-							<a href="${ctx['url']}" target="_blank">${ctx['url']}</a>								
+							The Draft ${object.name} is approved, please convert it into a PO.<br/> <br/>
+							Click the below button for more deatils<br/> <br/>
+							<a style="padding: 8px 12px; font-size: 12px; color: #FFFFFF; text-decoration: none !important; font-weight: 400; background-color: #875A7B; border: 0px solid #875A7B; border-radius:3px"
+							 href="${ctx['url']}" target="_blank">View Purchase Order</a>								
 						</p>
 					</p>
 				</div>
