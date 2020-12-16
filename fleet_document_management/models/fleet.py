@@ -26,6 +26,34 @@ import datetime
 from odoo.exceptions import UserError, ValidationError
 from odoo import models, fields, api, _
 
+class FleetVehicle(models.Model):
+    _inherit = 'fleet.vehicle'
+
+    def compute_fleet_document_count(self):
+        for fleet in self:
+            fleet.document_count = self.env['fleet.document.management'].search_count([('fleet_id','=',self.id)])
+        
+    document_count = fields.Integer('Fleet document', compute='compute_fleet_document_count')
+    
+    def open_documents(self):
+        context = {
+            'default_fleet_id': self.id}
+        return {
+            'name': _('Fleet Documents'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'fleet.document.management',
+            'view_id': False,
+            'type': 'ir.actions.act_window',
+            'context': context,
+            'domain': [('fleet_id', '=', self.id)],
+        }
+
+
+class FleetVehicle(models.Model):
+    _inherit = 'fleet.vehicle.log.services'
+    
+    attachment_ids = fields.Many2many('ir.attachment', string="Attachments")
 
 class FleetDocumentManagement(models.Model):
     _name = 'fleet.document.management'

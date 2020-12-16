@@ -21,6 +21,15 @@
 
 			</field>
 		</record>
+        <record id="view_company_document_search" model="ir.ui.view">
+            <field name="name">admin.document.search</field>
+            <field name="model">admin.document</field>
+            <field name="arch" type="xml">
+                <search string="Users">
+                    <filter name="Inactive" string="Archived" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
 
 		<record id="view_company_document_form" model="ir.ui.view">
 			<field name="name">document.form</field>
@@ -42,6 +51,10 @@
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="button_box">
+							<button name="open_documents" string="Expired Documents" type="object" class="oe_stat_button" icon="fa-book"
+									 help="show the archived documents" attrs="{'invisible': [('active', '=', False)]}" >
+<!-- 		                        <field name="document_count" widget="statinfo" string="Documents"/> -->
+		                    </button>
 							<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive"
 							groups="company_document_management.company_document_manager"  >
 								<field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
@@ -81,20 +94,6 @@
 								</group>
 							</page>
 							
-							<page string="History">
-								<group>
-									<field name="history_ids" readonly="1" nolabel="1" >
-			
-									<tree>
-										<field name="start_date" />
-										<field name="expiration_date" />
-										<field name="next_reminder" />
-										<field name="date" />
-										<field name="ins_ref" />							
-									</tree>
-								</field>
-							</group>								
-							</page>							
 						</notebook>
 						<group string="Extra Notes">
 							<field name="notes" nolabel="1" placeholder="Write here all other information relative to this contract" attrs="{'readonly': [('state', '!=', 'draft')]}" />
@@ -116,7 +115,7 @@
 			<field name="name">Company Documents</field>
 			<field name="res_model">admin.document</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">tree,form,search</field>
 			<field name="help" type="html">
 				<p class="oe_view_nocontent_create">Create the first document.</p>
 			</field>

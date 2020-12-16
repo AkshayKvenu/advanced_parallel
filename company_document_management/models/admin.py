@@ -151,14 +151,38 @@ class DocumentAdmin(models.Model):
             record.state = 'draft'
             
     @api.multi
+    def open_documents(self):
+        
+        return {
+            'name': _('Archived company Documents'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'admin.document',
+            'view_id': False,
+            'type': 'ir.actions.act_window',
+            'domain': [('cost_sub_type_id', '=', self.cost_sub_type_id.id),('active','=',False)],
+        }
+            
+    @api.multi
     def act_renew_contract_(self):
         
-        self.write({'history_ids':[(0,0,{'start_date':self.start_date,'expiration_date':self.expiration_date,'next_reminder':self.next_reminder,
-                                                                              'date':self.date, 'ins_ref': self.ins_ref})]})
+#         self.write({'history_ids':[(0,0,{'start_date':self.start_date,'expiration_date':self.expiration_date,'next_reminder':self.next_reminder,
+#                                                                               'date':self.date, 'ins_ref': self.ins_ref})]})
+        self.active = False
+        document_obj = self.create({'state': 'draft','cost_sub_type_id': self.cost_sub_type_id.id, 'document':self.document, 'user_ids':[(6,0,self.user_ids.ids)],
+                      'expiration_date':False, 'start_date':False, 'mail_time':False})
         
+        return {
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'admin.document',
+                'view_id': self.env.ref('company_document_management.view_company_document_form').id,
+                'type': 'ir.actions.act_window',
+                'res_id': document_obj.id,
+            }
         
-        self.write({'state': 'draft','ins_ref': False, 'next_reminder':False, 'date':False, 'expiration_date':False,
-                     'start_date':False, 'mail_time':False})
+#         self.write({'state': 'draft','ins_ref': False, 'next_reminder':False, 'date':False, 'expiration_date':False,
+#                      'start_date':False, 'mail_time':False})
     
     
     @api.constrains('start_date', 'expiration_date')

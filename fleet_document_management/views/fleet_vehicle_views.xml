@@ -1,0 +1,32 @@
+<odoo>
+	<data>
+		<record id='document_management_fleet_vehicle_id' model='ir.ui.view'>
+			<field name='name'>Fleet document vehicle</field>
+			<field name='model'>fleet.vehicle</field>
+			<field name='type'>form</field>
+			<field name='inherit_id' ref='fleet.fleet_vehicle_view_form'/>
+			<field name='arch' type='xml'>
+				<xpath expr='//div[@name="button_box"]' position='inside'>
+					<button name="open_documents" type="object" class="oe_stat_button" icon="fa-book"
+							 help="show the documents for this vehicle">
+                        <field name="document_count" widget="statinfo" string="Documents"/>
+                    </button>
+				</xpath>
+			</field>
+		</record>
+		
+		<record id='service_view_fleet_vehicle' model='ir.ui.view'>
+			<field name='name'>Fleet vehicle sevice</field>
+			<field name='model'>fleet.vehicle.log.services</field>
+			<field name='type'>form</field>
+			<field name='inherit_id' ref='fleet.fleet_vehicle_log_services_view_form'/>
+			<field name='arch' type='xml'>
+				<xpath expr='//sheet/group[2]' position='after'>
+					<group col="2" string="Attachments">
+						<field name="attachment_ids"  widget="many2many_binary" nolabel="1"/>
+					</group>
+				</xpath>
+			</field>
+		</record>
+</data>
+</odoo>
