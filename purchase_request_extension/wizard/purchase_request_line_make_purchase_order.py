@@ -22,6 +22,7 @@ class PurchaseRequestLineMakePurchaseOrder(models.TransientModel):
             'product_qty': line.pending_qty_to_receive,
             'product_qty_copy': line.pending_qty_to_receive,
             'product_uom_id': line.product_uom_id.id,
+            'keep_description':True,
         }
 
     @api.multi
@@ -123,5 +124,16 @@ class PurchaseRequestLineMakePurchaseOrderItem(models.TransientModel):
     product_qty_copy = fields.Float(
         string='Copy of Quantity',
         digits=dp.get_precision('Product Unit of Measure'))
+    
+    keep_description = fields.Boolean(default=True)
+    
+#     @api.model
+#     def default_get(self, field_list):
+#         res = super(PurchaseRequestLineMakePurchaseOrderItem, self).default_get(field_list)
+#         print("aaaaaaaaaaaaaaaaaaaaaaaaa",res)
+#         res.update({
+#             'keep_description': True,
+#         })
+#         return res
 
 

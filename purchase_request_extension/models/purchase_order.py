@@ -9,12 +9,78 @@ import math
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
+    
+    @api.constrains('order_line')
+    def compute_product_qty(self):
+        if self.state == 'purchase':
+            pr_lines = self.env['purchase.request.line'].search([])
+            pr_obj = self.env['purchase.request']
+            print("1111111111112222222222222333333333")
+            order_line_ids = []
+            for lines in pr_lines:
+                for po_lines in lines.purchase_lines:
+                    order_id = po_lines.order_id
+                    if self.id == order_id.id:
+                        pr_obj = lines.request_id
+            flag = 0
+            print("qqqqqqqqqqqqqqqqqqqqqqqqqqq",pr_obj)
+            if pr_obj:
+                for pr_line in pr_obj.line_ids:
+                    for po_line in pr_line.purchase_lines:
+                        if po_line.order_id.id != self.id and po_line.order_id.state == 'purchase':
+                            order_line_ids.append(po_line.id)
+                
+                print("rrrrrrrrrrrrrrrrrrrrrrr",order_line_ids)
+                for rec in self.order_line:
+                    request_lines = self.env['purchase.order.line'].search([('id','in',order_line_ids),('product_id','=',rec.product_id.id)])
+                    total_qty_po = 0
+                    total_done_qty = 0
+                    print("ttttttttttttttttttt",request_lines)
+                    for req_obj in request_lines:
+                        total_qty_po += req_obj.product_qty
+    #                     for purchase_lines in req_obj.purchase_lines:
+                        for move in req_obj.move_ids:
+                            if move.state != 'cancel':
+                                total_done_qty += move.product_uom_qty
+                                    
+    
+                    total_qty_pr = 0
+                    
+                    for pr_line in pr_obj.line_ids:
+                        if pr_line.product_id == rec.product_id:
+                            total_qty_pr += pr_line.product_qty
+#                     print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",total_done_qty,rec.product_qty, total_qty_pr)
+                    print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",total_qty_po+rec.product_qty, total_qty_pr)
+                    print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",rec.purchase_request_lines.id)
+                    if total_qty_po+rec.product_qty > total_qty_pr:
+                        raise UserError(
+                            _('%s product Quantity exceeds by %s.')% (rec.product_id.name,(total_qty_po+rec.product_qty)-total_qty_pr))
+                    if total_qty_po+rec.product_qty < total_qty_pr:
+                        if rec.purchase_request_lines.id != False:
+                            flag = 1
+                            print("ooooooooooooooo")
+                            if pr_obj.state == 'done':
+                                print("pppppppppppppppppppp")
+                                pr_obj.button_reset_to_approve()
+#                     if total_qty_po+rec.product_qty == total_qty_pr:
+#                         if pr_obj.state == 'approved':
+#                             pr_obj.button_done()
+                
+                for pr in pr_obj.line_ids:
+                    if pr.purchase_state != 'purchase':
+                        flag = 1
+                        break
+                print("hhhhhhhhhhhhhhhhhhhhhhhhhhh",flag)
+                if flag == 0:
+                    pr_obj.write({'state': 'done'})
+                                            
 
     @api.multi
     def button_confirm(self):
         res = super(PurchaseOrder, self).button_confirm()
         pr_lines = self.env['purchase.request.line'].search([])
         pr_obj = self.env['purchase.request']
+        print("1111111111112222222222222333333333")
         order_line_ids = []
         for lines in pr_lines:
             for po_lines in lines.purchase_lines:
@@ -22,16 +88,19 @@ class PurchaseOrder(models.Model):
                 if self.id == order_id.id:
                     pr_obj = lines.request_id
         flag = 0
+        print("qqqqqqqqqqqqqqqqqqqqqqqqqqq",pr_obj)
         if pr_obj:
             for pr_line in pr_obj.line_ids:
                 for po_line in pr_line.purchase_lines:
                     if po_line.order_id.id != self.id and po_line.order_id.state == 'purchase':
                         order_line_ids.append(po_line.id)
             
+            print("rrrrrrrrrrrrrrrrrrrrrrr",order_line_ids)
             for rec in self.order_line:
                 request_lines = self.env['purchase.order.line'].search([('id','in',order_line_ids),('product_id','=',rec.product_id.id)])
                 total_qty_po = 0
                 total_done_qty = 0
+                print("ttttttttttttttttttt",request_lines)
                 for req_obj in request_lines:
                     total_qty_po += req_obj.product_qty
 #                     for purchase_lines in req_obj.purchase_lines:
@@ -45,10 +114,11 @@ class PurchaseOrder(models.Model):
                 for pr_line in pr_obj.line_ids:
                     if pr_line.product_id == rec.product_id:
                         total_qty_pr += pr_line.product_qty
-                      
-                if total_done_qty+rec.product_qty > total_qty_pr:
+                print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",total_done_qty,rec.product_qty, total_qty_pr)
+#                 print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",total_done_qty,rec,rec.product_qty, total_qty_pr1)
+                if total_qty_po+rec.product_qty > total_qty_pr:
                     raise UserError(
-                        _('%s product Quantity exceeds by %s.')% (rec.product_id.name,(total_done_qty+rec.product_qty)-total_qty_pr))
+                        _('%s product Quantity exceeds by %s.')% (rec.product_id.name,(total_qty_po+rec.product_qty)-total_qty_pr))
                     
                     
 #             for rec in self.order_line:
@@ -63,8 +133,12 @@ class PurchaseOrder(models.Model):
             if flag == 0:
                 pr_obj.write({'state': 'done'})
         
+#         print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",total_done_qty,rec,rec.product_qty, total_qty_pr1)
         return res 
     
+# class PurchaseOrderLine(models.Model):
+#     _inherit = "purchase.order.line"
+        
 
 class PurchaseRequestLine(models.Model):
     _inherit = "purchase.request"
