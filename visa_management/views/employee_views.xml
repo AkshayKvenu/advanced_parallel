@@ -59,7 +59,7 @@
 								<field name="country" required='1'  attrs="{'readonly':[('parent_state', '=', 'confirm')]}"   />
 								<field name="quantity" required='1'  attrs="{'readonly':[('parent_state', '=', 'confirm')]}"  />
 								<field name="allocate" />
-								<field name="stamped"   attrs="{'readonly':[('parent_state', '=', 'confirm')]}"  />
+								<field name="stamped"  />
 								<field name="deployed" readonly='1' />
 								<field name="balance" readonly='1'/>
 								<field name="note"/>

@@ -46,7 +46,7 @@ class HrEmployee(models.Model):
     _inherit = 'hr.employee'
     
     visa_numb = fields.Many2one('hr.employee.visa', string="Visa No")
-    prof = fields.Char(string='Profession',readonly=True)
+    prof = fields.Char(string='Profession', related='visa_numb.profession', readonly=True)
     
 
     @api.model
