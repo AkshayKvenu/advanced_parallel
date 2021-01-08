@@ -27,14 +27,20 @@ from odoo.exceptions import UserError, ValidationError
 
 class EmployeeVisa(models.Model):
     _name = 'hr.employee.visa'
-    _rec_name = 'visa_num'
+    _rec_name = 'name'
 
 
+    name = fields.Char('Name', compute='compute_name')
+    
     visa_num = fields.Char(string='Visa No',required=True)
     profession = fields.Char(string='Profession',required=True) 
     employee = fields.Many2one('hr.employee', string="Employee", readonly=True)
     visa_id = fields.Many2one('hr.block.visa', string="Block Visa", readonly=True)
     
+    @api.depends('visa_num','profession')
+    def compute_name(self):
+        for rec in self:
+            rec.name = rec.visa_num +"["+ rec.profession+"]"
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
@@ -45,15 +51,21 @@ class HrEmployee(models.Model):
 
     @api.model
     def create(self, vals):
+        if 'visa_numb' in vals and vals['visa_numb']:
+            object = self.env['hr.employee.visa'].browse(vals['visa_numb'])
+            vals['prof'] = object.profession
+#             result.prof = result.visa_numb.profession
         result = super(HrEmployee, self).create(vals)
         if result.visa_numb:
-            result.prof = result.visa_numb.profession
             result.visa_numb.employee = result.id
+    
         return result
 
     
     @api.multi
     def write(self, vals):
+        if self.visa_numb:
+            self.visa_numb.employee = False
         if 'visa_numb' in vals and vals['visa_numb']:
             object = self.env['hr.employee.visa'].browse(vals['visa_numb'])
             vals['prof'] = object.profession
@@ -68,7 +80,7 @@ class HrEmployee(models.Model):
     def onchange_visa_numb(self):
         if self.visa_numb:
             self.prof = self.visa_numb.profession
-            self.visa_numb.employee = self.id
+#             self.visa_numb.employee = self.id
         else:
             self.prof = False
          

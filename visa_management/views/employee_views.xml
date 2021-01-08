@@ -22,27 +22,52 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Block Visa">
+				<header>
+					<button name='action_confirm' string='Confirm' states='draft'
+					 	class='oe_highlight' type='object' confirm='Are you sure you want to confirm'/>
+<!-- 					<button name='compute_visa' string='Compute Visa Lines' states='confirm'  -->
+<!-- 						 type='object' class='oe_highlight'/> -->
+					<button name='action_draft' string='Set to Draft' states='confirm' type='object' 
+						confirm='All the employees linked to the visa will be removed. Please link the employees once again after the confirmation'/>
+					<field name='state' widget='statusbar'/>
+				</header>
 				<sheet>
 					<group>
 						<group>
-							<field name="visa_number" />
+							<field name="visa_number" attrs="{'readonly':[('state', '=', 'confirm')]}"/>
+							<field name="sponser_number" attrs="{'readonly':[('state', '=', 'confirm')]}"/>
 						</group>
 						<group>
-							<field name="date" required='1'/>
-							<field name="total_visa_no" />
+							<field name="date" required='1' attrs="{'readonly':[('state', '=', 'confirm')]}"/>
+							<field name="expiry_date" attrs="{'readonly':[('state', '=', 'confirm')]}" />
+							<field name="total_visa_no" attrs="{'readonly':[('state', '=', 'confirm')]}" />
 						</group>
 						<group>
-							<field name="company_id" />
+							<field name="company_id" attrs="{'readonly':[('state', '=', 'confirm')]}"/>
 						</group>
 						<group>
-							<field name="remain_visa" />
+							<field name="remain_visa" attrs="{'readonly':[('state', '=', 'confirm')]}" />
 						</group>
 					</group>
 					<group>
-						<field name="add_inf" nolabel="1" placeholder="Additional Info" />
+						<field name="add_inf" nolabel="1" placeholder="Additional Info" attrs="{'readonly':[('state', '=', 'confirm')]}" />
 					</group>
 					
-						<field name="block_visa_ids" widget="many2many" domain ="[('visa_id','=',False)]">
+						<field name="profession_ids"> 
+							<tree string="Profession Visa" editable='bottom'>
+								<field name="category" required='1'  attrs="{'readonly':[('parent_state', '=', 'confirm')]}"  />
+								<field name="country" required='1'  attrs="{'readonly':[('parent_state', '=', 'confirm')]}"   />
+								<field name="quantity" required='1'  attrs="{'readonly':[('parent_state', '=', 'confirm')]}"  />
+								<field name="allocate" />
+								<field name="stamped"   attrs="{'readonly':[('parent_state', '=', 'confirm')]}"  />
+								<field name="deployed" readonly='1' />
+								<field name="balance" readonly='1'/>
+								<field name="note"/>
+								<field name="parent_state" invisible='1'/>
+							</tree>
+						</field>
+					
+						<field name="block_visa_ids" widget="many2many" domain ="[('visa_id','=',False)]" readonly='1'>
 							<tree string="Block Visa" >
 								<field name="visa_num" />
 								<field name="profession"  />
@@ -114,7 +139,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="help" type="html">
-				<p class="oe_view_nocontent_create">Create the first Visa.</p>
+				<p class="oe_view_nocontent_create">Create the first Visa</p>
 			</field>
 		</record>
 
