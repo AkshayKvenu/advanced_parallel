@@ -86,7 +86,7 @@ class BlockVisa(models.Model):
         if self.state == 'draft':
             for line in self.profession_ids:
                 for i in range(line.quantity):
-                    name = self.visa_number +'-'+ line.country.name+str(i)
+                    name = self.visa_number +'-'+ line.country.name
                     self.env['hr.employee.visa'].create({'visa_num':name, 'profession':line.category, 'visa_id':self.id})
             self.write({'state':'confirm'})
         

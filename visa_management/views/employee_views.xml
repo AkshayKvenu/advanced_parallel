@@ -23,11 +23,11 @@
 			<field name="arch" type="xml">
 				<form string="Block Visa">
 				<header>
-					<button name='action_confirm' string='Confirm' states='draft'
+					<button name='action_confirm' string='Confirm' states='draft' groups="visa_management.visa_manager"
 					 	class='oe_highlight' type='object' confirm='Are you sure you want to confirm'/>
 <!-- 					<button name='compute_visa' string='Compute Visa Lines' states='confirm'  -->
 <!-- 						 type='object' class='oe_highlight'/> -->
-					<button name='action_draft' string='Set to Draft' states='confirm' type='object' 
+					<button name='action_draft' string='Set to Draft' states='confirm' type='object' groups="visa_management.visa_manager"
 						confirm='All the employees linked to the visa will be removed. Please link the employees once again after the confirmation'/>
 					<field name='state' widget='statusbar'/>
 				</header>
@@ -142,14 +142,38 @@
 				<p class="oe_view_nocontent_create">Create the first Visa</p>
 			</field>
 		</record>
+<!-- 		<record id="view_employee_user_form" model="ir.ui.view"> -->
+<!-- 			<field name="name">hr.employee.inherit.form</field> -->
+<!-- 			<field name="model">hr.employee</field> -->
+<!--             <field name="inherit_id" ref="hr_attendance.view_attendance_form" /> -->
+<!--             <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_manager') ])]" />                 -->
+<!--             <field name="arch" type="xml">                                    -->
+<!--                 <field name="name" position="attributes"> -->
+<!--                    <attribute name="readonly">0</attribute>                    -->
+<!--                 </field>                              -->
+<!--             </field> -->
+<!-- 	</record> -->
 
 		<record model="ir.ui.view" id="view_hr_employee_inherit_form_">
 			<field name="name">hr.employee.inherit.form</field>
 			<field name="model">hr.employee</field>
 			<field name="inherit_id" ref="hr.view_employee_form" />
+	        <field name="groups_id" eval="[(6, 0, [ref('base.group_user') ])]" />   
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='visa_no']" position="replace">
-					<field name="visa_numb"  domain ="['|',('employee','=',False),('employee','ilike',name)]"  options="{'no_create_edit': True}"/>
+					<field name="visa_numb" readonly='1' domain ="['|',('employee','=',False),('employee','ilike',name)]"  options="{'no_create_edit': True}"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hr_employee_inherit_form_manager">
+			<field name="name">hr.employee.inherit.form.manager</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+	        <field name="groups_id" eval="[(6, 0, [ref('visa_management.visa_manager') ])]" />   
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='visa_numb']" position="replace">
+					<field name="visa_numb" readonly='0' domain ="['|',('employee','=',False),('employee','ilike',name)]"  options="{'no_create_edit': True}"/>
 				</xpath>
 			</field>
 		</record>
@@ -163,7 +187,7 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='employee_profession_id']"
 					position="replace">
-					<field name="prof" />
+					<field name="prof"/>
 				</xpath>
 			</field>
 		</record>

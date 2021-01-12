@@ -1,4 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_employee_visa,access_hr_employee_visa,model_hr_employee_visa,base.group_user,1,1,1,1
-access_hr_block_visa,access_hr_block_visa,model_hr_block_visa,base.group_user,1,1,1,1
-access_hr_visa_profession,access_hr_visa_profession,model_hr_visa_profession,base.group_user,1,1,1,1
+access_hr_employee_visa,access_hr_employee_visa,model_hr_employee_visa,visa_manager,1,1,1,1
+access_hr_employee_visa_user,access_hr_employee_visa_user,model_hr_employee_visa,visa_user,1,0,0,0
+access_hr_block_visa,access_hr_block_visa,model_hr_block_visa,visa_manager,1,1,1,1
+access_hr_block_visa_user,access_hr_block_visa_user,model_hr_block_visa,visa_user,1,0,0,0
+access_hr_visa_profession,access_hr_visa_profession,model_hr_visa_profession,visa_manager,1,1,1,1
+access_hr_visa_profession_user,access_hr_visa_profession_user,model_hr_visa_profession,visa_user,1,0,0,0

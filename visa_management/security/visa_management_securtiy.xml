@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id='visa_manager' model='res.groups'>
+		<field name='name'>Visa / Manager</field>
+	</record>
+	
+	<record id='visa_user' model='res.groups'>
+		<field name='name'>Visa / User</field>
+	</record>
+
+</odoo>
