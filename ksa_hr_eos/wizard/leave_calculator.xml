@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+	<record id="hr_leave_allocation_accrual_calculator_view_inherit"
+		model="ir.ui.view">
+		<field name="name">hr.leave.allocation.accrual.calculator</field>
+		<field name="model">hr.leave.allocation.accrual.calculator</field>
+		<field name="inherit_id"
+			ref="hr_holidays_accrual_advanced.hr_leave_allocation_accrual_calculator" />
+		<field name="arch" type="xml">
+
+			<field name="date" position="after">
+				<field name="employee_eos" invisible="1" />
+				<field name="balance_copy" invisible="1" />
+			</field>
+			
+			<field name="date" position="attributes">
+			<attribute name="readonly">1</attribute>
+				</field>
+			
+			<xpath expr="//footer/button[@special='cancel']"
+				position="before">
+				<button name="save_method" class="oe_highlight" string="Save"
+					type="object" attrs="{'invisible': [('employee_eos', '=', False)]}" />
+			</xpath>
+			
+		</field>
+	</record>
+</odoo>

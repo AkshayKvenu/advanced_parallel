@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_eos_service" model="ir.ui.view">
+		<field name="name">End of services</field>
+		<field name="model">eos.service</field>
+		<field name="arch" type="xml">
+			<form string="End of Services">
+				<group string="Contract Info">
+					<group>
+						<field name="contract_type" />
+					</group>
+					<group>
+						<field name="limited_contract" attrs="{'invisible': [('contract_type', '=', 'indefinite')]}" />
+						<field name="unlimited_contract"
+							attrs="{'invisible': [('contract_type', '=', 'fixed')], 'required': [('contract_type', '=', 'indefinite')]}" />
+					</group>
+				</group>
+				<group string="Other Details" col="4">
+					<field name="date_start" readonly="1" />
+					<field name="date_end" />
+					<field name="wage" />
+					<label for="duration_year" string="Duration" />
+					<div>
+						<field name="duration_year" class="oe_inline" />
+						Years -
+						<field name="duration_month" class="oe_inline" />
+						Months -
+						<field name="duration_day" class="oe_inline" />
+						Days
+					</div>
+					<field name="duration" invisible="1" />
+				</group>
+				<footer>
+					<button name="button_confirm" string="Compute" type="object" class="btn-primary" />
+					<button string="Cancel" class="btn-default" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<record id="action_view_calculate_eos" model="ir.actions.act_window">
+		<field name="name">Eligibility conditions for End of service benefits</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">eos.service</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+</odoo>

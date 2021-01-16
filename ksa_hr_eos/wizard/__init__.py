@@ -19,6 +19,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import eos
+from . import eos_service
+from . import leave_calculator
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

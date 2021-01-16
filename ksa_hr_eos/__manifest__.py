@@ -22,7 +22,7 @@
 
 {
     'name': 'Employee EOS',
-    'version': '1.6.20.1',
+    'version': '1.7',
     'category': 'HR',
     'sequence': 5,
     'summary': 'Employee End of Service Calculations',
@@ -35,15 +35,15 @@
     'author': 'Amzsys',
     'website': 'http://amzsys.com/',
     'depends': [
-        'base','hr','hr_payroll','hr_contract'
+        'base','hr','hr_payroll','hr_contract','hr_holidays_accrual_advanced'
     ],
     'data': [
         'security/employee_eos_security.xml',
         'security/ir.model.access.csv',
         'data/salary_rule.xml',
-        'wizard/eos_view.xml',
-        'views/hr_views.xml',
-        'views/report_view.xml',
+        'wizard/eos_service.xml',
+        'wizard/leave_calculator.xml',
+        'views/employee_eos.xml',
         'report/eos_report.xml',
     ],
     'demo': [
