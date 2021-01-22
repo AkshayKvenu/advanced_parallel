@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="res_company_settings_email" model="ir.ui.view">
+			<field name="name">res.company.email.inherit</field>
+			<field name="model">res.company</field>
+			<field name="priority" eval="30" />
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook/page[1]" position="after">
+					<page string="Email Notification">
+						<group>
+							<field name="email_notification_ids"
+								widget="many2many_tags" />
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

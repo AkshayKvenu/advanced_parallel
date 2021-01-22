@@ -1,24 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data noupdate="0">
-		<record id="hr_leave_approved_email_template"
-			model="mail.template">
-			<field name="name">Leave: Approved</field>
-			<field name="subject">Leave Approved</field>
+
+		<!--Email template -->
+		<record id="hr_approved_email_template" model="mail.template">
+			<field name="name">Leave HR Approved</field>
+			<field name="email_from">${(user.email and '&quot;%s&quot; &lt;%s&gt;' %
+				(user.name, user.email) or '')|safe}</field>
+				
+			<field name="email_to">${object.employee_id.work_email}</field>
+			
+			<field name="subject">Leave Approved By HR</field>
+			<field name="partner_to">${str(object.employee_id.company_id.email_notification_ids.mapped('partner_id').ids).replace('[','').replace(']','')} 
+			</field>
+			<field name="lang">${user.lang}</field>
 			<field name="model_id"
 				ref="hr_holidays_multi_levels_approval.model_hr_leave" />
-			<field name="email_from">${user.email |safe}
-			</field>
-			<field name="email_to">${ctx['mail']}</field>
-			<field name="lang">${user.lang}</field>
 			<field name="auto_delete" eval="False" />
 			<field name="body_html"><![CDATA[
                   <p>Dear Sir/Madam,</p>
                   <table>
                    <tr>
-                    <td>Employee Name</td> 
+                    <td>Employee Name</td>
                     <td>
-                    </td>
+                    </td> 
                     <td>
                     </td>                      
                     <td>${object.employee_id.name}</td>
@@ -26,9 +31,9 @@
                   <tr>
                     <td>Description</td>
                    <td>
-                    </td>
-                     <td>
                     </td>   
+                     <td>
+                    </td>
                     <td>${object.name}</td>
                   </tr>
                   <tr>
@@ -36,7 +41,7 @@
                     <td>
                     </td>
                     <td>
-                    </td>                       
+                    </td>   
                     <td> ${object.holiday_status_id.name}</td>
                   </tr>
                   <tr>
@@ -64,18 +69,18 @@
                  <td>${format_tz(object.date_to, tz='UTC', format='%d-%m-%Y')}</td>
                 </tr>
                 </table>
-                  <br><p>Requested Leave for ${format_tz(object.date_from, tz='UTC', format='%d-%m-%Y')} to ${format_tz(object.date_to, tz='UTC', format='%d-%m-%Y')} days has been approved.</p>
+                  <br><p>Requested Leave of ${object.employee_id.name} leave from ${format_tz(object.date_from, tz='UTC', format='%d-%m-%Y')} to ${format_tz(object.date_to, tz='UTC', format='%d-%m-%Y')} has been approved by HR. Please process further.</p>
                   <br>
                   <br>
                   <div style="text-align: left; margin-top: 16px;">
                 	<a href="${ctx['url']}" target="_blank" style="padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: 
-               		 #875A7B; border: 1px solid #875A7B; border-radius:3px">View Details</a>
+                	#875A7B; border: 1px solid #875A7B; border-radius:3px">View Details</a>
               </div>
                   <br>
                   <br>
                   <p>Regards,</p>
                   <p>${user.name}</p>
-
+                 
                    ]]>
 
 			</field>
@@ -83,3 +88,4 @@
 
 	</data>
 </odoo>
+

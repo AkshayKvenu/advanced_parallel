@@ -23,8 +23,8 @@
 			<field name="arch" type="xml">
 				<button name="action_validate" position="replace">
 					<button string="Validate" name="action_validate"
-						states="confirm" type="object"
-						groups="hr_holidays.group_hr_holidays_manager"
+						type="object" groups="hr_holidays.group_hr_holidays_manager"
+						attrs="{'invisible': [('state', 'in', ('validate','refuse','draft'))]}"
 						class="oe_highlight" />
 				</button>
 				<button name="action_approve" position="replace">
@@ -33,9 +33,22 @@
 						attrs="{'invisible': ['|', ('current_user_is_approver', '!=', True), ('state', '!=', 'confirm')]}"
 						class="oe_highlight" />
 				</button>
+
+				<button name="action_refuse" position="replace">
+					<button string="Refuse" name="%(open_wizard_action_id)d"
+						type="action"
+						attrs="{'invisible': [('state', 'not in', ('confirm','validate','validate1','hr_approval'))]}"
+						class="oe_highlight" />
+				</button>
+
 				<field name="department_id" position="after">
 					<field name="pending_approver" />
 				</field>
+
+				<xpath expr="//field[@name='name']" position="after">
+					<field name="rejection_reason" readonly="1" />
+				</xpath>
+
 				<xpath expr="//sheet/group[1]" position="after">
 					<notebook>
 						<page string="Approbations">
@@ -68,7 +81,8 @@
 				</p>
 			</field>
 			<field name="domain">['|', ('pending_approver_user','=', uid),
-				('pending_transfered_approver_user','=', uid)]</field>
+				('pending_transfered_approver_user','=', uid)]
+			</field>
 			<field name="search_view_id"
 				ref="hr_holidays.view_hr_holidays_filter" />
 		</record>

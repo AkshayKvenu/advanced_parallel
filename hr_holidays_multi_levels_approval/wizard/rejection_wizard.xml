@@ -1,0 +1,33 @@
+<odoo>
+	<data>
+
+		<record id="leave_rejection_wizard_view" model="ir.ui.view">
+			<field name="name">leave.rejection.wizard</field>
+			<field name="model">leave.rejection</field>
+			<field name="arch" type="xml">
+				<form string="Leave Rejection Reason" version="7.0">
+					<group>
+						<field name="rejection_reason" />
+					</group>
+					<footer>
+						<button name="submit_method" string="Submit" type="object"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="open_wizard_action_id"
+			model="ir.actions.act_window">
+			<field name="name">Leave Rejection Reason</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">leave.rejection</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+	</data>
+</odoo>

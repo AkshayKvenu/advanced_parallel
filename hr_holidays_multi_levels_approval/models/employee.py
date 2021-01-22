@@ -8,6 +8,7 @@ class Employee(models.Model):
     holidays_approvers = fields.One2many('hr.employee.holidays.approver', 'employee', string='Approvers chain')
     transfer_holidays_approvals_to = fields.Many2one('hr.employee', string='Transfer approval rights to')
     transfer_holidays_approvals_to_user = fields.Many2one('res.users', string='Transfer approval rights to user', related='transfer_holidays_approvals_to.user_id', related_sudo=True, store=True, readonly=True)
+    current_leave_state = fields.Selection(selection_add=[('hr_approval', 'HR Approval')])
     
     @api.multi
     @api.one

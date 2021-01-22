@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="hr_holidays.hr_leave_rule_officer_read" model="ir.rule">
+		<field name="name">Leaves: officer: read and write all</field>
+		<field name="model_id" ref="model_hr_leave" />
+		<field name="domain_force">[(1, '=', 1)]</field>
+		<field name="perm_create" eval="False" />
+		<field name="perm_write" eval="True" />
+		<field name="perm_unlink" eval="False" />
+		<field name="groups"
+			eval="[(4, ref('hr_holidays.group_hr_holidays_user'))]" />
+	</record>
+</odoo>
