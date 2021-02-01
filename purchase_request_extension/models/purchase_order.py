@@ -76,8 +76,23 @@ class PurchaseOrder(models.Model):
                                             
 
     @api.multi
-    def button_confirm(self):
-        res = super(PurchaseOrder, self).button_confirm()
+    def button_approve(self):
+        res = super(PurchaseOrder, self).button_approve()
+        if 'purchase_approve_active' in self.env['res.company']._fields and self.company_id.purchase_approve_active:
+            print("Aaaaaaaaaaaaaaaaaa",self.state)
+            if self.state == 'approved':
+                print("    Aaaaaaaaaaaaaaaaaa1111111")
+                return res
+        self.confirm_pr_()
+        return res
+    
+    @api.multi
+    def button_release(self):
+        res = super(PurchaseOrder, self).button_release()
+        self.confirm_pr_()
+        return res
+    
+    def confirm_pr_(self):
         pr_lines = self.env['purchase.request.line'].search([])
         pr_obj = self.env['purchase.request']
         print("1111111111112222222222222333333333")
@@ -128,16 +143,12 @@ class PurchaseOrder(models.Model):
                 
             for pr in pr_obj.line_ids:
                 if pr.purchase_state != 'purchase':
+                    print("lllllllllllllllllllllllllll",pr.purchase_state)
                     flag = 1
                     break
             if flag == 0:
                 pr_obj.write({'state': 'done'})
         
-#         print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",total_done_qty,rec,rec.product_qty, total_qty_pr1)
-        return res 
-    
-# class PurchaseOrderLine(models.Model):
-#     _inherit = "purchase.order.line"
         
 
 class PurchaseRequestLine(models.Model):
