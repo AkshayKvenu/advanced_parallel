@@ -34,20 +34,21 @@ class PurchaseOrder(models.Model):
 #         print("333333333333333333333333333",mail_send_bool2)
         
         mail_send = self.env['ir.config_parameter'].sudo().get_param('purchase_approval.mail_send_to')
-        print("11111111111111111111111",mail_send)
-        line = mail_send.strip('][').split(', ')
-        
-        email_list = []
-        for vals in line:
-            mail_users = self.env['res.users'].browse(int(vals))
-                
-            email_to = mail_users.partner_id.email
-            email_list.append(email_to)
+        if mail_send !='[]':
+            line = mail_send.strip('][').split(', ')
             
-        email_list_new = ','.join( c for c in email_list if  c not in "[]''")
-        template = self.env.ref('purchase_approval.purchase_order_confirm_email_template', False)
-        template_id = self.env['mail.template'].browse(template.id)
-        template_id.with_context(url=base_url,mail=email_list_new).send_mail(self.id, force_send=True)
+            email_list = []
+            for vals in line:
+                mail_users = self.env['res.users'].browse(int(vals))
+                    
+                email_to = mail_users.partner_id.email if mail_users.partner_id else ''
+                if email_to:
+                    email_list.append(email_to)
+            if email_list:
+                email_list_new = ','.join( c for c in email_list if  c not in "[]''")
+                template = self.env.ref('purchase_approval.purchase_order_confirm_email_template', False)
+                template_id = self.env['mail.template'].browse(template.id)
+                template_id.with_context(url=base_url,mail=email_list_new).send_mail(self.id, force_send=True)
         
         return True
     
@@ -62,17 +63,20 @@ class PurchaseOrder(models.Model):
             approved_mail_send = self.env['ir.config_parameter'].sudo().get_param('purchase_approval.approved_mail_send_to')
             approved_line = approved_mail_send.strip('][').split(', ') 
             
-            email_list = []
-            for vals in approved_line:
-                mail_users = self.env['res.users'].browse(int(vals))
-                    
-                email_to = mail_users.partner_id.email
-                email_list.append(email_to)
-            
-            email_list_new = ','.join( c for c in email_list if c not in "[]''")
-            template = self.env.ref('purchase_approval.purchase_order_approve_email_template', False)
-            template_id = self.env['mail.template'].browse(template.id)
-            template_id.with_context(url=base_url,mail=email_list_new).send_mail(self.id, force_send=True)
+            if approved_mail_send !='[]':
+                email_list = []
+                for vals in approved_line:
+                    mail_users = self.env['res.users'].browse(int(vals))
+                        
+                    email_to = mail_users.partner_id.email if mail_users.partner_id else ''
+                    if email_to:
+                        email_list.append(email_to)
+                
+                if email_list:
+                    email_list_new = ','.join( c for c in email_list if c not in "[]''")
+                    template = self.env.ref('purchase_approval.purchase_order_approve_email_template', False)
+                    template_id = self.env['mail.template'].browse(template.id)
+                    template_id.with_context(url=base_url,mail=email_list_new).send_mail(self.id, force_send=True)
         
         return res
         

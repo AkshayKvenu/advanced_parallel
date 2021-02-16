@@ -13,6 +13,15 @@
 					<attribute name="groups">purchase_approval.group_purchase_order_button</attribute>
 				</xpath>
 
+				<xpath expr="//div[@class='oe_title']/span[1]"
+					position="attributes">
+					<attribute name="attrs">{'invisible': [('state','not in',('draft','sent','to approve'))]}</attribute>
+				</xpath>
+
+				<xpath expr="//div[@class='oe_title']/span[2]"
+					position="attributes">
+					<attribute name="attrs">{'invisible': [('state','in',('draft','sent','to approve'))]}</attribute>
+				</xpath>
 			</field>
 		</record>
 	</data>
