@@ -173,6 +173,22 @@ class PurchaseOrder(models.Model):
             if flag == 0:
                 pr_obj.write({'state': 'done'})
         
+    @api.multi
+    def button_cancel(self):
+        for rec in self:
+            if rec.state == 'purchase':
+                pr_lines = self.env['purchase.request.line'].search([])
+                pr_obj = self.env['purchase.request']
+                order_line_ids = []
+                for lines in pr_lines:
+                    for po_lines in lines.purchase_lines:
+                        order_id = po_lines.order_id
+                        if rec.id == order_id.id:
+                            pr_obj = lines.request_id
+                if pr_obj and pr_obj.state == 'done':
+                    pr_obj.button_reset_to_approve()
+        return super(PurchaseOrder, self).button_cancel()
+                
         
 
 class PurchaseRequestLine(models.Model):
